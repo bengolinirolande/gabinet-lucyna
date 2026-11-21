@@ -58,7 +58,9 @@ export const CustomCursor: React.FC<{ resetKey?: string }> = ({ resetKey }) => {
 
       const nextLabel = cursorEl?.dataset.cursor || null;
       const nextPointer = Boolean(interactiveEl || cursorEl);
-      const nextDark = Boolean(target?.closest('[data-dark-surface="true"]'));
+      const nextDark =
+        document.documentElement.dataset.theme === 'dark' ||
+        Boolean(target?.closest('[data-dark-surface="true"]'));
 
       if (nextLabel !== labelRef.current) {
         labelRef.current = nextLabel;

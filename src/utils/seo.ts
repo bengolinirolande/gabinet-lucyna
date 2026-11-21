@@ -1,5 +1,6 @@
 import { PRACTICE } from '../data/practice';
-import { ROUTES, SITE_ORIGIN, type PageId } from '../types/navigation';
+import { PRACTICE_RU } from '../data/practice.ru';
+import { getRoutes, SITE_ORIGIN, type Locale, type PageId } from '../types/navigation';
 
 const ROUTE_LD_SCRIPT_ID = 'route-structured-data';
 
@@ -24,14 +25,18 @@ function upsertCanonical(href: string): void {
 }
 
 /**
- * Synchronizes `<title>`, meta descriptions, Open Graph / Twitter tags, canonical link,
- * and route-specific JSON-LD (`BreadcrumbList` on subpages, `FAQPage` strictly on `gabinety`).
+ * Synchronizes `<html lang>`, `<title>`, meta descriptions, Open Graph / Twitter tags,
+ * canonical link, and localized route-specific JSON-LD (`BreadcrumbList`, `FAQPage`).
  */
-export function syncRouteSeo(page: PageId): void {
-  const meta = ROUTES[page];
+export function syncRouteSeo(page: PageId, lang: Locale = 'pl'): void {
+  const routes = getRoutes(lang);
+  const meta = routes[page];
+  const practice = lang === 'ru' ? PRACTICE_RU : PRACTICE;
 
+  document.documentElement.lang = lang;
   document.title = meta.seoTitle;
   upsertMeta('name', 'description', meta.seoDescription);
+  upsertMeta('property', 'og:locale', lang === 'ru' ? 'ru_RU' : 'pl_PL');
   upsertMeta('property', 'og:title', meta.seoTitle);
   upsertMeta('property', 'og:description', meta.seoDescription);
   upsertMeta('name', 'twitter:title', meta.seoTitle);
@@ -55,7 +60,7 @@ export function syncRouteSeo(page: PageId): void {
         {
           '@type': 'ListItem',
           position: 1,
-          name: 'Start',
+          name: routes.home.navLabel,
           item: `${SITE_ORIGIN}/`,
         },
         {
@@ -71,7 +76,7 @@ export function syncRouteSeo(page: PageId): void {
   if (page === 'gabinety') {
     graph.push({
       '@type': 'FAQPage',
-      mainEntity: PRACTICE.faq.map((item) => ({
+      mainEntity: practice.faq.map((item) => ({
         '@type': 'Question',
         name: item.question,
         acceptedAnswer: {

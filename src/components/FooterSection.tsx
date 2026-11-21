@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Check, Copy, Mail, Phone } from 'lucide-react';
-import { PRACTICE } from '../data/practice';
-import { handleRouteLinkClick, NAV_ORDER, ROUTES, type PageId } from '../types/navigation';
+import { usePreferences } from '../context/PreferencesContext';
+import { handleRouteLinkClick, NAV_ORDER, type PageId } from '../types/navigation';
 import { useLenis } from './motion/LenisProvider';
 import {
   HairlineDivider,
@@ -24,6 +24,8 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
   onOpenBooking,
   onOpenPrivacy,
 }) => {
+  const { practice, ui, routes } = usePreferences();
+  const f = ui.footer;
   const { scrollTo } = useLenis();
   const reduced = useReducedMotion();
   const [copiedField, setCopiedField] = useState<'email' | 'phone' | null>(null);
@@ -44,7 +46,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
       setCopiedField(field);
       copyTimerRef.current = window.setTimeout(() => setCopiedField(null), 2200);
     } catch {
-      // Clipboard API unavailable in insecure contexts
+      // Clipboard API unavailable
     }
   };
 
@@ -52,7 +54,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
     <footer
       ref={footerRef}
       data-dark-surface="true"
-      className="relative overflow-hidden bg-[#1A2723] pt-14 pb-8 text-[#F6F3EE] md:pt-18"
+      className="relative overflow-hidden border-t border-[#F6F3EE]/8 bg-[var(--bg-deep)] pt-14 pb-8 text-[#F6F3EE] md:pt-18"
     >
       <div
         aria-hidden="true"
@@ -65,31 +67,24 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
           <div className="lg:col-span-8">
             <Reveal>
               <p className="text-[11px] uppercase tracking-[0.22em] text-[#C9A484]">
-                Pierwszy krok
+                {f.eyebrow}
               </p>
             </Reveal>
             <h2 className="font-editorial mt-4 text-[clamp(2.1rem,4vw,3.6rem)] font-light leading-[1.03] tracking-[-0.02em] text-[#F6F3EE]">
-              <MaskedLines
-                lines={[
-                  'Nie musisz mieć wszystkiego',
-                  'poukładanego, żeby zacząć.',
-                ]}
-              />
+              <MaskedLines lines={f.lines} />
             </h2>
           </div>
 
           <div className="flex flex-col items-start gap-4 lg:col-span-4 lg:items-end">
             <MagneticButton
               onClick={onOpenBooking}
-              cursorLabel="Start"
+              cursorLabel={ui.cursors.start}
               className="group inline-flex items-center gap-3 rounded-full bg-[#F6F3EE] px-8 py-4 text-[13.5px] font-medium text-[#1A2723] transition-colors duration-300 hover:bg-[#EFEAE1]"
             >
-              <SlotRollText label="Umów konsultację" italicHover />
+              <SlotRollText label={f.cta} italicHover />
               <KineticArrow className="h-4 w-4" />
             </MagneticButton>
-            <p className="text-[12px] font-light text-[#F6F3EE]/55">
-              Odpowiadam zwykle w ciągu 24 godzin w dni robocze.
-            </p>
+            <p className="text-[12px] font-light text-[#F6F3EE]/55">{f.replyNote}</p>
           </div>
         </div>
 
@@ -97,31 +92,31 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
 
         {/* Structured Footer Columns */}
         <div className="grid grid-cols-1 gap-10 py-12 md:grid-cols-2 lg:grid-cols-12">
-          {/* Contact Direct with One-Click Copy Spell */}
+          {/* Contact Direct */}
           <address className="space-y-4 not-italic lg:col-span-4">
             <p className="text-[10.5px] uppercase tracking-[0.22em] text-[#C9A484]">
-              Kontakt bezpośredni
+              {f.contactHeading}
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
               <a
-                href={PRACTICE.phoneHref}
+                href={practice.phoneHref}
                 className="editorial-link inline-flex items-center gap-2.5 text-[16px] font-light text-[#F6F3EE]"
               >
                 <Phone className="h-4 w-4 stroke-[1.4] text-[#C9A484]" />
-                <span>{PRACTICE.phoneDisplay}</span>
+                <span>{practice.phoneDisplay}</span>
               </a>
               <span className="text-[#F6F3EE]/30">/</span>
               <a
-                href={PRACTICE.phoneSecondaryHref}
+                href={practice.phoneSecondaryHref}
                 className="editorial-link text-[15px] font-light text-[#F6F3EE]/85"
               >
                 58 500 46 88
               </a>
               <button
                 type="button"
-                onClick={() => copyToClipboard(PRACTICE.phoneDisplay, 'phone')}
-                aria-label="Kopiuj numer telefonu"
+                onClick={() => copyToClipboard(practice.phoneDisplay, 'phone')}
+                aria-label={f.copyPhoneAria}
                 className="inline-flex h-7 items-center gap-1.5 rounded-full border border-[#F6F3EE]/15 px-2.5 text-[11px] text-[#F6F3EE]/70 transition-colors hover:border-[#C9A484] hover:text-[#F6F3EE]"
               >
                 <AnimatePresence mode="wait">
@@ -134,7 +129,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                       className="inline-flex items-center gap-1 text-[#C9A484]"
                     >
                       <Check className="h-3 w-3" />
-                      <span>Skopiowano</span>
+                      <span>{f.copied}</span>
                     </motion.span>
                   ) : (
                     <motion.span
@@ -152,16 +147,16 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
 
             <div className="flex items-center gap-3">
               <a
-                href={`mailto:${PRACTICE.email}`}
+                href={`mailto:${practice.email}`}
                 className="editorial-link inline-flex items-center gap-2.5 text-[15px] font-light text-[#F6F3EE]/85"
               >
                 <Mail className="h-4 w-4 stroke-[1.4] text-[#C9A484]" />
-                <span>{PRACTICE.email}</span>
+                <span>{practice.email}</span>
               </a>
               <button
                 type="button"
-                onClick={() => copyToClipboard(PRACTICE.email, 'email')}
-                aria-label="Kopiuj adres e-mail"
+                onClick={() => copyToClipboard(practice.email, 'email')}
+                aria-label={f.copyEmailAria}
                 className="inline-flex h-7 items-center gap-1.5 rounded-full border border-[#F6F3EE]/15 px-2.5 text-[11px] text-[#F6F3EE]/70 transition-colors hover:border-[#C9A484] hover:text-[#F6F3EE]"
               >
                 <AnimatePresence mode="wait">
@@ -174,7 +169,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                       className="inline-flex items-center gap-1 text-[#C9A484]"
                     >
                       <Check className="h-3 w-3" />
-                      <span>Skopiowano</span>
+                      <span>{f.copied}</span>
                     </motion.span>
                   ) : (
                     <motion.span
@@ -191,13 +186,14 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
             </div>
 
             <p className="pt-1 text-[12px] font-light leading-relaxed text-[#F6F3EE]/55">
-              Rejestracja telefoniczna Przychodni Medyczna Gdynia ({PRACTICE.clinicEmail}). Wizytę
-              możesz też umówić przez formularz lub oficjalne profile:
+              {f.clinicNoteBefore}
+              {practice.clinicEmail}
+              {f.clinicNoteAfter}
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-1 text-[12px] text-[#C9A484]">
               <a
-                href={PRACTICE.znanyLekarzUrl}
+                href={practice.znanyLekarzUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="editorial-link hover:text-[#F6F3EE]"
@@ -205,7 +201,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                 ZnanyLekarz
               </a>
               <a
-                href={PRACTICE.twojPsychologUrl}
+                href={practice.twojPsychologUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="editorial-link hover:text-[#F6F3EE]"
@@ -213,7 +209,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                 TwójPsycholog
               </a>
               <a
-                href={PRACTICE.facebookUrl}
+                href={practice.facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="editorial-link hover:text-[#F6F3EE]"
@@ -223,65 +219,65 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
             </div>
           </address>
 
-          {/* Gabinety — derived from PRACTICE.locations single source of truth */}
+          {/* Locations */}
           <address className="space-y-4 not-italic lg:col-span-3">
             <p className="text-[10.5px] uppercase tracking-[0.22em] text-[#C9A484]">
-              Lokalizacje
+              {f.locationsHeading}
             </p>
             <div className="space-y-3.5 text-[13.5px] font-light text-[#F6F3EE]/78">
-              {PRACTICE.locations.map((loc) => (
+              {practice.locations.map((loc) => (
                 <div key={loc.id}>
                   <p className="font-normal text-[#F6F3EE]">
                     {loc.city}{' '}
                     {loc.id !== 'online'
                       ? `· ${loc.district.split('·')[0].trim()}`
-                      : '· Wideo i telefon'}
+                      : `· ${f.onlineLabel}`}
                   </p>
                   <p className="text-[12.5px] text-[#F6F3EE]/65">
-                    {loc.id === 'online'
-                      ? 'Spotkania wideo i telefoniczne · PL / RU'
-                      : loc.address}
+                    {loc.id === 'online' ? f.onlineSub : loc.address}
                   </p>
                 </div>
               ))}
             </div>
-            <p lang="ru" className="pt-1 text-[11.5px] font-light text-[#F6F3EE]/55">
-              Консультации также на русском языке — в Гдыне и онлайн.
+            <p lang={f.bilingualNoteLang} className="pt-1 text-[11.5px] font-light text-[#F6F3EE]/55">
+              {f.bilingualNote}
             </p>
           </address>
 
-          {/* Quick Page Navigation */}
-          <nav aria-label="Nawigacja w stopce" className="space-y-4 lg:col-span-2">
+          {/* Navigation */}
+          <nav aria-label={f.navAria} className="space-y-4 lg:col-span-2">
             <p className="text-[10.5px] uppercase tracking-[0.22em] text-[#C9A484]">
-              Nawigacja
+              {f.navHeading}
             </p>
             <ul className="space-y-2.5 text-[13.5px] font-light text-[#F6F3EE]/75">
               {NAV_ORDER.map((pageId) => (
                 <li key={pageId}>
                   <a
-                    href={ROUTES[pageId].hash}
+                    href={routes[pageId].hash}
                     onClick={(e) => handleRouteLinkClick(e, () => onNavigate(pageId))}
                     className="editorial-link transition-colors hover:text-[#F6F3EE]"
                   >
-                    {ROUTES[pageId].navLabel}
+                    {routes[pageId].navLabel}
                   </a>
                 </li>
               ))}
             </ul>
           </nav>
 
-          {/* Clinical Crisis Resources (Essential Ethical Standard) */}
+          {/* Crisis Resources */}
           <div className="space-y-4 lg:col-span-3">
             <p className="text-[10.5px] uppercase tracking-[0.22em] text-[#C9A484]">
-              Pilna pomoc w kryzysie
+              {f.crisisHeading}
             </p>
             <p className="text-[12.5px] font-light leading-relaxed text-[#F6F3EE]/60">
-              Gabinet nie prowadzi całodobowego dyżuru interwencyjnego. W sytuacji nagłego kryzysu
-              psychicznego skontaktuj się bezpłatnie:
+              {f.crisisIntro}
             </p>
             <ul className="space-y-2 text-[12.5px]">
-              {PRACTICE.crisisHelp.map((line) => (
-                <li key={line.number} className="flex items-baseline justify-between gap-2 border-b border-[#F6F3EE]/10 pb-1.5">
+              {practice.crisisHelp.map((line) => (
+                <li
+                  key={line.number}
+                  className="flex items-baseline justify-between gap-2 border-b border-[#F6F3EE]/10 pb-1.5"
+                >
                   <span className="font-light text-[#F6F3EE]/70">{line.label}</span>
                   <a
                     href={`tel:${line.number.replace(/\s+/g, '')}`}
@@ -300,7 +296,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
         {/* Quiet Editorial Legal Row */}
         <div className="flex flex-col items-start justify-between gap-4 pt-8 text-[12px] font-light text-[#F6F3EE]/50 sm:flex-row sm:items-center">
           <p>
-            © {new Date().getFullYear()} {PRACTICE.fullName} · Gabinet Psychologiczny · Gdynia i online
+            © {new Date().getFullYear()} {practice.fullName} · {f.copyrightSuffix}
           </p>
           <div className="flex items-center gap-6">
             <button
@@ -308,25 +304,25 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
               onClick={onOpenPrivacy}
               className="editorial-link text-[#F6F3EE]/65 hover:text-[#F6F3EE]"
             >
-              Polityka prywatności i RODO
+              {f.privacyBtn}
             </button>
             <button
               type="button"
               onClick={() => scrollTo(0, 0)}
               className="editorial-link text-[#F6F3EE]/65 hover:text-[#F6F3EE]"
             >
-              Powrót na górę ↑
+              {f.backToTop}
             </button>
           </div>
         </div>
 
-        {/* Monumental Scroll-Rising Editorial Wordmark (Proportional Closing Signature) */}
+        {/* Monumental Scroll-Rising Editorial Wordmark */}
         <div aria-hidden="true" className="mt-6 overflow-hidden select-none">
           <motion.p
             style={{ y: wordmarkY, opacity: wordmarkOpacity }}
             className="font-editorial text-center text-[clamp(2.8rem,9.5vw,8.5rem)] font-light leading-[0.88] tracking-[-0.03em] text-[#F6F3EE]"
           >
-            {PRACTICE.shortName}
+            {practice.shortName}
           </motion.p>
         </div>
       </div>

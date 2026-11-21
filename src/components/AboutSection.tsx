@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShieldCheck } from 'lucide-react';
-import { PRACTICE, type CredentialGroup } from '../data/practice';
+import { usePreferences } from '../context/PreferencesContext';
+import type { CredentialGroup } from '../data/practice';
 import {
   CurtainImage,
   EASE_EDITORIAL,
@@ -19,11 +20,12 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
   compactHeader = false,
   ready = true,
 }) => {
+  const { practice, ui } = usePreferences();
   const [activeTab, setActiveTab] = useState<CredentialGroup['id']>('education');
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const handleTabKeyDown = (e: React.KeyboardEvent, idx: number) => {
-    const count = PRACTICE.about.credentials.length;
+    const count = practice.about.credentials.length;
     let nextIdx = idx;
     if (e.key === 'ArrowRight') nextIdx = (idx + 1) % count;
     else if (e.key === 'ArrowLeft') nextIdx = (idx - 1 + count) % count;
@@ -32,7 +34,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
     else return;
 
     e.preventDefault();
-    const nextGroup = PRACTICE.about.credentials[nextIdx];
+    const nextGroup = practice.about.credentials[nextIdx];
     setActiveTab(nextGroup.id);
     tabRefs.current[nextIdx]?.focus();
   };
@@ -40,8 +42,9 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
   return (
     <section
       id="o-mnie"
-      className={`relative bg-[#EFEAE1]/55 ${compactHeader ? 'pt-10 pb-16 md:pt-12 md:pb-20' : 'py-16 md:py-24'
-        }`}
+      className={`relative bg-[var(--bg-surface-soft)] ${
+        compactHeader ? 'pt-10 pb-16 md:pt-12 md:pb-20' : 'py-16 md:py-24'
+      }`}
     >
       <div className="mx-auto max-w-[1360px] px-5 sm:px-6 md:px-10 lg:px-14">
         {!compactHeader && <HairlineDivider className="mb-14 md:mb-18" />}
@@ -53,24 +56,24 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
               {!compactHeader && (
                 <>
                   <Reveal>
-                    <p className="eyebrow">{PRACTICE.about.eyebrow}</p>
+                    <p className="eyebrow">{practice.about.eyebrow}</p>
                   </Reveal>
 
-                  <h2 className="font-editorial text-[clamp(2.2rem,3.6vw,3.35rem)] font-light leading-[1.05] tracking-[-0.02em] text-[#1D2220]">
+                  <h2 className="font-editorial text-[clamp(2.2rem,3.6vw,3.35rem)] font-light leading-[1.05] tracking-[-0.02em] text-[var(--text-ink)]">
                     <MaskedLines
-                      lines={['Łączę kliniczną', 'rzetelność z uważną,', 'ludzką obecnością.']}
-                      italicSubstring="ludzką obecnością."
+                      lines={ui.about.lines}
+                      italicSubstring={ui.about.italicSubstring}
                     />
                   </h2>
                 </>
               )}
 
-              {/* Authentic In-Office Photograph of mgr Lucyna Grochowska + Monograph Identity Plate */}
+              {/* Authentic In-Office Photograph + Monograph Identity Plate */}
               <Reveal delay={0.14}>
-                <div className="overflow-hidden border border-[#1D2220]/11 bg-[#FAF8F4] shadow-[0_18px_45px_-30px_rgba(26,39,35,0.2)]">
+                <div className="overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-paper)] shadow-[var(--shadow-card)]">
                   <CurtainImage
-                    src={PRACTICE.images.officePortrait}
-                    alt="mgr Lucyna Grochowska w swoim gabinecie psychologicznym w Gdyni"
+                    src={practice.images.officePortrait}
+                    alt={ui.about.officeAlt}
                     aspectClass="aspect-[4/3]"
                     imgClassName="object-top"
                     parallaxStrength={0}
@@ -78,22 +81,22 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                     priority={compactHeader}
                     ready={ready}
                     delay={compactHeader ? 0.12 : 0}
-                    cursorLabel="Gabinet"
+                    cursorLabel={ui.cursors.office}
                   />
 
                   <div className="p-5 sm:p-6">
-                    <div className="flex items-start justify-between gap-4 border-b border-[#1D2220]/10 pb-4">
+                    <div className="flex items-start justify-between gap-4 border-b border-[var(--border-hairline)] pb-4">
                       <div>
-                        <p className="font-editorial text-[24px] font-normal text-[#1D2220]">
-                          {PRACTICE.fullName}
+                        <p className="font-editorial text-[24px] font-normal text-[var(--text-ink)]">
+                          {practice.fullName}
                         </p>
-                        <p className="mt-0.5 text-[11.5px] tracking-[0.06em] text-[#5D6560]">
-                          {PRACTICE.role}
+                        <p className="mt-0.5 text-[11.5px] tracking-[0.06em] text-[var(--text-muted)]">
+                          {practice.role}
                         </p>
                       </div>
                       <span
-                        title="Dyplomy zweryfikowane przez TwójPsycholog.pl"
-                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#2B423B]/8 text-[#2B423B]"
+                        title={ui.about.verifiedTitle}
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--accent-tint)] text-[var(--accent-emphasis)]"
                       >
                         <ShieldCheck className="h-4 w-4 stroke-[1.4]" />
                       </span>
@@ -101,32 +104,36 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
 
                     <dl className="mt-4 grid grid-cols-2 gap-4 text-[12.5px]">
                       <div>
-                        <dt className="text-[10px] uppercase tracking-[0.18em] text-[#5D6560]">
-                          Nurt pracy
+                        <dt className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                          {ui.about.plate.approachLabel}
                         </dt>
-                        <dd className="mt-0.5 font-medium text-[#1D2220]">Psychodynamiczny</dd>
-                      </div>
-                      <div>
-                        <dt className="text-[10px] uppercase tracking-[0.18em] text-[#5D6560]">
-                          Specjalizacje
-                        </dt>
-                        <dd className="mt-0.5 font-medium text-[#1D2220]">
-                          Trauma · Seksuologia
+                        <dd className="mt-0.5 font-medium text-[var(--text-ink)]">
+                          {ui.about.plate.approachVal}
                         </dd>
                       </div>
                       <div>
-                        <dt className="text-[10px] uppercase tracking-[0.18em] text-[#5D6560]">
-                          Języki i standard
+                        <dt className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                          {ui.about.plate.specLabel}
                         </dt>
-                        <dd className="mt-0.5 font-medium text-[#1D2220]">
-                          PL / RU · Superwizja
+                        <dd className="mt-0.5 font-medium text-[var(--text-ink)]">
+                          {ui.about.plate.specVal}
                         </dd>
                       </div>
                       <div>
-                        <dt className="text-[10px] uppercase tracking-[0.18em] text-[#5D6560]">
-                          Lokalizacja
+                        <dt className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                          {ui.about.plate.langLabel}
                         </dt>
-                        <dd className="mt-0.5 font-medium text-[#1D2220]">Gdynia · Online</dd>
+                        <dd className="mt-0.5 font-medium text-[var(--text-ink)]">
+                          {ui.about.plate.langVal}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                          {ui.about.plate.locLabel}
+                        </dt>
+                        <dd className="mt-0.5 font-medium text-[var(--text-ink)]">
+                          {ui.about.plate.locVal}
+                        </dd>
                       </div>
                     </dl>
                   </div>
@@ -138,11 +145,14 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
           {/* Right Narrative & Interactive Credentials Column */}
           <div className="lg:col-span-7">
             <div className="space-y-6">
-              {PRACTICE.about.paragraphs.map((paragraph, idx) => (
+              {practice.about.paragraphs.map((paragraph, idx) => (
                 <Reveal key={idx} delay={idx * 0.08}>
                   <p
-                    className={`font-light leading-[1.86] text-[#3F4642] ${idx === 0 ? 'text-[17px] text-[#1D2220] md:text-[18.5px]' : 'text-[15.5px]'
-                      }`}
+                    className={`font-light leading-[1.86] ${
+                      idx === 0
+                        ? 'text-[17px] text-[var(--text-ink)] md:text-[18.5px]'
+                        : 'text-[15.5px] text-[var(--text-body)]'
+                    }`}
                   >
                     {paragraph}
                   </p>
@@ -150,18 +160,16 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
               ))}
             </div>
 
-            {/* Interactive Credentials Tabs with Spring FLIP Pill & Proper WAI-ARIA + SEO-Crawlable Panels */}
-            <Reveal delay={0.18} className="mt-9 border-t border-[#1D2220]/11 pt-8">
-              <h2 className="eyebrow mb-4">
-                Wykształcenie, doświadczenie kliniczne i standardy pracy
-              </h2>
+            {/* Interactive Credentials Tabs + SEO-Crawlable Panels */}
+            <Reveal delay={0.18} className="mt-9 border-t border-[var(--border-subtle)] pt-8">
+              <h2 className="eyebrow mb-4">{ui.about.tabsHeading}</h2>
 
               <div
                 role="tablist"
-                aria-label="Kwalifikacje i standardy"
-                className="inline-flex max-w-full flex-wrap gap-1.5 rounded-2xl border border-[#1D2220]/11 bg-[#FAF8F4]/80 p-1.5 sm:rounded-full"
+                aria-label={ui.about.tabsAria}
+                className="inline-flex max-w-full flex-wrap gap-1.5 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-paper-soft)] p-1.5 sm:rounded-full"
               >
-                {PRACTICE.about.credentials.map((tab, idx) => {
+                {practice.about.credentials.map((tab, idx) => {
                   const active = tab.id === activeTab;
                   return (
                     <button
@@ -177,14 +185,17 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                       aria-controls={`cred-panel-${tab.id}`}
                       onKeyDown={(e) => handleTabKeyDown(e, idx)}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`relative rounded-full px-3.5 py-2 text-[12px] font-medium tracking-[0.02em] transition-colors duration-300 sm:px-5 sm:py-2.5 sm:text-[12.5px] ${active ? 'text-[#F6F3EE]' : 'text-[#4E5551] hover:text-[#1D2220]'
-                        }`}
+                      className={`relative rounded-full px-3.5 py-2 text-[12px] font-medium tracking-[0.02em] transition-colors duration-300 sm:px-5 sm:py-2.5 sm:text-[12.5px] ${
+                        active
+                          ? 'text-[var(--btn-primary-text)]'
+                          : 'text-[var(--text-secondary)] hover:text-[var(--text-ink)]'
+                      }`}
                     >
                       {active && (
                         <motion.span
                           layoutId="about-credential-pill"
                           transition={{ type: 'spring', stiffness: 360, damping: 32 }}
-                          className="absolute inset-0 rounded-full bg-[#2B423B]"
+                          className="absolute inset-0 rounded-full bg-[var(--btn-primary-bg)]"
                         />
                       )}
                       <span className="relative z-10">{tab.label}</span>
@@ -193,9 +204,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                 })}
               </div>
 
-              {/* All 3 panels stay mounted in DOM for complete SEO crawlability (MSWiA, Szpital im. Jurasza, Orły Medycyny) */}
               <div className="mt-6 min-h-[280px]">
-                {PRACTICE.about.credentials.map((group) => {
+                {practice.about.credentials.map((group) => {
                   const isActive = group.id === activeTab;
                   return (
                     <motion.div
@@ -207,22 +217,22 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                       initial={false}
                       animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 8 }}
                       transition={{ duration: 0.36, ease: EASE_EDITORIAL }}
-                      className="divide-y divide-[#1D2220]/10"
+                      className="divide-y divide-[var(--border-hairline)]"
                     >
                       {group.items.map((entry) => (
                         <div key={entry.title} className="py-5 first:pt-2">
                           <div className="flex flex-wrap items-baseline justify-between gap-2">
-                            <span className="text-[11px] uppercase tracking-[0.18em] text-[#8C5E3E]">
+                            <span className="text-[11px] uppercase tracking-[0.18em] text-[var(--accent-amber)]">
                               {entry.period}
                             </span>
-                            <span className="text-[12px] font-light text-[#5D6560]">
+                            <span className="text-[12px] font-light text-[var(--text-muted)]">
                               {entry.institution}
                             </span>
                           </div>
-                          <h3 className="font-editorial mt-2 text-[23px] font-normal leading-snug text-[#1D2220]">
+                          <h3 className="font-editorial mt-2 text-[23px] font-normal leading-snug text-[var(--text-ink)]">
                             {entry.title}
                           </h3>
-                          <p className="mt-2 text-[14px] font-light leading-[1.75] text-[#4E5551]">
+                          <p className="mt-2 text-[14px] font-light leading-[1.75] text-[var(--text-secondary)]">
                             {entry.detail}
                           </p>
                         </div>

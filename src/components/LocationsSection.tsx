@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Car, Clock, ExternalLink, MapPin, Train } from 'lucide-react';
-import { PRACTICE, type LocationItem } from '../data/practice';
+import { usePreferences } from '../context/PreferencesContext';
+import type { LocationItem } from '../data/practice';
 import {
   EASE_EDITORIAL,
   HairlineDivider,
@@ -21,11 +22,12 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
   compactHeader = false,
   onOpenBooking,
 }) => {
+  const { practice, ui } = usePreferences();
   const [selectedId, setSelectedId] = useState<LocationItem['id']>('witomino');
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const handleTabKeyDown = (e: React.KeyboardEvent, idx: number) => {
-    const count = PRACTICE.locations.length;
+    const count = practice.locations.length;
     let nextIdx = idx;
     if (e.key === 'ArrowRight') nextIdx = (idx + 1) % count;
     else if (e.key === 'ArrowLeft') nextIdx = (idx - 1 + count) % count;
@@ -34,7 +36,7 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
     else return;
 
     e.preventDefault();
-    const nextLoc = PRACTICE.locations[nextIdx];
+    const nextLoc = practice.locations[nextIdx];
     setSelectedId(nextLoc.id);
     tabRefs.current[nextIdx]?.focus();
   };
@@ -42,7 +44,7 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
   return (
     <section
       id="gabinety"
-      className={`relative bg-[#EFEAE1]/55 ${
+      className={`relative bg-[var(--bg-surface-soft)] ${
         compactHeader ? 'pt-8 pb-14 md:pt-10 md:pb-18' : 'py-14 md:py-18'
       }`}
     >
@@ -57,32 +59,30 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
         >
           {compactHeader ? (
             <div>
-              <h2 className="eyebrow">
-                Wybierz lokalizację · Gdynia Witomino, Śródmieście lub online
-              </h2>
+              <h2 className="eyebrow">{ui.locations.compactHeading}</h2>
             </div>
           ) : (
             <div>
               <Reveal>
-                <p className="eyebrow mb-4">Gabinety w Gdyni i online (PL / RU)</p>
+                <p className="eyebrow mb-4">{ui.locations.eyebrow}</p>
               </Reveal>
-              <h2 className="font-editorial text-[clamp(2.3rem,4.1vw,3.75rem)] font-light leading-[1.04] tracking-[-0.02em] text-[#1D2220]">
+              <h2 className="font-editorial text-[clamp(2.3rem,4.1vw,3.75rem)] font-light leading-[1.04] tracking-[-0.02em] text-[var(--text-ink)]">
                 <MaskedLines
-                  lines={['Kameralne przestrzenie', 'w Gdyni oraz online.']}
-                  italicSubstring="Gdyni oraz online."
+                  lines={ui.locations.lines}
+                  italicSubstring={ui.locations.italicSubstring}
                 />
               </h2>
             </div>
           )}
 
-          {/* Spring FLIP Segmented Control with Full WAI-ARIA Arrow Navigation (390px mobile-safe) */}
+          {/* Spring FLIP Segmented Control */}
           <Reveal delay={0.08}>
             <div
               role="tablist"
-              aria-label="Wybierz lokalizację gabinetu"
-              className="inline-flex max-w-full flex-wrap rounded-2xl border border-[#1D2220]/12 bg-[#FAF8F4] p-1 sm:flex-nowrap sm:rounded-full sm:p-1.5"
+              aria-label={ui.locations.tablistAria}
+              className="inline-flex max-w-full flex-wrap rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-paper)] p-1 sm:flex-nowrap sm:rounded-full sm:p-1.5"
             >
-              {PRACTICE.locations.map((loc, idx) => {
+              {practice.locations.map((loc, idx) => {
                 const active = loc.id === selectedId;
                 return (
                   <button
@@ -99,14 +99,16 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
                     onKeyDown={(e) => handleTabKeyDown(e, idx)}
                     onClick={() => setSelectedId(loc.id)}
                     className={`relative rounded-full px-3 py-1.5 text-[12px] font-medium transition-colors duration-300 sm:px-5 sm:py-2 sm:text-[13px] md:px-6 ${
-                      active ? 'text-[#F6F3EE]' : 'text-[#4E5551] hover:text-[#1D2220]'
+                      active
+                        ? 'text-[var(--btn-primary-text)]'
+                        : 'text-[var(--text-secondary)] hover:text-[var(--text-ink)]'
                     }`}
                   >
                     {active && (
                       <motion.span
                         layoutId="location-active-pill"
                         transition={{ type: 'spring', stiffness: 360, damping: 32 }}
-                        className="absolute inset-0 rounded-full bg-[#2B423B]"
+                        className="absolute inset-0 rounded-full bg-[var(--btn-primary-bg)]"
                       />
                     )}
                     <span className="relative z-10">{loc.city}</span>
@@ -117,9 +119,9 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
           </Reveal>
         </div>
 
-        {/* All 3 Location Panels Mounted in DOM (toggled via hidden) for SEO Crawlability & Guaranteed Visible Photos */}
+        {/* All 3 Location Panels Mounted in DOM */}
         <div className={compactHeader ? 'mt-7 md:mt-9' : 'mt-10 md:mt-14'}>
-          {PRACTICE.locations.map((loc) => {
+          {practice.locations.map((loc) => {
             const isActive = loc.id === selectedId;
             return (
               <motion.div
@@ -133,23 +135,22 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
                 transition={{ duration: 0.36, ease: EASE_EDITORIAL }}
                 className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-10"
               >
-                {/* Layered Architectural Diptych Collage — always rendered visible (zero opacity-trap) */}
+                {/* Layered Architectural Diptych Collage */}
                 <div className="lg:col-span-7">
                   <div className="relative">
                     <div
                       data-cursor={loc.city}
-                      className="group relative aspect-[4/3] w-full overflow-hidden rounded-[2px] bg-[#E5DDD1] shadow-[0_28px_65px_-32px_rgba(26,39,35,0.28)]"
+                      className="group relative aspect-[4/3] w-full overflow-hidden rounded-[2px] bg-[var(--bg-img-frame)] shadow-[var(--shadow-card-lg)]"
                     >
                       <img
                         src={loc.image}
-                        alt={`Gabinet psychologiczny — ${loc.city}, ${loc.district}`}
+                        alt={`${ui.locations.imgAltPrefix} ${loc.city}, ${loc.district}`}
                         loading="eager"
                         decoding="async"
                         className="h-full w-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
                       />
 
-                      {/* Diagonal Top-Left Architectural Coordinates */}
-                      <div className="absolute left-4 top-4 inline-flex max-w-[calc(100%-2rem)] items-center gap-3 bg-[#1A2723]/84 px-4 py-2 text-[#F6F3EE] backdrop-blur-md">
+                      <div className="absolute left-4 top-4 inline-flex max-w-[calc(100%-2rem)] items-center gap-3 bg-[#1A2723]/86 px-4 py-2 text-[#F6F3EE] backdrop-blur-md">
                         <span className="truncate text-[10.5px] uppercase tracking-[0.2em]">
                           {loc.city} · {loc.district.split('·')[0].trim()}
                         </span>
@@ -159,9 +160,8 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
                       </div>
                     </div>
 
-                    {/* Overlapping Secondary Editorial Plate — anchored strictly to photo corner */}
-                    <figure className="mt-4 border border-[#1D2220]/10 bg-[#FAF8F4] p-2 shadow-[0_20px_50px_-24px_rgba(26,39,35,0.32)] sm:absolute sm:bottom-5 sm:right-5 sm:mt-0 sm:w-[200px] md:w-[224px]">
-                      <div className="aspect-[4/3] overflow-hidden bg-[#E5DDD1]">
+                    <figure className="mt-4 border border-[var(--border-subtle)] bg-[var(--bg-paper)] p-2 shadow-[var(--shadow-card)] sm:absolute sm:bottom-5 sm:right-5 sm:mt-0 sm:w-[200px] md:w-[224px]">
+                      <div className="aspect-[4/3] overflow-hidden bg-[var(--bg-img-frame)]">
                         <img
                           src={loc.secondaryImage}
                           alt={loc.secondaryCaption}
@@ -172,7 +172,7 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
                           }`}
                         />
                       </div>
-                      <figcaption className="px-1.5 pt-2 pb-1 text-[10.5px] font-light leading-snug text-[#4E5551]">
+                      <figcaption className="px-1.5 pt-2 pb-1 text-[10.5px] font-light leading-snug text-[var(--text-secondary)]">
                         {loc.secondaryCaption}
                       </figcaption>
                     </figure>
@@ -180,31 +180,34 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
                 </div>
 
                 {/* Practical Logistics Editorial Card */}
-                <div className="flex flex-col justify-between border border-[#1D2220]/11 bg-[#FAF8F4] p-7 md:p-9 lg:col-span-5">
+                <div className="flex flex-col justify-between border border-[var(--border-subtle)] bg-[var(--bg-paper)] p-7 md:p-9 lg:col-span-5">
                   <div>
                     <div className="flex items-center justify-between gap-3">
-                      <span className="text-[10.5px] uppercase tracking-[0.2em] text-[#8C5E3E]">
+                      <span className="text-[10.5px] uppercase tracking-[0.2em] text-[var(--accent-amber)]">
                         {loc.badge}
                       </span>
-                      <span className="h-px flex-1 bg-[#1D2220]/10" />
+                      <span className="h-px flex-1 bg-[var(--border-hairline)]" />
                     </div>
 
-                    <h3 className="font-editorial mt-4 text-3xl font-normal text-[#1D2220] md:text-[34px]">
+                    <h3 className="font-editorial mt-4 text-3xl font-normal text-[var(--text-ink)] md:text-[34px]">
                       {loc.city} · {loc.district.split('·')[0].trim()}
                     </h3>
 
-                    <p className="mt-3.5 text-[14.5px] font-light leading-[1.78] text-[#4E5551]">
+                    <p className="mt-3.5 text-[14.5px] font-light leading-[1.78] text-[var(--text-secondary)]">
                       {loc.ambiance}
                     </p>
 
                     {loc.id === 'online' && (
-                      <p lang="ru" className="mt-3 text-[13px] font-light text-[#5D6560]">
-                        Консультации и психотерапия также на русском языке — онлайн и в Гдыне.
+                      <p
+                        lang={ui.locations.bilingualNoteLang}
+                        className="mt-3 text-[13px] font-light text-[var(--text-muted)]"
+                      >
+                        {ui.locations.bilingualNote}
                       </p>
                     )}
 
                     <address className="mt-6 not-italic">
-                      <ul className="space-y-3.5 border-t border-[#1D2220]/10 pt-5 text-[13.5px] font-light text-[#3F4642]">
+                      <ul className="space-y-3.5 border-t border-[var(--border-hairline)] pt-5 text-[13.5px] font-light text-[var(--text-body)]">
                         {[
                           { icon: MapPin, text: loc.address, bold: true },
                           { icon: Train, text: loc.transit, bold: false },
@@ -214,8 +217,8 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
                           const Icon = row.icon;
                           return (
                             <li key={row.text} className="flex items-start gap-3.5">
-                              <Icon className="mt-0.5 h-4 w-4 shrink-0 stroke-[1.5] text-[#2B423B]" />
-                              <span className={row.bold ? 'font-normal text-[#1D2220]' : ''}>
+                              <Icon className="mt-0.5 h-4 w-4 shrink-0 stroke-[1.5] text-[var(--accent-emphasis)]" />
+                              <span className={row.bold ? 'font-normal text-[var(--text-ink)]' : ''}>
                                 {row.text}
                               </span>
                             </li>
@@ -225,23 +228,13 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
                     </address>
                   </div>
 
-                  <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-[#1D2220]/10 pt-5">
+                  <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-[var(--border-hairline)] pt-5">
                     <button
                       type="button"
-                      onClick={() =>
-                        onOpenBooking(
-                          undefined,
-                          undefined,
-                          loc.id === 'witomino'
-                            ? 'Gdynia Witomino'
-                            : loc.id === 'srodmiescie'
-                              ? 'Gdynia Śródmieście'
-                              : 'Online (wideo / telefon)'
-                        )
-                      }
-                      className="group editorial-link-persistent text-[13.5px] font-medium text-[#2B423B] hover:text-[#1A2723]"
+                      onClick={() => onOpenBooking(undefined, undefined, loc.id)}
+                      className="group editorial-link-persistent text-[13.5px] font-medium text-[var(--accent-emphasis)] hover:text-[var(--accent-emphasis-hover)]"
                     >
-                      <SlotRollText label={`Zapytaj o termin (${loc.city})`} />
+                      <SlotRollText label={`${ui.locations.askSlotPrefix} (${loc.city})`} />
                       <KineticArrow className="h-3.5 w-3.5" />
                     </button>
 
@@ -250,9 +243,9 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
                         href={loc.mapUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="editorial-link text-[12px] font-normal text-[#5D6560] hover:text-[#2B423B]"
+                        className="editorial-link text-[12px] font-normal text-[var(--text-muted)] hover:text-[var(--accent-emphasis)]"
                       >
-                        <span>Google Maps</span>
+                        <span>{ui.locations.mapsLabel}</span>
                         <ExternalLink className="h-3 w-3" />
                       </a>
                     )}

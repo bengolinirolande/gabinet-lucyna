@@ -12,7 +12,8 @@ import {
   Phone,
   X,
 } from 'lucide-react';
-import { PRACTICE } from '../data/practice';
+import { usePreferences } from '../context/PreferencesContext';
+import type { Locale } from '../types/navigation';
 import { useLenis } from './motion/LenisProvider';
 import { EASE_EDITORIAL, SlotRollText } from './motion/MotionPrimitives';
 
@@ -30,43 +31,11 @@ interface BookingDrawerProps {
   onOpenPrivacy: () => void;
 }
 
-const SESSION_TYPES = [
-  'Konsultacja psychologiczna / psychoterapeutyczna (50 min · 200–210 zł)',
-  'Psychoterapia indywidualna — psychodynamiczna (50–60 min · 200–210 zł)',
-  'Psychotraumatologia / Seksuologia / Terapia par (50 min · 200–210 zł)',
-  'Interwencja kryzysowa, badania, ocena stanu psychicznego (od 210 zł)',
-  'Wizyta domowa na terenie Gdyni (430 zł)',
-];
+const WEEKDAYS = [1, 2, 3, 4, 5];
 
-const HOME_VISIT_OPTION = SESSION_TYPES[4];
-
-const LOCATIONS = [
-  'Gdynia Witomino',
-  'Gdynia Śródmieście',
-  'Online (wideo / telefon)',
-] as const;
-type LocationOption = (typeof LOCATIONS)[number];
-
-const TIME_SLOTS = ['Poranek (08:30–12:00)', 'Popołudnie (12:00–16:00)', 'Wieczór (16:00–20:00)'];
-
-const LOCATION_OPEN_WEEKDAYS: Record<LocationOption, { days: number[]; label: string }> = {
-  'Gdynia Witomino': {
-    days: [1, 2, 3, 4, 5],
-    label: 'ul. Chwarznieńska 136–138 (wejście wspólne z rehabilitacją, w lewo, 3. gabinet) · PL / RU',
-  },
-  'Gdynia Śródmieście': {
-    days: [1, 2, 3, 4, 5],
-    label: 'Przychodnia Medyczna Gdynia (ul. gen. Bema 16/2 · tel. 58 500 46 87 / 88)',
-  },
-  'Online (wideo / telefon)': {
-    days: [1, 2, 3, 4, 5],
-    label: 'Wideokonsultacja lub rozmowa telefoniczna (język polski / rosyjski)',
-  },
-};
-
-function getUpcomingDaysForWeekdays(allowedDays: number[]): string[] {
-  const days: string[] = ['Najbliższy wolny termin'];
-  const formatter = new Intl.DateTimeFormat('pl-PL', {
+function getUpcomingDaysForLocale(lang: Locale, nearestLabel: string): string[] {
+  const days: string[] = [nearestLabel];
+  const formatter = new Intl.DateTimeFormat(lang === 'ru' ? 'ru-RU' : 'pl-PL', {
     weekday: 'short',
     day: 'numeric',
     month: 'short',
@@ -76,7 +45,7 @@ function getUpcomingDaysForWeekdays(allowedDays: number[]): string[] {
 
   while (added < 5) {
     cursor.setDate(cursor.getDate() + 1);
-    if (allowedDays.includes(cursor.getDay())) {
+    if (WEEKDAYS.includes(cursor.getDay())) {
       const formatted = formatter.format(cursor);
       days.push(formatted.charAt(0).toUpperCase() + formatted.slice(1));
       added++;
@@ -85,26 +54,48 @@ function getUpcomingDaysForWeekdays(allowedDays: number[]): string[] {
   return days;
 }
 
-function resolveSessionPreset(raw?: string): string {
-  if (!raw) return SESSION_TYPES[0];
+function resolveSessionIndex(raw?: string): number {
+  if (!raw) return 0;
   const lower = raw.toLowerCase();
-  if (lower.includes('domow')) return SESSION_TYPES[4];
+  if (lower === 'home-visit' || lower.includes('domow') || lower.includes('дом')) return 4;
   if (
+    lower === 'diagnostics-support' ||
     lower.includes('badani') ||
     lower.includes('kryzys') ||
     lower.includes('ocena') ||
     lower.includes('relaks') ||
-    lower.includes('psychoeduk')
+    lower.includes('psychoeduk') ||
+    lower.includes('кризис') ||
+    lower.includes('диагност')
   ) {
-    return SESSION_TYPES[3];
+    return 3;
   }
-  if (lower.includes('seksuolog') || lower.includes('traum') || lower.includes('par')) {
-    return SESSION_TYPES[2];
+  if (
+    lower.includes('seksuolog') ||
+    lower.includes('traum') ||
+    lower.includes('par') ||
+    lower.includes('сексолог') ||
+    lower.includes('травм')
+  ) {
+    return 2;
   }
-  if (lower.includes('psychoterapia') || lower.includes('indywidualn')) {
-    return SESSION_TYPES[1];
+  if (
+    lower === 'psychotherapy' ||
+    lower.includes('psychoterapia') ||
+    lower.includes('indywidualn') ||
+    lower.includes('психотерап')
+  ) {
+    return 1;
   }
-  return SESSION_TYPES[0];
+  return 0;
+}
+
+function resolveLocationIndex(raw?: string): number {
+  if (!raw) return 0;
+  const lower = raw.toLowerCase();
+  if (lower === 'srodmiescie' || lower.includes('śródmieśc') || lower.includes('центр')) return 1;
+  if (lower === 'online' || lower.includes('онлайн')) return 2;
+  return 0;
 }
 
 export const BookingDrawer: React.FC<BookingDrawerProps> = ({
@@ -114,22 +105,24 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
   onClose,
   onOpenPrivacy,
 }) => {
+  const { lang, practice, ui } = usePreferences();
+  const b = ui.booking;
   const { lockScroll, unlockScroll } = useLenis();
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const fetchAbortRef = useRef<AbortController | null>(null);
   const copyTimerRef = useRef<number | null>(null);
 
-  const [sessionType, setSessionType] = useState(SESSION_TYPES[0]);
-  const [location, setLocation] = useState<LocationOption>(LOCATIONS[0]);
+  const [sessionIndex, setSessionIndex] = useState(0);
+  const [locationIndex, setLocationIndex] = useState(0);
 
   const dateOptions = useMemo(
-    () => getUpcomingDaysForWeekdays(LOCATION_OPEN_WEEKDAYS[location].days),
-    [location]
+    () => getUpcomingDaysForLocale(lang, b.nearestSlot),
+    [lang, b.nearestSlot]
   );
 
-  const [preferredDay, setPreferredDay] = useState('Najbliższy wolny termin');
-  const [preferredTime, setPreferredTime] = useState(TIME_SLOTS[2]);
+  const [preferredDayIndex, setPreferredDayIndex] = useState(0);
+  const [preferredTimeIndex, setPreferredTimeIndex] = useState(2);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [clientEmail, setClientEmail] = useState('');
@@ -163,23 +156,26 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
     setError(null);
     setSending(false);
     setCopiedSummary(false);
-    setPreferredDay('Najbliższy wolny termin');
-    setSessionType(resolveSessionPreset(preset.sessionType));
+    setPreferredDayIndex(0);
+    setSessionIndex(resolveSessionIndex(preset.sessionType));
 
-    if (preset.location && (LOCATIONS as readonly string[]).includes(preset.location)) {
-      setLocation(preset.location as LocationOption);
+    if (preset.location) {
+      setLocationIndex(resolveLocationIndex(preset.location));
     }
     if (preset.topic) {
-      setNote(`Obszar, o którym chcę porozmawiać: ${preset.topic}.`);
+      setNote(`${b.noteTopicPrefix} ${preset.topic}.`);
     } else {
       setNote((prev) =>
-        prev.startsWith('Obszar, o którym chcę porozmawiać:') ? '' : prev
+        prev.startsWith('Obszar, o którym chcę porozmawiać:') ||
+        prev.startsWith('Тема, которую хотелось бы обсудить:')
+          ? ''
+          : prev
       );
     }
 
     const focusTimer = window.setTimeout(() => closeBtnRef.current?.focus(), 60);
     return () => window.clearTimeout(focusTimer);
-  }, [open, preset]);
+  }, [open, preset, b.noteTopicPrefix]);
 
   useEffect(() => {
     if (!open || privacyOpen) return;
@@ -190,37 +186,33 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [open, privacyOpen, onClose]);
 
-  const handleSessionTypeChange = (option: string) => {
-    setSessionType(option);
-    setPreferredDay('Najbliższy wolny termin');
-  };
+  const sessionType = b.sessionTypes[sessionIndex] ?? b.sessionTypes[0];
+  const locationLabel = b.locations[locationIndex] ?? b.locations[0];
+  const preferredDay = dateOptions[preferredDayIndex] ?? dateOptions[0];
+  const preferredTime = b.timeSlots[preferredTimeIndex] ?? b.timeSlots[2];
 
-  const handleLocationChange = (loc: LocationOption) => {
-    setLocation(loc);
-    setPreferredDay('Najbliższy wolny termin');
-  };
-
-  const recipientEmail = PRACTICE.bookingRecipientEmail;
-  const isHomeVisit = sessionType === HOME_VISIT_OPTION;
-  const effectiveLocationLabel = isHomeVisit ? 'Wizyta domowa (Gdynia)' : location;
+  const recipientEmail = practice.bookingRecipientEmail;
+  const isHomeVisit = sessionIndex === 4;
+  const effectiveLocationLabel = isHomeVisit ? b.homeVisitLocationLabel : locationLabel;
   const trimmedNameDisplay = name.trim();
+  const sf = b.summaryFields;
 
   const summaryPlainText = [
-    `Imię: ${trimmedNameDisplay}`,
-    phone.trim() ? `Telefon: ${phone.trim()}` : null,
-    clientEmail.trim() ? `E-mail pacjenta: ${clientEmail.trim()}` : null,
-    `Rodzaj spotkania: ${sessionType}`,
-    `Forma / Lokalizacja: ${effectiveLocationLabel}`,
-    `Preferowany dzień: ${preferredDay}`,
-    `Preferowana pora: ${preferredTime}`,
-    `Wiadomość: ${note.trim() || '(brak dodatkowej wiadomości)'}`,
+    `${sf.name}: ${trimmedNameDisplay}`,
+    phone.trim() ? `${sf.phone}: ${phone.trim()}` : null,
+    clientEmail.trim() ? `${sf.email}: ${clientEmail.trim()}` : null,
+    `${sf.sessionType}: ${sessionType}`,
+    `${sf.location}: ${effectiveLocationLabel}`,
+    `${sf.day}: ${preferredDay}`,
+    `${sf.time}: ${preferredTime}`,
+    `${sf.message}: ${note.trim() || sf.noMessage}`,
   ]
     .filter(Boolean)
     .join('\n');
 
   const mailtoHref = `mailto:${recipientEmail}?subject=${encodeURIComponent(
-    `[Rezerwacja] ${trimmedNameDisplay} — ${sessionType} (${effectiveLocationLabel})`
-  )}&body=${encodeURIComponent(`Dzień dobry,\n\n${summaryPlainText}`)}`;
+    `${b.mailtoSubjectPrefix} ${trimmedNameDisplay} — ${sessionType} (${effectiveLocationLabel})`
+  )}&body=${encodeURIComponent(`${b.mailtoGreeting}\n\n${summaryPlainText}`)}`;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -236,23 +228,23 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
     const trimmedEmail = clientEmail.trim();
 
     if (!trimmedName) {
-      setError('Podaj proszę swoje imię.');
+      setError(b.errors.name);
       return;
     }
     if (!trimmedPhone && !trimmedEmail) {
-      setError('Podaj numer telefonu lub adres e-mail, abym mogła odpowiedzieć.');
+      setError(b.errors.contact);
       return;
     }
     if (trimmedPhone && trimmedPhone.replace(/\D/g, '').length < 7) {
-      setError('Numer telefonu wydaje się zbyt krótki — sprawdź proszę cyfry lub podaj e-mail.');
+      setError(b.errors.phoneShort);
       return;
     }
     if (trimmedEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
-      setError('Sprawdź proszę poprawność adresu e-mail.');
+      setError(b.errors.emailInvalid);
       return;
     }
     if (!consent) {
-      setError('Potwierdź proszę zgodę na kontakt zwrotny (RODO).');
+      setError(b.errors.consent);
       return;
     }
 
@@ -260,16 +252,16 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
     setSending(true);
 
     const payload: Record<string, string> = {
-      'Imię pacjenta': trimmedName,
-      'Telefon kontaktowy': trimmedPhone || 'Nie podano',
-      'E-mail pacjenta': trimmedEmail || 'Nie podano',
-      'Rodzaj spotkania': sessionType,
-      'Forma / Lokalizacja': effectiveLocationLabel,
-      'Preferowany dzień': preferredDay,
-      'Preferowana pora dnia': preferredTime,
-      Wiadomość: note.trim() || 'Brak dodatkowej wiadomości',
-      'Zgoda RODO': 'Tak — zgoda na kontakt zwrotny w celu umówienia wizyty',
-      _subject: `Nowa rezerwacja: ${trimmedName} — ${effectiveLocationLabel}`,
+      [sf.name]: trimmedName,
+      [sf.phone]: trimmedPhone || sf.notProvided,
+      [sf.email]: trimmedEmail || sf.notProvided,
+      [sf.sessionType]: sessionType,
+      [sf.location]: effectiveLocationLabel,
+      [sf.day]: preferredDay,
+      [sf.time]: preferredTime,
+      [sf.message]: note.trim() || sf.noMessage,
+      [sf.rodo]: sf.rodoValue,
+      _subject: `${b.mailtoSubjectPrefix} ${trimmedName} — ${effectiveLocationLabel}`,
       _template: 'table',
       _captcha: 'false',
       _honey: '',
@@ -349,7 +341,8 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
             onClick={onClose}
-            className="absolute inset-0 bg-[#1A2723]/58 backdrop-blur-sm"
+            style={{ backgroundColor: 'var(--backdrop-scrim)' }}
+            className="absolute inset-0 backdrop-blur-sm"
           />
 
           <motion.div
@@ -358,25 +351,25 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
             animate={{ x: '0%' }}
             exit={{ x: '100%' }}
             transition={{ duration: 0.6, ease: EASE_EDITORIAL }}
-            className="relative z-10 flex h-[100dvh] w-full max-w-[580px] flex-col overflow-y-auto overscroll-contain bg-[#F6F3EE] px-6 pb-10 pt-8 text-[#1D2220] shadow-2xl sm:px-10 sm:py-10"
+            className="relative z-10 flex h-[100dvh] w-full max-w-[580px] flex-col overflow-y-auto overscroll-contain border-l border-[var(--border-subtle)] bg-[var(--bg-canvas)] px-6 pb-10 pt-8 text-[var(--text-ink)] shadow-2xl sm:px-10 sm:py-10"
           >
             {/* Header */}
-            <div className="flex items-start justify-between gap-4 border-b border-[#1D2220]/11 pb-6">
+            <div className="flex items-start justify-between gap-4 border-b border-[var(--border-subtle)] pb-6">
               <div>
-                <p className="eyebrow">Rezerwacja konsultacji</p>
+                <p className="eyebrow">{b.eyebrow}</p>
                 <h2
                   id="booking-drawer-title"
-                  className="font-editorial mt-2 text-3xl font-normal text-[#1D2220] sm:text-[34px]"
+                  className="font-editorial mt-2 text-3xl font-normal text-[var(--text-ink)] sm:text-[34px]"
                 >
-                  Zróbmy spokojny pierwszy krok.
+                  {b.title}
                 </h2>
               </div>
               <button
                 ref={closeBtnRef}
                 type="button"
                 onClick={onClose}
-                aria-label="Zamknij panel rezerwacji"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#1D2220]/15 text-[#1D2220] transition-colors hover:border-[#2B423B] hover:bg-[#2B423B] hover:text-[#F6F3EE]"
+                aria-label={b.closeAria}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[var(--border-medium)] text-[var(--text-ink)] transition-colors hover:border-[var(--btn-primary-bg)] hover:bg-[var(--btn-primary-bg)] hover:text-[var(--btn-primary-text)]"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -396,22 +389,26 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                 >
                   {/* 1. Rodzaj spotkania */}
                   <fieldset className="space-y-2">
-                    <legend className="block text-[10.5px] uppercase tracking-[0.18em] text-[#5D6560]">
-                      1. Wybierz formę spotkania
+                    <legend className="block text-[10.5px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                      {b.step1}
                     </legend>
                     <div className="grid grid-cols-1 gap-1.5">
-                      {SESSION_TYPES.map((option) => {
-                        const active = sessionType === option;
+                      {b.sessionTypes.map((option, idx) => {
+                        const active = sessionIndex === idx;
                         return (
                           <button
-                            key={option}
+                            key={idx}
                             type="button"
                             aria-pressed={active}
-                            onClick={() => handleSessionTypeChange(option)}
-                            className={`flex items-center justify-between border px-4 py-2.5 text-left text-[13px] transition-all duration-300 ${active
-                              ? 'border-[#2B423B] bg-[#2B423B] text-[#F6F3EE]'
-                              : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#1D2220] hover:border-[#2B423B]/45'
-                              }`}
+                            onClick={() => {
+                              setSessionIndex(idx);
+                              setPreferredDayIndex(0);
+                            }}
+                            className={`flex items-center justify-between border px-4 py-2.5 text-left text-[13px] transition-all duration-300 ${
+                              active
+                                ? 'border-[var(--btn-primary-bg)] bg-[var(--btn-primary-bg)] font-medium text-[var(--btn-primary-text)]'
+                                : 'border-[var(--border-subtle)] bg-[var(--bg-paper)] text-[var(--text-ink)] hover:border-[var(--border-accent)]'
+                            }`}
                           >
                             <span>{option}</span>
                             {active && <Check className="h-4 w-4 shrink-0" />}
@@ -421,25 +418,29 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                     </div>
                   </fieldset>
 
-                  {/* 2. Lokalizacja (ukrywana dla wizyty domowej) */}
+                  {/* 2. Lokalizacja */}
                   {!isHomeVisit && (
                     <fieldset className="space-y-2">
-                      <legend className="block text-[10.5px] uppercase tracking-[0.18em] text-[#5D6560]">
-                        2. Lokalizacja
+                      <legend className="block text-[10.5px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                        {b.step2}
                       </legend>
                       <div className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-3">
-                        {LOCATIONS.map((loc) => {
-                          const active = location === loc;
+                        {b.locations.map((loc, idx) => {
+                          const active = locationIndex === idx;
                           return (
                             <button
-                              key={loc}
+                              key={idx}
                               type="button"
                               aria-pressed={active}
-                              onClick={() => handleLocationChange(loc)}
-                              className={`border px-2.5 py-2.5 text-center text-[12px] leading-tight transition-all duration-300 ${active
-                                ? 'border-[#2B423B] bg-[#2B423B]/10 font-medium text-[#2B423B]'
-                                : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#4E5551] hover:border-[#2B423B]/40'
-                                }`}
+                              onClick={() => {
+                                setLocationIndex(idx);
+                                setPreferredDayIndex(0);
+                              }}
+                              className={`border px-2.5 py-2.5 text-center text-[12px] leading-tight transition-all duration-300 ${
+                                active
+                                  ? 'border-[var(--accent-emphasis)] bg-[var(--accent-tint)] font-medium text-[var(--accent-emphasis)]'
+                                  : 'border-[var(--border-subtle)] bg-[var(--bg-paper)] text-[var(--text-secondary)] hover:border-[var(--border-accent)]'
+                              }`}
                             >
                               {loc}
                             </button>
@@ -451,28 +452,31 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
 
                   {/* 3. Preferowany dzień i pora */}
                   <fieldset className="space-y-2.5">
-                    <legend className="flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.18em] text-[#5D6560]">
-                      <Calendar className="h-3.5 w-3.5 text-[#8C5E3E]" />
-                      <span>{isHomeVisit ? '2.' : '3.'} Preferowany dzień i pora</span>
+                    <legend className="flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                      <Calendar className="h-3.5 w-3.5 text-[var(--accent-amber)]" />
+                      <span>
+                        {isHomeVisit ? '2.' : '3.'} {b.step3}
+                      </span>
                     </legend>
-                    <p className="text-[11.5px] font-light text-[#5D6560]">
+                    <p className="text-[11.5px] font-light text-[var(--text-muted)]">
                       {isHomeVisit
-                        ? 'Wizyta domowa na terenie Gdyni — podaj dzielnicę w wiadomości poniżej.'
-                        : `${location}: ${LOCATION_OPEN_WEEKDAYS[location].label}`}
+                        ? b.homeVisitHint
+                        : `${locationLabel}: ${b.locationMeta[locationIndex]}`}
                     </p>
                     <div className="flex flex-wrap gap-1.5">
-                      {dateOptions.map((day) => {
-                        const active = preferredDay === day;
+                      {dateOptions.map((day, idx) => {
+                        const active = preferredDayIndex === idx;
                         return (
                           <button
-                            key={day}
+                            key={idx}
                             type="button"
                             aria-pressed={active}
-                            onClick={() => setPreferredDay(day)}
-                            className={`rounded-full border px-3 py-1.5 text-[11.5px] transition-all duration-250 ${active
-                              ? 'border-[#2B423B] bg-[#2B423B] text-[#F6F3EE]'
-                              : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#4E5551] hover:border-[#2B423B]/45'
-                              }`}
+                            onClick={() => setPreferredDayIndex(idx)}
+                            className={`rounded-full border px-3 py-1.5 text-[11.5px] transition-all duration-250 ${
+                              active
+                                ? 'border-[var(--btn-primary-bg)] bg-[var(--btn-primary-bg)] font-medium text-[var(--btn-primary-text)]'
+                                : 'border-[var(--border-subtle)] bg-[var(--bg-paper)] text-[var(--text-secondary)] hover:border-[var(--border-accent)]'
+                            }`}
                           >
                             {day}
                           </button>
@@ -481,18 +485,19 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                     </div>
 
                     <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-3">
-                      {TIME_SLOTS.map((slot) => {
-                        const active = preferredTime === slot;
+                      {b.timeSlots.map((slot, idx) => {
+                        const active = preferredTimeIndex === idx;
                         return (
                           <button
-                            key={slot}
+                            key={idx}
                             type="button"
                             aria-pressed={active}
-                            onClick={() => setPreferredTime(slot)}
-                            className={`border px-2.5 py-2 text-center text-[11.5px] transition-all duration-300 ${active
-                              ? 'border-[#2B423B] bg-[#2B423B]/10 font-medium text-[#2B423B]'
-                              : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#4E5551] hover:border-[#2B423B]/40'
-                              }`}
+                            onClick={() => setPreferredTimeIndex(idx)}
+                            className={`border px-2.5 py-2 text-center text-[11.5px] transition-all duration-300 ${
+                              active
+                                ? 'border-[var(--accent-emphasis)] bg-[var(--accent-tint)] font-medium text-[var(--accent-emphasis)]'
+                                : 'border-[var(--border-subtle)] bg-[var(--bg-paper)] text-[var(--text-secondary)] hover:border-[var(--border-accent)]'
+                            }`}
                           >
                             {slot}
                           </button>
@@ -506,9 +511,9 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                     <div>
                       <label
                         htmlFor="booking-name"
-                        className="mb-1 block text-[10.5px] uppercase tracking-[0.18em] text-[#5D6560]"
+                        className="mb-1 block text-[10.5px] uppercase tracking-[0.18em] text-[var(--text-muted)]"
                       >
-                        Imię *
+                        {b.nameLabel}
                       </label>
                       <input
                         id="booking-name"
@@ -516,16 +521,16 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                         autoComplete="given-name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="np. Anna"
-                        className="w-full border border-[#1D2220]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-[13.5px] text-[#1D2220] placeholder:text-[#5D6560]/60 focus:border-[#2B423B]"
+                        placeholder={b.namePlaceholder}
+                        className="w-full border border-[var(--border-medium)] bg-[var(--bg-paper)] px-3.5 py-2.5 text-[13.5px] text-[var(--text-ink)] placeholder:text-[var(--text-muted)]/70 focus:border-[var(--accent-emphasis)]"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="booking-phone"
-                        className="mb-1 block text-[10.5px] uppercase tracking-[0.18em] text-[#5D6560]"
+                        className="mb-1 block text-[10.5px] uppercase tracking-[0.18em] text-[var(--text-muted)]"
                       >
-                        Telefon (lub e-mail) *
+                        {b.phoneLabel}
                       </label>
                       <input
                         id="booking-phone"
@@ -534,8 +539,8 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                         autoComplete="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        placeholder="np. 500 000 000"
-                        className="w-full border border-[#1D2220]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-[13.5px] text-[#1D2220] placeholder:text-[#5D6560]/60 focus:border-[#2B423B]"
+                        placeholder={b.phonePlaceholder}
+                        className="w-full border border-[var(--border-medium)] bg-[var(--bg-paper)] px-3.5 py-2.5 text-[13.5px] text-[var(--text-ink)] placeholder:text-[var(--text-muted)]/70 focus:border-[var(--accent-emphasis)]"
                       />
                     </div>
                   </div>
@@ -555,9 +560,9 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                   <div>
                     <label
                       htmlFor="booking-email"
-                      className="mb-1 block text-[10.5px] uppercase tracking-[0.18em] text-[#5D6560]"
+                      className="mb-1 block text-[10.5px] uppercase tracking-[0.18em] text-[var(--text-muted)]"
                     >
-                      Adres e-mail (do potwierdzenia terminu)
+                      {b.emailLabel}
                     </label>
                     <input
                       id="booking-email"
@@ -565,48 +570,47 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                       autoComplete="email"
                       value={clientEmail}
                       onChange={(e) => setClientEmail(e.target.value)}
-                      placeholder="np. anna@example.pl"
-                      className="w-full border border-[#1D2220]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-[13.5px] text-[#1D2220] placeholder:text-[#5D6560]/60 focus:border-[#2B423B]"
+                      placeholder={b.emailPlaceholder}
+                      className="w-full border border-[var(--border-medium)] bg-[var(--bg-paper)] px-3.5 py-2.5 text-[13.5px] text-[var(--text-ink)] placeholder:text-[var(--text-muted)]/70 focus:border-[var(--accent-emphasis)]"
                     />
                   </div>
 
                   <div>
                     <label
                       htmlFor="booking-note"
-                      className="mb-1 block text-[10.5px] uppercase tracking-[0.18em] text-[#5D6560]"
+                      className="mb-1 block text-[10.5px] uppercase tracking-[0.18em] text-[var(--text-muted)]"
                     >
-                      Krótka wiadomość (opcjonalnie)
+                      {b.noteLabel}
                     </label>
                     <textarea
                       id="booking-note"
                       rows={2}
                       value={note}
                       onChange={(e) => setNote(e.target.value)}
-                      placeholder="Wystarczy jedno zdanie lub preferowane godziny."
-                      className="w-full resize-none border border-[#1D2220]/15 bg-[#FAF8F4] px-3.5 py-2.5 text-[13.5px] text-[#1D2220] placeholder:text-[#5D6560]/60 focus:border-[#2B423B]"
+                      placeholder={b.notePlaceholder}
+                      className="w-full resize-none border border-[var(--border-medium)] bg-[var(--bg-paper)] px-3.5 py-2.5 text-[13.5px] text-[var(--text-ink)] placeholder:text-[var(--text-muted)]/70 focus:border-[var(--accent-emphasis)]"
                     />
                   </div>
 
                   {/* Consent */}
-                  <div className="flex items-start gap-3 text-[12px] font-light leading-relaxed text-[#4E5551]">
+                  <div className="flex items-start gap-3 text-[12px] font-light leading-relaxed text-[var(--text-secondary)]">
                     <input
                       id="booking-consent"
                       type="checkbox"
                       checked={consent}
                       onChange={(e) => setConsent(e.target.checked)}
-                      className="mt-1 h-4 w-4 shrink-0 cursor-pointer accent-[#2B423B]"
+                      className="mt-1 h-4 w-4 shrink-0 cursor-pointer accent-[var(--btn-primary-bg)]"
                     />
                     <div>
                       <label htmlFor="booking-consent" className="cursor-pointer">
-                        Wyrażam zgodę na kontakt zwrotny w celu ustalenia terminu konsultacji oraz
-                        potwierdzam zapoznanie się z{' '}
+                        {b.consentPrefix}{' '}
                       </label>
                       <button
                         type="button"
                         onClick={onOpenPrivacy}
-                        className="underline decoration-[#2B423B]/50 underline-offset-2 hover:text-[#2B423B]"
+                        className="underline decoration-[var(--border-accent)] underline-offset-2 hover:text-[var(--accent-emphasis)]"
                       >
-                        Polityką prywatności i RODO
+                        {b.consentLink}
                       </button>
                       .
                     </div>
@@ -615,9 +619,9 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                   {error && (
                     <div
                       role="alert"
-                      className="flex items-start gap-2.5 border-l-2 border-[#8C5E3E] bg-[#EFEAE1] px-3.5 py-2.5 text-[12.5px] text-[#1D2220]"
+                      className="flex items-start gap-2.5 border-l-2 border-[var(--accent-amber)] bg-[var(--bg-surface)] px-3.5 py-2.5 text-[12.5px] text-[var(--text-ink)]"
                     >
-                      <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#8C5E3E]" />
+                      <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-[var(--accent-amber)]" />
                       <span>{error}</span>
                     </div>
                   )}
@@ -627,51 +631,53 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                     <button
                       type="submit"
                       disabled={sending}
-                      className="group flex w-full items-center justify-center gap-2.5 rounded-full bg-[#2B423B] px-7 py-4 text-[13.5px] font-medium text-[#F6F3EE] transition-colors duration-300 hover:bg-[#1A2723] disabled:opacity-70"
+                      className="group flex w-full items-center justify-center gap-2.5 rounded-full bg-[var(--btn-primary-bg)] px-7 py-4 text-[13.5px] font-medium text-[var(--btn-primary-text)] transition-colors duration-300 hover:bg-[var(--btn-primary-hover)] disabled:opacity-70"
                     >
                       {sending ? (
                         <>
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          <span>Wysyłanie zgłoszenia…</span>
+                          <span>{b.sendingBtn}</span>
                         </>
                       ) : (
                         <>
-                          <SlotRollText label="Wyślij zapytanie o termin" />
+                          <SlotRollText label={b.submitBtn} />
                           <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                         </>
                       )}
                     </button>
 
-                    <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#5D6560]">
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[var(--text-muted)]">
                       <span className="inline-flex items-center gap-1.5">
                         <Lock className="h-3.5 w-3.5 stroke-[1.5]" />
-                        <span>Wiadomość trafia na {recipientEmail}</span>
+                        <span>
+                          {b.recipientPrefix} {recipientEmail}
+                        </span>
                       </span>
                       <a
-                        href={PRACTICE.phoneHref}
-                        className="inline-flex items-center gap-1.5 text-[#2B423B] hover:underline"
+                        href={practice.phoneHref}
+                        className="inline-flex items-center gap-1.5 text-[var(--accent-emphasis)] hover:underline"
                       >
                         <Phone className="h-3.5 w-3.5 stroke-[1.5]" />
-                        <span>{PRACTICE.phoneDisplay}</span>
+                        <span>{practice.phoneDisplay}</span>
                       </a>
                     </div>
 
-                    <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#1D2220]/9 pt-2.5 text-[11px] text-[#5D6560]">
-                      <span>Wolisz kalendarz zewnętrzny?</span>
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border-hairline)] pt-2.5 text-[11px] text-[var(--text-muted)]">
+                      <span>{b.externalCalendar}</span>
                       <div className="flex items-center gap-3">
                         <a
-                          href={PRACTICE.twojPsychologUrl}
+                          href={practice.twojPsychologUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-medium text-[#2B423B] underline decoration-[#2B423B]/35 underline-offset-2 hover:text-[#1A2723]"
+                          className="font-medium text-[var(--accent-emphasis)] underline decoration-[var(--border-accent-soft)] underline-offset-2 hover:text-[var(--accent-emphasis-hover)]"
                         >
                           TwójPsycholog.pl
                         </a>
                         <a
-                          href={PRACTICE.znanyLekarzUrl}
+                          href={practice.znanyLekarzUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-medium text-[#2B423B] underline decoration-[#2B423B]/35 underline-offset-2 hover:text-[#1A2723]"
+                          className="font-medium text-[var(--accent-emphasis)] underline decoration-[var(--border-accent-soft)] underline-offset-2 hover:text-[var(--accent-emphasis-hover)]"
                         >
                           ZnanyLekarz.pl
                         </a>
@@ -688,10 +694,11 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                   className="my-auto flex flex-col items-start py-8"
                 >
                   <div
-                    className={`flex h-16 w-16 items-center justify-center rounded-full ${deliveryMode === 'email-sent'
-                      ? 'bg-[#2B423B] text-[#F6F3EE]'
-                      : 'bg-[#8C5E3E] text-[#F6F3EE]'
-                      }`}
+                    className={`flex h-16 w-16 items-center justify-center rounded-full ${
+                      deliveryMode === 'email-sent'
+                        ? 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]'
+                        : 'bg-[var(--accent-amber)] text-[#F6F3EE]'
+                    }`}
                   >
                     {deliveryMode === 'email-sent' ? (
                       <svg viewBox="0 0 28 28" fill="none" className="h-7 w-7">
@@ -711,39 +718,36 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                     )}
                   </div>
 
-                  <h3 className="font-editorial mt-7 text-4xl font-light text-[#1D2220]">
+                  <h3 className="font-editorial mt-7 text-4xl font-light text-[var(--text-ink)]">
                     {deliveryMode === 'email-sent'
-                      ? `Dziękuję, ${trimmedNameDisplay}.`
-                      : `Prawie gotowe, ${trimmedNameDisplay}.`}
+                      ? `${b.successTitlePrefix} ${trimmedNameDisplay}.`
+                      : `${b.fallbackTitlePrefix} ${trimmedNameDisplay}.`}
                   </h3>
 
                   {deliveryMode === 'email-sent' ? (
-                    <p className="mt-4 text-[15px] font-light leading-[1.82] text-[#4E5551]">
-                      Twoje zapytanie o termin zostało wysłane na skrzynkę gabinetu (
-                      <span className="font-normal text-[#1D2220]">{recipientEmail}</span>).
-                      Odpowiadam osobiście w ciągu 24 godzin w dni robocze z propozycją dokładnej
-                      godziny.
+                    <p className="mt-4 text-[15px] font-light leading-[1.82] text-[var(--text-secondary)]">
+                      {b.successBodyBefore}
+                      <span className="font-normal text-[var(--text-ink)]">{recipientEmail}</span>
+                      {b.successBodyAfter}
                     </p>
                   ) : (
-                    <p className="mt-4 text-[15px] font-light leading-[1.82] text-[#4E5551]">
-                      Nie udało się teraz potwierdzić automatycznej wysyłki — prawdopodobnie z
-                      powodu chwilowej przerwy połączenia. Możesz wysłać przygotowane zapytanie
-                      jednym kliknięciem ze swojej poczty na adres{' '}
-                      <span className="font-normal text-[#1D2220]">{recipientEmail}</span> lub
-                      skopiować jego treść:
+                    <p className="mt-4 text-[15px] font-light leading-[1.82] text-[var(--text-secondary)]">
+                      {b.fallbackBodyBefore}
+                      <span className="font-normal text-[var(--text-ink)]">{recipientEmail}</span>
+                      {b.fallbackBodyAfter}
                     </p>
                   )}
 
-                  <div className="mt-6 w-full space-y-2 border border-[#1D2220]/11 bg-[#FAF8F4] p-5 text-[13px]">
-                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#8C5E3E]">
-                      Podsumowanie zgłoszenia
+                  <div className="mt-6 w-full space-y-2 border border-[var(--border-subtle)] bg-[var(--bg-paper)] p-5 text-[13px]">
+                    <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--accent-amber)]">
+                      {b.summaryHeading}
                     </p>
-                    <p className="font-medium text-[#1D2220]">{sessionType}</p>
-                    <p className="text-[#4E5551]">
+                    <p className="font-medium text-[var(--text-ink)]">{sessionType}</p>
+                    <p className="text-[var(--text-secondary)]">
                       {effectiveLocationLabel} · {preferredDay} · {preferredTime}
                     </p>
-                    <p className="text-[#4E5551]">
-                      Kontakt: {phone.trim() || clientEmail.trim()}
+                    <p className="text-[var(--text-secondary)]">
+                      {b.contactLabel} {phone.trim() || clientEmail.trim()}
                       {phone.trim() && clientEmail.trim() ? ` · ${clientEmail.trim()}` : ''}
                     </p>
                   </div>
@@ -751,25 +755,25 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                   <div className="mt-7 flex flex-wrap items-center gap-3">
                     <a
                       href={mailtoHref}
-                      className="inline-flex items-center gap-2 rounded-full bg-[#2B423B] px-5 py-3 text-[12.5px] font-medium text-[#F6F3EE] transition-colors hover:bg-[#1A2723]"
+                      className="inline-flex items-center gap-2 rounded-full bg-[var(--btn-primary-bg)] px-5 py-3 text-[12.5px] font-medium text-[var(--btn-primary-text)] transition-colors hover:bg-[var(--btn-primary-hover)]"
                     >
                       <Mail className="h-3.5 w-3.5" />
-                      <span>Wyślij przez program pocztowy</span>
+                      <span>{b.sendEmailBtn}</span>
                     </a>
                     <button
                       type="button"
                       onClick={handleCopySummary}
-                      className="inline-flex items-center gap-2 rounded-full border border-[#1D2220]/16 bg-[#FAF8F4] px-4 py-3 text-[12.5px] font-medium text-[#1D2220] hover:border-[#2B423B]"
+                      className="inline-flex items-center gap-2 rounded-full border border-[var(--border-medium)] bg-[var(--bg-paper)] px-4 py-3 text-[12.5px] font-medium text-[var(--text-ink)] hover:border-[var(--border-accent)]"
                     >
                       {copiedSummary ? (
                         <>
-                          <Check className="h-3.5 w-3.5 text-[#2B423B]" />
-                          <span>Skopiowano</span>
+                          <Check className="h-3.5 w-3.5 text-[var(--accent-emphasis)]" />
+                          <span>{b.copiedBtn}</span>
                         </>
                       ) : (
                         <>
                           <Copy className="h-3.5 w-3.5" />
-                          <span>Kopiuj treść</span>
+                          <span>{b.copyBtn}</span>
                         </>
                       )}
                     </button>
@@ -779,16 +783,16 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                     <button
                       type="button"
                       onClick={() => setSubmitted(false)}
-                      className="editorial-link text-[13px] font-medium text-[#2B423B]"
+                      className="editorial-link text-[13px] font-medium text-[var(--accent-emphasis)]"
                     >
-                      ← Popraw dane
+                      {b.editDataBtn}
                     </button>
                     <button
                       type="button"
                       onClick={onClose}
-                      className="editorial-link-persistent text-[13px] font-medium text-[#4E5551] hover:text-[#1D2220]"
+                      className="editorial-link-persistent text-[13px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-ink)]"
                     >
-                      Wróć na stronę
+                      {b.backToSiteBtn}
                     </button>
                   </div>
                 </motion.div>

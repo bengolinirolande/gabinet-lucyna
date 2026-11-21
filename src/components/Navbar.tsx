@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
-import { ArrowUpRight, Menu, X } from 'lucide-react';
-import { PRACTICE } from '../data/practice';
-import { handleRouteLinkClick, NAV_ORDER, ROUTES, type PageId } from '../types/navigation';
+import { ArrowUpRight, Menu, Moon, Sun, X } from 'lucide-react';
+import { usePreferences } from '../context/PreferencesContext';
+import { handleRouteLinkClick, NAV_ORDER, type Locale, type PageId } from '../types/navigation';
 import { useLenis } from './motion/LenisProvider';
 import {
   EASE_EDITORIAL,
@@ -22,6 +22,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
   onOpenBooking,
 }) => {
+  const { lang, setLang, theme, toggleTheme, practice, ui, routes } = usePreferences();
   const { lockScroll, unlockScroll } = useLenis();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -40,7 +41,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Snap reading-progress spring cleanly back to 0 at top of each new chapter
   useEffect(() => {
     if (window.scrollY < 10) {
       progressScaleX.jump(0);
@@ -69,51 +69,55 @@ export const Navbar: React.FC<NavbarProps> = ({
     <>
       <header
         data-dark-surface={mobileOpen ? 'true' : undefined}
-        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${mobileOpen
-          ? 'bg-transparent py-5 shadow-none'
-          : scrolled
-            ? 'bg-[#F6F3EE]/90 py-3.5 backdrop-blur-md shadow-[0_1px_0_rgba(29,34,32,0.08)]'
-            : 'bg-transparent py-5'
-          }`}
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+          mobileOpen
+            ? 'bg-transparent py-4 shadow-none sm:py-5'
+            : scrolled
+              ? 'bg-[var(--bg-canvas-blur)] py-3 backdrop-blur-md shadow-[var(--shadow-nav)] sm:py-3.5'
+              : 'bg-transparent py-4 sm:py-5'
+        }`}
       >
         {!mobileOpen && (
           <motion.div
             style={{ scaleX: progressScaleX, transformOrigin: 'left center' }}
-            className={`pointer-events-none absolute inset-x-0 bottom-0 h-[1.5px] bg-[#2B423B]/65 transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'
-              }`}
+            className={`pointer-events-none absolute inset-x-0 bottom-0 h-[1.5px] bg-[var(--progress-bar)] transition-opacity duration-300 ${
+              scrolled ? 'opacity-100' : 'opacity-0'
+            }`}
           />
         )}
 
-        <div className="mx-auto flex max-w-[1360px] items-center justify-between px-5 sm:px-6 md:px-10 lg:px-14">
+        <div className="mx-auto flex max-w-[1360px] items-center justify-between gap-2 px-4 sm:px-6 md:px-10 lg:px-14">
           {/* Brand Mark */}
           <a
-            href={ROUTES.home.hash}
+            href={routes.home.hash}
             onClick={(e) => handleRouteLinkClick(e, () => handleNavClick('home'))}
-            className="group flex items-baseline gap-3 text-left"
+            className="group flex min-w-0 items-baseline gap-3 text-left"
           >
             <span
-              className={`font-editorial text-[22px] font-medium tracking-tight transition-colors duration-300 sm:text-2xl md:text-[26px] ${mobileOpen ? 'text-[#F6F3EE]' : 'text-[#1D2220]'
-                }`}
+              className={`font-editorial truncate text-[20px] font-medium tracking-tight transition-colors duration-300 sm:text-2xl md:text-[25px] ${
+                mobileOpen ? 'text-[#F6F3EE]' : 'text-[var(--text-ink)]'
+              }`}
             >
-              {PRACTICE.shortName}
+              {practice.shortName}
             </span>
             <span
-              className={`hidden text-[10px] uppercase tracking-[0.22em] transition-colors duration-300 xl:inline ${mobileOpen
-                ? 'text-[#C9A484]'
-                : 'text-[#5D6560] group-hover:text-[#2B423B]'
-                }`}
+              className={`hidden whitespace-nowrap text-[10px] uppercase tracking-[0.2em] transition-colors duration-300 2xl:inline ${
+                mobileOpen
+                  ? 'text-[#C9A484]'
+                  : 'text-[var(--text-muted)] group-hover:text-[var(--accent-emphasis)]'
+              }`}
             >
-              Psycholog · Gdynia i online
+              {ui.navbar.subtitle}
             </span>
           </a>
 
           {/* Clean 4-Chapter Desktop Navigation with Active Pill */}
           <nav
-            aria-label="Nawigacja główna"
-            className="hidden items-center gap-1.5 rounded-full border border-[#1D2220]/9 bg-[#FAF8F4]/72 p-1 backdrop-blur-md lg:flex"
+            aria-label={ui.navbar.navAria}
+            className="hidden shrink-0 items-center gap-1 rounded-full border border-[var(--border-hairline)] bg-[var(--bg-paper-soft)] p-1 backdrop-blur-md lg:flex"
           >
             {NAV_ORDER.map((pageId) => {
-              const meta = ROUTES[pageId];
+              const meta = routes[pageId];
               const active = currentPage === pageId;
               return (
                 <a
@@ -121,16 +125,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                   href={meta.hash}
                   aria-current={active ? 'page' : undefined}
                   onClick={(e) => handleRouteLinkClick(e, () => handleNavClick(pageId))}
-                  className={`group relative rounded-full px-4 py-1.5 text-[12.5px] tracking-[0.02em] transition-colors duration-300 ${active
-                    ? 'font-medium text-[#F6F3EE]'
-                    : 'font-normal text-[#1D2220]/78 hover:text-[#1D2220]'
-                    }`}
+                  className={`group relative whitespace-nowrap rounded-full px-3.5 py-1.5 text-[12.5px] tracking-[0.02em] transition-colors duration-300 xl:px-4 ${
+                    active
+                      ? 'font-medium text-[var(--btn-primary-text)]'
+                      : 'font-normal text-[var(--text-ink-soft)] hover:text-[var(--text-ink)]'
+                  }`}
                 >
                   {active && (
                     <motion.span
                       layoutId="navbar-active-route"
                       transition={{ type: 'spring', stiffness: 360, damping: 32 }}
-                      className="absolute inset-0 rounded-full bg-[#2B423B]"
+                      className="absolute inset-0 rounded-full bg-[var(--btn-primary-bg)]"
                     />
                   )}
                   <span className="relative z-10">
@@ -141,30 +146,85 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Right CTA & Mobile Trigger */}
-          <div className="flex items-center gap-3">
+          {/* Right Utility Controls (PL/RU + Theme Toggle + CTA + Mobile Menu) */}
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
+            {/* Compact PL / RU Segmented Switcher */}
+            <div
+              role="group"
+              aria-label={ui.navbar.langGroupAria}
+              className={`inline-flex items-center rounded-full border p-0.5 backdrop-blur-md transition-colors ${
+                mobileOpen
+                  ? 'border-[#F6F3EE]/25 bg-[#F6F3EE]/8'
+                  : 'border-[var(--border-subtle)] bg-[var(--bg-paper-soft)]'
+              }`}
+            >
+              {(['pl', 'ru'] as Locale[]).map((code) => {
+                const active = lang === code;
+                return (
+                  <button
+                    key={code}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setLang(code)}
+                    className={`relative rounded-full px-2 py-1 text-[10.5px] font-medium uppercase tracking-[0.08em] transition-colors sm:px-2.5 sm:text-[11px] ${
+                      active
+                        ? mobileOpen
+                          ? 'bg-[#C9A484] text-[#101715]'
+                          : 'bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)]'
+                        : mobileOpen
+                          ? 'text-[#F6F3EE]/72 hover:text-[#F6F3EE]'
+                          : 'text-[var(--text-muted)] hover:text-[var(--text-ink)]'
+                    }`}
+                  >
+                    {code.toUpperCase()}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Tactile Light / Dark Mode Switcher */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? ui.navbar.switchToLight : ui.navbar.switchToDark}
+              title={theme === 'dark' ? ui.navbar.switchToLight : ui.navbar.switchToDark}
+              className={`inline-flex h-8 w-8 items-center justify-center rounded-full border backdrop-blur-md transition-colors sm:h-9 sm:w-9 ${
+                mobileOpen
+                  ? 'border-[#F6F3EE]/25 bg-transparent text-[#F6F3EE] hover:border-[#C9A484] hover:text-[#C9A484]'
+                  : 'border-[var(--border-subtle)] bg-[var(--bg-paper-soft)] text-[var(--text-ink)] hover:border-[var(--border-accent)] hover:text-[var(--accent-emphasis)]'
+              }`}
+            >
+              {theme === 'dark' ? (
+                <Sun className="h-3.5 w-3.5 stroke-[1.7]" />
+              ) : (
+                <Moon className="h-3.5 w-3.5 stroke-[1.7]" />
+              )}
+            </button>
+
             <MagneticButton
               onClick={() => {
                 setMobileOpen(false);
                 onOpenBooking();
               }}
-              cursorLabel="Umów"
-              className={`group items-center gap-2.5 rounded-full bg-[#2B423B] px-5 py-2.5 text-[12.5px] font-medium tracking-[0.03em] text-[#F6F3EE] transition-colors duration-300 hover:bg-[#1A2723] ${mobileOpen ? 'hidden' : 'hidden sm:inline-flex'
-                }`}
+              cursorLabel={ui.cursors.book}
+              className={`group whitespace-nowrap items-center gap-2 rounded-full bg-[var(--btn-primary-bg)] px-4 py-2 text-[12px] font-medium tracking-[0.02em] text-[var(--btn-primary-text)] transition-colors duration-300 hover:bg-[var(--btn-primary-hover)] xl:px-5 xl:py-2.5 xl:text-[12.5px] ${
+                mobileOpen ? 'hidden' : 'hidden sm:inline-flex'
+              }`}
             >
-              <SlotRollText label="Umów konsultację" italicHover />
+              <SlotRollText label={ui.navbar.bookCta} italicHover />
               <KineticArrow className="h-3.5 w-3.5" />
             </MagneticButton>
 
             <button
               type="button"
               onClick={() => setMobileOpen((prev) => !prev)}
-              aria-label={mobileOpen ? 'Zamknij menu' : 'Otwórz menu'}
+              aria-label={mobileOpen ? ui.navbar.closeMenu : ui.navbar.openMenu}
               aria-expanded={mobileOpen}
-              className={`inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors lg:hidden ${mobileOpen
-                ? 'border-[#F6F3EE]/30 bg-transparent text-[#F6F3EE] hover:border-[#C9A484]'
-                : 'border-[#1D2220]/15 bg-[#FAF8F4]/70 text-[#1D2220] backdrop-blur-sm hover:border-[#2B423B]'
-                }`}
+              className={`inline-flex h-8 w-8 items-center justify-center rounded-full border transition-colors sm:h-9 sm:w-9 lg:hidden ${
+                mobileOpen
+                  ? 'border-[#F6F3EE]/30 bg-transparent text-[#F6F3EE] hover:border-[#C9A484]'
+                  : 'border-[var(--border-medium)] bg-[var(--bg-paper-soft)] text-[var(--text-ink)] backdrop-blur-sm hover:border-[var(--border-accent)]'
+              }`}
             >
               {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
@@ -182,11 +242,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
             exit={{ clipPath: 'inset(0% 0% 100% 0%)' }}
             transition={{ duration: 0.6, ease: EASE_EDITORIAL }}
-            className="fixed inset-0 z-[45] flex flex-col justify-between overflow-y-auto bg-[#1A2723] px-7 pb-10 pt-24 text-[#F6F3EE] lg:hidden"
+            className="fixed inset-0 z-[45] flex flex-col justify-between overflow-y-auto bg-[var(--bg-deep)] px-7 pb-10 pt-24 text-[#F6F3EE] lg:hidden"
           >
-            <nav aria-label="Menu mobilne" className="flex flex-col gap-3">
+            <nav aria-label={ui.navbar.mobileNavAria} className="flex flex-col gap-3">
               {NAV_ORDER.map((pageId, idx) => {
-                const meta = ROUTES[pageId];
+                const meta = routes[pageId];
                 const active = currentPage === pageId;
                 return (
                   <div
@@ -205,8 +265,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                         ease: EASE_EDITORIAL,
                       }}
                       onClick={(e) => handleRouteLinkClick(e, () => handleNavClick(pageId))}
-                      className={`font-editorial flex w-full items-baseline justify-between text-left text-4xl font-light tracking-tight transition-colors ${active ? 'italic text-[#C9A484]' : 'text-[#F6F3EE] hover:text-[#C9A484]'
-                        }`}
+                      className={`font-editorial flex w-full items-baseline justify-between text-left text-4xl font-light tracking-tight transition-colors ${
+                        active ? 'italic text-[#C9A484]' : 'text-[#F6F3EE] hover:text-[#C9A484]'
+                      }`}
                     >
                       <span>{meta.navLabel}</span>
                       <span className="font-sans text-[11px] tracking-[0.2em] text-[#F6F3EE]/40">
@@ -233,13 +294,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
                 className="flex w-full items-center justify-center gap-2 rounded-full bg-[#F6F3EE] px-6 py-4 text-sm font-medium text-[#1A2723]"
               >
-                <span>Umów pierwszą konsultację</span>
+                <span>{ui.navbar.mobileBookCta}</span>
                 <ArrowUpRight className="h-4 w-4" />
               </button>
-              <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#F6F3EE]/60">
-                <span>{PRACTICE.regionLabel}</span>
-                <a href={PRACTICE.phoneHref} className="text-[#C9A484]">
-                  {PRACTICE.phoneDisplay}
+
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#F6F3EE]/65">
+                <span>{practice.regionLabel}</span>
+                <a href={practice.phoneHref} className="text-[#C9A484]">
+                  {practice.phoneDisplay}
                 </a>
               </div>
             </motion.div>

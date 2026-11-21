@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ExternalLink, MapPin, Navigation, ShieldCheck, Star } from 'lucide-react';
-import { PRACTICE } from '../data/practice';
+import { usePreferences } from '../context/PreferencesContext';
 import {
   EASE_EDITORIAL,
   KineticArrow,
@@ -10,57 +10,50 @@ import {
   SlotRollText,
 } from './motion/MotionPrimitives';
 
-/**
- * Crisp immediate score display (always 5,0 from Frame 0 — never flashes 0,0 before scroll).
- */
 const RatingScore: React.FC<{ target: number }> = ({ target }) => (
-  <span className="font-editorial text-6xl font-light leading-none tracking-tight text-[#1D2220] md:text-7xl">
+  <span className="font-editorial text-6xl font-light leading-none tracking-tight text-[var(--text-ink)] md:text-7xl">
     {target.toFixed(1).replace('.', ',')}
   </span>
 );
 
-/**
- * Official Verified Profiles Showcase (ZnanyLekarz 5,0 · TwójPsycholog Verified Diplomas · Google Maps)
- * + Accessible Stylized Interactive Gdynia & Zatoka Gdańska Coastal Map.
- */
 export const GoogleProfileSection: React.FC = () => {
+  const { lang, practice, ui } = usePreferences();
   const [selectedPin, setSelectedPin] = useState<'witomino' | 'srodmiescie'>('witomino');
   const reduced = useReducedMotion();
 
   const activeLocation =
-    PRACTICE.locations.find((l) => l.id === selectedPin) ?? PRACTICE.locations[0];
+    practice.locations.find((l) => l.id === selectedPin) ?? practice.locations[0];
 
   const mapsUrl =
     selectedPin === 'witomino'
-      ? PRACTICE.googleProfile.mapsWitominoUrl
-      : PRACTICE.googleProfile.mapsSrodmiescieUrl;
+      ? practice.googleProfile.mapsWitominoUrl
+      : practice.googleProfile.mapsSrodmiescieUrl;
 
   const transitPill =
     selectedPin === 'witomino'
-      ? 'Witomino · Gabinet prywatny · ZKM / Obwodnica'
-      : 'Śródmieście · Medyczna Gdynia · 7 min od SKM';
+      ? ui.googleProfile.transitWitomino
+      : ui.googleProfile.transitSrodmiescie;
 
   return (
-    <section id="wizytowka-google" className="relative bg-[#EFEAE1]/65 py-14 md:py-18">
+    <section id="wizytowka-google" className="relative bg-[var(--bg-surface-strong)] py-14 md:py-18">
       <div className="mx-auto max-w-[1360px] px-5 sm:px-6 md:px-10 lg:px-14">
         <div className="grid grid-cols-1 items-end gap-4 pb-6 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <Reveal>
-              <p className="eyebrow mb-4">Zweryfikowane profile · ZnanyLekarz · TwójPsycholog</p>
+              <p className="eyebrow mb-4">{ui.googleProfile.eyebrow}</p>
             </Reveal>
-            <h2 className="font-editorial text-[clamp(2.25rem,3.9vw,3.55rem)] font-light leading-[1.06] tracking-[-0.02em] text-[#1D2220]">
+            <h2 className="font-editorial text-[clamp(2.25rem,3.9vw,3.55rem)] font-light leading-[1.06] tracking-[-0.02em] text-[var(--text-ink)]">
               <MaskedLines
-                lines={['Zweryfikowane dyplomy', 'i pełne zaufanie pacjentów.']}
-                italicSubstring="zaufanie pacjentów."
+                lines={ui.googleProfile.lines}
+                italicSubstring={ui.googleProfile.italicSubstring}
               />
             </h2>
           </div>
 
           <div className="lg:col-span-5 lg:text-right">
             <Reveal delay={0.12}>
-              <p className="text-[14.5px] font-light leading-[1.78] text-[#4E5551] lg:ml-auto lg:max-w-[420px]">
-                Sprawdź potwierdzone opinie pacjentów na portalu ZnanyLekarz, zweryfikowane dyplomy
-                w serwisie TwójPsycholog oraz lokalizacje obu gabinetów w Gdyni.
+              <p className="text-[14.5px] font-light leading-[1.78] text-[var(--text-secondary)] lg:ml-auto lg:max-w-[420px]">
+                {ui.googleProfile.lead}
               </p>
             </Reveal>
           </div>
@@ -71,75 +64,74 @@ export const GoogleProfileSection: React.FC = () => {
           {/* Left 7 Cols: Official Profiles Summary + Real Verified Review Snippets */}
           <div className="flex flex-col gap-6 lg:col-span-7">
             <Reveal>
-              <div className="border border-[#1D2220]/12 bg-[#FAF8F4] p-7 shadow-[0_24px_55px_-35px_rgba(26,39,35,0.22)] md:p-9">
-                <div className="flex flex-wrap items-start justify-between gap-6 border-b border-[#1D2220]/10 pb-7">
+              <div className="border border-[var(--border-subtle)] bg-[var(--bg-paper)] p-7 shadow-[var(--shadow-card)] md:p-9">
+                <div className="flex flex-wrap items-start justify-between gap-6 border-b border-[var(--border-hairline)] pb-7">
                   <div className="flex items-center gap-5">
-                    <RatingScore target={PRACTICE.googleProfile.rating} />
+                    <RatingScore target={practice.googleProfile.rating} />
                     <div>
-                      <div className="flex items-center gap-1" aria-label="Ocena 5 na 5 gwiazdek">
+                      <div className="flex items-center gap-1" aria-label={ui.googleProfile.starsAria}>
                         {Array.from({ length: 5 }).map((_, i) => (
                           <span key={i}>
                             <Star className="h-4.5 w-4.5 fill-[#C4924A] text-[#C4924A]" />
                           </span>
                         ))}
                       </div>
-                      <p className="mt-2 text-[13.5px] font-medium text-[#1D2220]">
-                        {PRACTICE.googleProfile.reviewCount} zweryfikowanych opinii · ZnanyLekarz.pl
+                      <p className="mt-2 text-[13.5px] font-medium text-[var(--text-ink)]">
+                        {practice.googleProfile.reviewCount} {ui.googleProfile.reviewsCountSuffix}
                       </p>
-                      <p className="mt-0.5 text-[12px] font-light text-[#5D6560]">
-                        {PRACTICE.fullName} · Dyplomy zweryfikowane przez TwójPsycholog.pl
+                      <p className="mt-0.5 text-[12px] font-light text-[var(--text-muted)]">
+                        {practice.fullName} · {ui.googleProfile.diplomasSubtitleSuffix}
                       </p>
                     </div>
                   </div>
 
-                  {/* Verified Diplomas Emblem */}
-                  <div className="flex items-center gap-2 rounded-full border border-[#2B423B]/20 bg-[#F6F3EE] px-3.5 py-1.5">
-                    <ShieldCheck className="h-4 w-4 text-[#2B423B]" />
-                    <span className="text-[11.5px] font-medium text-[#1D2220]">
-                      Dyplomy zweryfikowane
+                  <div className="flex items-center gap-2 rounded-full border border-[var(--border-accent-soft)] bg-[var(--bg-canvas)] px-3.5 py-1.5">
+                    <ShieldCheck className="h-4 w-4 text-[var(--accent-emphasis)]" />
+                    <span className="text-[11.5px] font-medium text-[var(--text-ink)]">
+                      {ui.googleProfile.verifiedBadge}
                     </span>
                   </div>
                 </div>
 
                 {/* Actionable Direct Official Profile Links */}
-                <div className="mt-6 flex flex-wrap items-center gap-3">
+                <div className="mt-6 flex flex-wrap items-center gap-2.5">
                   <a
-                    href={PRACTICE.znanyLekarzUrl}
+                    href={practice.znanyLekarzUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 rounded-full bg-[#2B423B] px-5 py-2.5 text-[12.5px] font-medium text-[#F6F3EE] transition-colors hover:bg-[#1A2723]"
+                    className="group inline-flex items-center gap-2 rounded-full bg-[var(--btn-primary-bg)] px-4 py-2.5 text-[12px] font-medium text-[var(--btn-primary-text)] transition-colors hover:bg-[var(--btn-primary-hover)]"
                   >
-                    <SlotRollText label="Profil ZnanyLekarz (5,0)" />
+                    <SlotRollText label={ui.googleProfile.znanyBtn} />
                     <ExternalLink className="h-3.5 w-3.5" />
                   </a>
 
                   <a
-                    href={PRACTICE.twojPsychologUrl}
+                    href={practice.twojPsychologUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2 rounded-full border border-[#1D2220]/16 bg-[#F6F3EE] px-5 py-2.5 text-[12.5px] font-medium text-[#1D2220] transition-colors hover:border-[#2B423B] hover:text-[#2B423B]"
+                    className="group inline-flex items-center gap-2 rounded-full border border-[var(--border-medium)] bg-[var(--bg-canvas)] px-4 py-2.5 text-[12px] font-medium text-[var(--text-ink)] transition-colors hover:border-[var(--border-accent)] hover:text-[var(--accent-emphasis)]"
                   >
-                    <SlotRollText label="Profil TwójPsycholog" />
+                    <SlotRollText label={ui.googleProfile.twojBtn} />
                     <KineticArrow className="h-3.5 w-3.5" />
                   </a>
 
                   <a
-                    href={PRACTICE.googleProfile.profileUrl}
+                    href={practice.googleProfile.profileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group editorial-link ml-1 text-[12.5px] font-medium text-[#4E5551] hover:text-[#2B423B]"
+                    className="group editorial-link ml-1 text-[12.5px] font-medium text-[var(--text-secondary)] hover:text-[var(--accent-emphasis)]"
                   >
-                    <span>Google Maps</span>
+                    <span>{ui.googleProfile.mapsLink}</span>
                     <KineticArrow className="h-3.5 w-3.5" />
                   </a>
 
                   <a
-                    href={PRACTICE.facebookUrl}
+                    href={practice.facebookUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group editorial-link ml-1 text-[12.5px] font-medium text-[#4E5551] hover:text-[#2B423B]"
+                    className="group editorial-link ml-1 text-[12.5px] font-medium text-[var(--text-secondary)] hover:text-[var(--accent-emphasis)]"
                   >
-                    <span>Facebook</span>
+                    <span>{ui.googleProfile.fbLink}</span>
                     <KineticArrow className="h-3.5 w-3.5" />
                   </a>
                 </div>
@@ -148,28 +140,28 @@ export const GoogleProfileSection: React.FC = () => {
 
             {/* 3 Real Verified Review Snippet Cards */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              {PRACTICE.googleProfile.featuredReviews.map((rev, idx) => (
+              {practice.googleProfile.featuredReviews.map((rev, idx) => (
                 <Reveal key={rev.author} delay={0.08 * idx}>
-                  <article className="flex h-full flex-col justify-between border border-[#1D2220]/10 bg-[#FAF8F4]/90 p-5 transition-all duration-400 hover:-translate-y-0.5 hover:border-[#2B423B]/35">
+                  <article className="flex h-full flex-col justify-between border border-[var(--border-hairline)] bg-[var(--bg-paper)] p-5 transition-all duration-400 hover:-translate-y-0.5 hover:border-[var(--border-accent)]">
                     <div>
                       <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-0.5" aria-label="5 gwiazdek">
+                        <div className="flex items-center gap-0.5" aria-label={ui.googleProfile.star5Aria}>
                           {Array.from({ length: 5 }).map((_, s) => (
                             <Star key={s} className="h-3 w-3 fill-[#C4924A] text-[#C4924A]" />
                           ))}
                         </div>
-                        <span className="text-[10px] text-[#5D6560]">
+                        <span className="text-[10px] text-[var(--text-muted)]">
                           {rev.dateLabel.split('·')[0].trim()}
                         </span>
                       </div>
-                      <p className="mt-3.5 text-[13px] font-light leading-[1.7] text-[#3F4642]">
-                        „{rev.text}”
+                      <p className="mt-3.5 text-[13px] font-light leading-[1.7] text-[var(--text-body)]">
+                        {lang === 'ru' ? `«${rev.text}»` : `„${rev.text}”`}
                       </p>
                     </div>
 
-                    <div className="mt-4 flex items-center justify-between border-t border-[#1D2220]/8 pt-3">
-                      <span className="text-[12px] font-medium text-[#1D2220]">{rev.author}</span>
-                      <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.12em] text-[#2B423B]">
+                    <div className="mt-4 flex items-center justify-between border-t border-[var(--border-hairline)] pt-3">
+                      <span className="text-[12px] font-medium text-[var(--text-ink)]">{rev.author}</span>
+                      <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.12em] text-[var(--accent-emphasis)]">
                         <ShieldCheck className="h-3 w-3" />
                         ZnanyLekarz
                       </span>
@@ -180,22 +172,21 @@ export const GoogleProfileSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Right 5 Cols: Accessible Stylized Interactive Gdynia & Zatoka Gdańska Coastal Map */}
+          {/* Right 5 Cols: Interactive Gdynia & Zatoka Gdańska Coastal Map */}
           <Reveal delay={0.14} className="lg:col-span-5">
             <div
               data-dark-surface="true"
-              className="flex h-full flex-col justify-between overflow-hidden border border-[#1D2220]/12 bg-[#1A2723] text-[#F6F3EE] shadow-[0_28px_60px_-34px_rgba(26,39,35,0.4)]"
+              className="flex h-full flex-col justify-between overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-deep)] text-[#F6F3EE] shadow-[var(--shadow-card-lg)]"
             >
-              <div className="relative h-[300px] w-full overflow-hidden bg-[#1D2C27] sm:h-[320px]">
+              <div className="relative h-[300px] w-full overflow-hidden bg-[var(--bg-deep-soft)] sm:h-[320px]">
                 <svg
                   viewBox="0 0 460 320"
                   className="h-full w-full"
                   role="group"
-                  aria-label="Interaktywna mapa gabinetów mgr Lucyny Grochowskiej na Witominie i w Śródmieściu Gdyni"
+                  aria-label={ui.googleProfile.mapAria}
                 >
-                  <title>Mapa gabinetów — Gdynia Witomino i Gdynia Śródmieście</title>
+                  <title>{ui.googleProfile.mapTitle}</title>
 
-                  {/* Architectural lat/lon grid */}
                   {[60, 120, 180, 240, 300, 360, 420].map((x) => (
                     <line
                       key={x}
@@ -219,7 +210,6 @@ export const GoogleProfileSection: React.FC = () => {
                     />
                   ))}
 
-                  {/* Trójmiejski Park Krajobrazowy green hills contour (west of Witomino) */}
                   <path
                     d="M 0 90 C 42 84, 78 118, 98 164 C 118 210, 102 272, 68 320"
                     fill="none"
@@ -233,13 +223,11 @@ export const GoogleProfileSection: React.FC = () => {
                     strokeWidth="1"
                   />
 
-                  {/* Zatoka Gdańska sea fill */}
                   <path
                     d="M 278 0 L 460 0 L 460 320 L 320 320 C 296 270, 286 226, 276 176 C 266 126, 268 62, 278 0 Z"
                     fill="rgba(201, 164, 132, 0.065)"
                   />
 
-                  {/* Animated Gdynia Coastline contour */}
                   <motion.path
                     d="M 278 0 C 268 62, 266 126, 276 176 C 286 226, 296 270, 320 320"
                     fill="none"
@@ -251,7 +239,6 @@ export const GoogleProfileSection: React.FC = () => {
                     transition={{ duration: 1.5, ease: EASE_EDITORIAL }}
                   />
 
-                  {/* Secondary sea depth contour */}
                   <path
                     d="M 314 0 C 306 64, 306 128, 318 182 C 330 232, 342 276, 366 320"
                     fill="none"
@@ -260,7 +247,6 @@ export const GoogleProfileSection: React.FC = () => {
                     strokeWidth="1"
                   />
 
-                  {/* SKM Trójmiasto Rapid Rail Axis (Gdynia Główna -> Wzgórze -> Orłowo -> Sopot) */}
                   <motion.path
                     d="M 218 28 C 228 84, 236 142, 248 208 L 274 304"
                     fill="none"
@@ -274,7 +260,6 @@ export const GoogleProfileSection: React.FC = () => {
                     transition={{ duration: 1.35, delay: 0.25, ease: EASE_EDITORIAL }}
                   />
 
-                  {/* ul. Chwarznieńska / Witomino connector road */}
                   <path
                     d="M 102 184 C 148 176, 186 154, 232 132"
                     fill="none"
@@ -282,7 +267,6 @@ export const GoogleProfileSection: React.FC = () => {
                     strokeWidth="1.1"
                   />
 
-                  {/* Compass rose & Cartographic Labels */}
                   <g opacity="0.4" transform="translate(414, 274)">
                     <line x1="0" y1="-12" x2="0" y2="12" stroke="#F6F3EE" strokeWidth="1" />
                     <line x1="-10" y1="0" x2="10" y2="0" stroke="#F6F3EE" strokeWidth="1" />
@@ -292,26 +276,26 @@ export const GoogleProfileSection: React.FC = () => {
                   </g>
 
                   <text
-                    x="324"
+                    x="306"
                     y="156"
-                    fill="rgba(246,243,238,0.28)"
-                    fontSize="9.5"
-                    letterSpacing="3"
+                    fill="rgba(246,243,238,0.32)"
+                    fontSize="8.5"
+                    letterSpacing="2"
                   >
-                    ZATOKA GDAŃSKA
+                    {ui.googleProfile.mapBay}
                   </text>
                   <text
-                    x="136"
+                    x="130"
                     y="272"
                     fill="rgba(246,243,238,0.42)"
                     fontSize="9"
-                    letterSpacing="2"
+                    letterSpacing="1.8"
                   >
-                    ORŁOWO · SOPOT
+                    {ui.googleProfile.mapOrlowo}
                   </text>
                   <circle cx="264" cy="268" r="2.5" fill="rgba(246,243,238,0.42)" />
 
-                  {/* Interactive Pin: Gdynia Śródmieście (Medyczna Gdynia, ul. Bema 16/2) */}
+                  {/* Pin: Śródmieście */}
                   <g
                     onClick={() => setSelectedPin('srodmiescie')}
                     onKeyDown={(e) => {
@@ -323,7 +307,7 @@ export const GoogleProfileSection: React.FC = () => {
                     className="cursor-pointer"
                     role="button"
                     tabIndex={0}
-                    aria-label="Wybierz gabinet Gdynia Śródmieście — ul. Bema 16/2"
+                    aria-label={ui.googleProfile.pinSrodmiescieAria}
                     aria-pressed={selectedPin === 'srodmiescie'}
                   >
                     <circle cx="236" cy="126" r="24" fill="transparent" />
@@ -356,13 +340,13 @@ export const GoogleProfileSection: React.FC = () => {
                       fill={selectedPin === 'srodmiescie' ? '#C9A484' : 'rgba(246,243,238,0.75)'}
                       fontSize="10.5"
                       fontWeight={selectedPin === 'srodmiescie' ? '600' : '400'}
-                      letterSpacing="1.5"
+                      letterSpacing="1.4"
                     >
-                      ŚRÓDMIEŚCIE · BEMA 16/2
+                      {ui.googleProfile.mapSrodmiescie}
                     </text>
                   </g>
 
-                  {/* Interactive Pin: Gdynia Witomino (ul. Chwarznieńska 136-138) */}
+                  {/* Pin: Witomino */}
                   <g
                     onClick={() => setSelectedPin('witomino')}
                     onKeyDown={(e) => {
@@ -374,7 +358,7 @@ export const GoogleProfileSection: React.FC = () => {
                     className="cursor-pointer"
                     role="button"
                     tabIndex={0}
-                    aria-label="Wybierz gabinet Gdynia Witomino — ul. Chwarznieńska 136–138"
+                    aria-label={ui.googleProfile.pinWitominoAria}
                     aria-pressed={selectedPin === 'witomino'}
                   >
                     <circle cx="144" cy="176" r="24" fill="transparent" />
@@ -407,14 +391,13 @@ export const GoogleProfileSection: React.FC = () => {
                       fill={selectedPin === 'witomino' ? '#C9A484' : 'rgba(246,243,238,0.75)'}
                       fontSize="10.5"
                       fontWeight={selectedPin === 'witomino' ? '600' : '400'}
-                      letterSpacing="1.4"
+                      letterSpacing="1.3"
                     >
-                      WITOMINO · CHWARZNIEŃSKA
+                      {ui.googleProfile.mapWitomino}
                     </text>
                   </g>
                 </svg>
 
-                {/* Positioned top-right over open sea so city labels remain unobstructed */}
                 <div className="absolute right-4 top-4 flex gap-1.5">
                   {(['witomino', 'srodmiescie'] as const).map((pinId) => (
                     <button
@@ -428,17 +411,18 @@ export const GoogleProfileSection: React.FC = () => {
                           : 'bg-[#1A2723]/75 text-[#F6F3EE]/80 hover:text-[#F6F3EE]'
                       }`}
                     >
-                      {pinId === 'witomino' ? 'Witomino' : 'Śródmieście'}
+                      {pinId === 'witomino'
+                        ? ui.googleProfile.tabWitomino
+                        : ui.googleProfile.tabSrodmiescie}
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Selected Gabinet Navigation Details */}
               <div className="p-7">
                 <AnimatePresence mode="wait">
                   <motion.div
-                    key={selectedPin}
+                    key={`${selectedPin}-${activeLocation.city}`}
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
@@ -470,7 +454,7 @@ export const GoogleProfileSection: React.FC = () => {
                       className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#F6F3EE]/22 bg-[#F6F3EE]/8 px-5 py-3 text-[12.5px] font-medium text-[#F6F3EE] transition-colors hover:border-[#C9A484] hover:bg-[#C9A484] hover:text-[#1A2723]"
                     >
                       <Navigation className="h-3.5 w-3.5" />
-                      <SlotRollText label="Wyznacz trasę w Google Maps" />
+                      <SlotRollText label={ui.googleProfile.routeBtn} />
                     </a>
                   </motion.div>
                 </AnimatePresence>

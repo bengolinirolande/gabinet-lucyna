@@ -2,7 +2,7 @@
 
 @theme {
   --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
-  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: "Plus Jakarta Sans", "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   --color-canvas: #F6F3EE;
   --color-surface: #EFEAE1;
@@ -17,20 +17,127 @@
   --color-sand: #D8CFC2;
 }
 
+/* ==========================================================================
+   SEMANTIC DESIGN TOKENS — LIGHT ("Baltic Linen") & DARK ("Baltic Midnight")
+   ========================================================================== */
+:root {
+  color-scheme: light;
+
+  --bg-canvas: #F6F3EE;
+  --bg-canvas-blur: rgba(246, 243, 238, 0.90);
+  --bg-surface: #EFEAE1;
+  --bg-surface-soft: rgba(239, 234, 225, 0.55);
+  --bg-surface-strong: rgba(239, 234, 225, 0.65);
+  --bg-paper: #FAF8F4;
+  --bg-paper-soft: rgba(250, 248, 244, 0.78);
+  --bg-paper-elevated: rgba(250, 248, 244, 0.94);
+  --bg-img-frame: #E5DDD1;
+  --bg-deep: #1A2723;
+  --bg-deep-soft: #1D2C27;
+  --bg-deep-ribbon: #16211D;
+
+  --text-ink: #1D2220;
+  --text-ink-soft: rgba(29, 34, 32, 0.78);
+  --text-body: #3F4642;
+  --text-secondary: #4E5551;
+  --text-muted: #5D6560;
+
+  --accent-emphasis: #2B423B;
+  --accent-emphasis-hover: #1A2723;
+  --accent-amber: #8C5E3E;
+  --accent-amber-soft: #C9A484;
+  --accent-tint: rgba(43, 66, 59, 0.10);
+  --accent-tint-soft: rgba(43, 66, 59, 0.08);
+
+  --btn-primary-bg: #2B423B;
+  --btn-primary-hover: #1A2723;
+  --btn-primary-text: #F6F3EE;
+
+  --border-hairline: rgba(29, 34, 32, 0.10);
+  --border-subtle: rgba(29, 34, 32, 0.12);
+  --border-medium: rgba(29, 34, 32, 0.16);
+  --border-accent: rgba(43, 66, 59, 0.45);
+  --border-accent-soft: rgba(43, 66, 59, 0.22);
+
+  --shadow-nav: 0 1px 0 rgba(29, 34, 32, 0.08);
+  --shadow-card: 0 24px 55px -34px rgba(26, 39, 35, 0.24);
+  --shadow-card-lg: 0 28px 65px -32px rgba(26, 39, 35, 0.28);
+  --spotlight-glow: rgba(169, 120, 86, 0.13);
+  --progress-bar: rgba(43, 66, 59, 0.65);
+  --ribbon-spark: rgba(43, 66, 59, 0.40);
+  --botanical-stroke: rgba(43, 66, 59, 0.34);
+  --quote-watermark: rgba(43, 66, 59, 0.06);
+  --backdrop-scrim: rgba(26, 39, 35, 0.58);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg-canvas: #101715;
+  --bg-canvas-blur: rgba(16, 23, 21, 0.88);
+  --bg-surface: #151F1C;
+  --bg-surface-soft: rgba(21, 31, 28, 0.88);
+  --bg-surface-strong: rgba(21, 31, 28, 0.96);
+  --bg-paper: #192521;
+  --bg-paper-soft: rgba(25, 37, 33, 0.84);
+  --bg-paper-elevated: rgba(25, 37, 33, 0.95);
+  --bg-img-frame: #1F2D28;
+  --bg-deep: #0A100E;
+  --bg-deep-soft: #0F1714;
+  --bg-deep-ribbon: #0C1311;
+
+  --text-ink: #F2ECE3;
+  --text-ink-soft: rgba(242, 236, 227, 0.78);
+  --text-body: #D2DAD5;
+  --text-secondary: #BCC6C0;
+  --text-muted: #93A099;
+
+  --accent-emphasis: #D4B290;
+  --accent-emphasis-hover: #E3C6A8;
+  --accent-amber: #D5AF8A;
+  --accent-amber-soft: #D9B794;
+  --accent-tint: rgba(212, 178, 144, 0.14);
+  --accent-tint-soft: rgba(212, 178, 144, 0.10);
+
+  --btn-primary-bg: #CFA983;
+  --btn-primary-hover: #DFBE9C;
+  --btn-primary-text: #101715;
+
+  --border-hairline: rgba(242, 236, 227, 0.09);
+  --border-subtle: rgba(242, 236, 227, 0.12);
+  --border-medium: rgba(242, 236, 227, 0.18);
+  --border-accent: rgba(212, 178, 144, 0.52);
+  --border-accent-soft: rgba(212, 178, 144, 0.28);
+
+  --shadow-nav: 0 1px 0 rgba(242, 236, 227, 0.08);
+  --shadow-card: 0 24px 55px -30px rgba(0, 0, 0, 0.55);
+  --shadow-card-lg: 0 28px 65px -28px rgba(0, 0, 0, 0.65);
+  --spotlight-glow: rgba(209, 171, 134, 0.14);
+  --progress-bar: rgba(212, 178, 144, 0.75);
+  --ribbon-spark: rgba(212, 178, 144, 0.45);
+  --botanical-stroke: rgba(212, 178, 144, 0.36);
+  --quote-watermark: rgba(212, 178, 144, 0.08);
+  --backdrop-scrim: rgba(4, 8, 7, 0.76);
+}
+
 @layer base {
   html {
-    background-color: var(--color-canvas);
-    color: var(--color-ink);
+    background-color: var(--bg-canvas);
+    color: var(--text-ink);
     font-family: var(--font-sans);
     overflow-x: clip;
     scrollbar-gutter: stable;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.35s ease, color 0.35s ease;
   }
 
   body {
     overflow-x: clip;
+    background-color: var(--bg-canvas);
+    color: var(--text-ink);
+    transition: background-color 0.35s ease, color 0.35s ease;
   }
 
   html.lenis,
@@ -51,13 +158,13 @@
   }
 
   ::selection {
-    background-color: #2B423B;
-    color: #F6F3EE;
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
   }
 
   /* Accessible editorial keyboard focus ring (invisible for mouse, crisp for keyboard) */
   :focus-visible {
-    outline: 2px solid #2B423B;
+    outline: 2px solid var(--accent-emphasis);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -73,16 +180,16 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #F6F3EE;
+    background: var(--bg-canvas);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(43, 66, 59, 0.25);
+    background: var(--border-accent-soft);
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(43, 66, 59, 0.45);
+    background: var(--border-accent);
   }
 }
 
@@ -100,7 +207,7 @@
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--color-ink-muted);
+    color: var(--text-muted);
   }
 
   /* Signature Awwwards hairline underline link */
@@ -169,17 +276,21 @@
     background-size: 200px 200px;
   }
 
+  :root[data-theme="dark"] .paper-grain {
+    opacity: 0.036;
+  }
+
   /* Fine hairline rules */
   .hairline-t {
-    border-top: 1px solid rgba(29, 34, 32, 0.11);
+    border-top: 1px solid var(--border-subtle);
   }
 
   .hairline-b {
-    border-bottom: 1px solid rgba(29, 34, 32, 0.11);
+    border-bottom: 1px solid var(--border-subtle);
   }
 
   .hairline-all {
-    border: 1px solid rgba(29, 34, 32, 0.11);
+    border: 1px solid var(--border-subtle);
   }
 }
 

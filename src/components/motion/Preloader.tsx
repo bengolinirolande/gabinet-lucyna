@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { EASE_EDITORIAL } from './MotionPrimitives';
-import { PRACTICE } from '../../data/practice';
+import { usePreferences } from '../../context/PreferencesContext';
 
 interface PreloaderProps {
   onComplete: () => void;
@@ -32,6 +32,7 @@ export function shouldPlayPreloader(): boolean {
  * Brief, serene Awwwards editorial opening curtain (~0.38s hold on first visit; instant skip on repeat/bots).
  */
 export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
+  const { practice, ui } = usePreferences();
   const shouldPlay = useRef<boolean>(shouldPlayPreloader());
   const [visible, setVisible] = useState<boolean>(shouldPlay.current);
   const completedRef = useRef(false);
@@ -76,7 +77,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
           initial={{ clipPath: 'inset(0% 0% 0% 0%)' }}
           exit={{ clipPath: 'inset(0% 0% 100% 0%)', pointerEvents: 'none' }}
           transition={{ duration: 0.68, ease: EASE_EDITORIAL }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#1A2723] text-[#F6F3EE]"
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[var(--bg-deep)] text-[#F6F3EE]"
         >
           <div className="flex flex-col items-center gap-5 px-6 text-center">
             <div className="overflow-hidden">
@@ -87,7 +88,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
                 transition={{ duration: 0.44, ease: EASE_EDITORIAL }}
                 className="font-editorial block text-5xl font-light tracking-tight md:text-6xl"
               >
-                {PRACTICE.shortName}
+                {practice.shortName}
               </motion.span>
             </div>
 
@@ -107,7 +108,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
               transition={{ duration: 0.36, delay: 0.06, ease: EASE_EDITORIAL }}
               className="text-[10px] uppercase tracking-[0.26em] text-[#F6F3EE]/78"
             >
-              Psycholog · Psychotraumatolog · Gdynia i online
+              {ui.preloaderSubtitle}
             </motion.span>
           </div>
         </motion.div>

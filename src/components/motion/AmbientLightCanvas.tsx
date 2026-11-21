@@ -59,29 +59,55 @@ export const AmbientLightCanvas: React.FC<{ className?: string }> = ({ className
 
       ctx.clearRect(0, 0, width, height);
 
-      const blobs = [
-        {
-          x: width * (0.72 + Math.sin(t * 1.1) * 0.07 + (mouseX - 0.5) * 0.14),
-          y: height * (0.28 + Math.cos(t * 0.9) * 0.08 + (mouseY - 0.5) * 0.1),
-          r: Math.max(width, height) * 0.42,
-          color0: 'rgba(169, 120, 86, 0.125)',
-          color1: 'rgba(169, 120, 86, 0)',
-        },
-        {
-          x: width * (0.24 + Math.cos(t * 0.8) * 0.08 - (mouseX - 0.5) * 0.08),
-          y: height * (0.68 + Math.sin(t * 1.05) * 0.07 - (mouseY - 0.5) * 0.08),
-          r: Math.max(width, height) * 0.46,
-          color0: 'rgba(43, 66, 59, 0.075)',
-          color1: 'rgba(43, 66, 59, 0)',
-        },
-        {
-          x: width * (0.5 + Math.sin(t * 0.6 + 1.4) * 0.12 + (mouseX - 0.5) * 0.18),
-          y: height * (0.45 + Math.cos(t * 0.75 + 0.8) * 0.09 + (mouseY - 0.5) * 0.14),
-          r: Math.max(width, height) * 0.34,
-          color0: 'rgba(216, 207, 194, 0.28)',
-          color1: 'rgba(216, 207, 194, 0)',
-        },
-      ];
+      const isDark = document.documentElement.dataset.theme === 'dark';
+
+      const blobs = isDark
+        ? [
+            {
+              x: width * (0.72 + Math.sin(t * 1.1) * 0.07 + (mouseX - 0.5) * 0.14),
+              y: height * (0.28 + Math.cos(t * 0.9) * 0.08 + (mouseY - 0.5) * 0.1),
+              r: Math.max(width, height) * 0.42,
+              color0: 'rgba(207, 169, 131, 0.095)',
+              color1: 'rgba(207, 169, 131, 0)',
+            },
+            {
+              x: width * (0.24 + Math.cos(t * 0.8) * 0.08 - (mouseX - 0.5) * 0.08),
+              y: height * (0.68 + Math.sin(t * 1.05) * 0.07 - (mouseY - 0.5) * 0.08),
+              r: Math.max(width, height) * 0.48,
+              color0: 'rgba(54, 88, 76, 0.18)',
+              color1: 'rgba(54, 88, 76, 0)',
+            },
+            {
+              x: width * (0.5 + Math.sin(t * 0.6 + 1.4) * 0.12 + (mouseX - 0.5) * 0.18),
+              y: height * (0.45 + Math.cos(t * 0.75 + 0.8) * 0.09 + (mouseY - 0.5) * 0.14),
+              r: Math.max(width, height) * 0.36,
+              color0: 'rgba(34, 54, 47, 0.22)',
+              color1: 'rgba(34, 54, 47, 0)',
+            },
+          ]
+        : [
+            {
+              x: width * (0.72 + Math.sin(t * 1.1) * 0.07 + (mouseX - 0.5) * 0.14),
+              y: height * (0.28 + Math.cos(t * 0.9) * 0.08 + (mouseY - 0.5) * 0.1),
+              r: Math.max(width, height) * 0.42,
+              color0: 'rgba(169, 120, 86, 0.125)',
+              color1: 'rgba(169, 120, 86, 0)',
+            },
+            {
+              x: width * (0.24 + Math.cos(t * 0.8) * 0.08 - (mouseX - 0.5) * 0.08),
+              y: height * (0.68 + Math.sin(t * 1.05) * 0.07 - (mouseY - 0.5) * 0.08),
+              r: Math.max(width, height) * 0.46,
+              color0: 'rgba(43, 66, 59, 0.075)',
+              color1: 'rgba(43, 66, 59, 0)',
+            },
+            {
+              x: width * (0.5 + Math.sin(t * 0.6 + 1.4) * 0.12 + (mouseX - 0.5) * 0.18),
+              y: height * (0.45 + Math.cos(t * 0.75 + 0.8) * 0.09 + (mouseY - 0.5) * 0.14),
+              r: Math.max(width, height) * 0.34,
+              color0: 'rgba(216, 207, 194, 0.28)',
+              color1: 'rgba(216, 207, 194, 0)',
+            },
+          ];
 
       for (const b of blobs) {
         const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);

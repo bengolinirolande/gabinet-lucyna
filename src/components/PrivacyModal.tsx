@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
-import { PRACTICE } from '../data/practice';
+import { usePreferences } from '../context/PreferencesContext';
 import { useLenis } from './motion/LenisProvider';
 import { EASE_EDITORIAL } from './motion/MotionPrimitives';
 
@@ -11,6 +11,8 @@ interface PrivacyModalProps {
 }
 
 export const PrivacyModal: React.FC<PrivacyModalProps> = ({ open, onClose }) => {
+  const { ui } = usePreferences();
+  const p = ui.privacy;
   const { lockScroll, unlockScroll } = useLenis();
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const prevFocusRef = useRef<HTMLElement | null>(null);
@@ -39,7 +41,7 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ open, onClose }) => 
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Polityka prywatności i RODO"
+          aria-label={p.dialogAria}
           className="fixed inset-0 z-[90] flex items-center justify-center p-5"
         >
           <motion.div
@@ -47,7 +49,8 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ open, onClose }) => 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-[#1A2723]/60 backdrop-blur-sm"
+            style={{ backgroundColor: 'var(--backdrop-scrim)' }}
+            className="absolute inset-0 backdrop-blur-sm"
           />
           <motion.div
             data-lenis-prevent
@@ -55,62 +58,40 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ open, onClose }) => 
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.98 }}
             transition={{ duration: 0.45, ease: EASE_EDITORIAL }}
-            className="relative z-10 max-h-[82vh] w-full max-w-[620px] overflow-y-auto overscroll-contain border border-[#1D2220]/12 bg-[#F6F3EE] p-8 text-[#1D2220] shadow-2xl sm:p-10"
+            className="relative z-10 max-h-[82vh] w-full max-w-[620px] overflow-y-auto overscroll-contain border border-[var(--border-subtle)] bg-[var(--bg-canvas)] p-8 text-[var(--text-ink)] shadow-2xl sm:p-10"
           >
-            <div className="flex items-start justify-between gap-4 border-b border-[#1D2220]/11 pb-5">
+            <div className="flex items-start justify-between gap-4 border-b border-[var(--border-subtle)] pb-5">
               <div>
-                <p className="eyebrow">Informacja prawna</p>
-                <h2 className="font-editorial mt-1.5 text-3xl font-normal">
-                  Polityka prywatności i RODO
-                </h2>
+                <p className="eyebrow">{p.eyebrow}</p>
+                <h2 className="font-editorial mt-1.5 text-3xl font-normal">{p.title}</h2>
               </div>
               <button
                 ref={closeBtnRef}
                 type="button"
                 onClick={onClose}
-                aria-label="Zamknij okno"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-[#1D2220]/15 text-[#1D2220] hover:border-[#2B423B]"
+                aria-label={p.closeAria}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border-medium)] text-[var(--text-ink)] hover:border-[var(--border-accent)]"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="mt-6 space-y-5 text-[14px] font-light leading-[1.8] text-[#4E5551]">
-              <p>
-                <strong className="font-medium text-[#1D2220]">1. Administrator danych:</strong>{' '}
-                Administratorem danych osobowych przekazywanych przez formularz kontaktowy jest{' '}
-                {PRACTICE.fullName} — Prywatny Gabinet Psychologiczny (Gdynia, ul. Chwarznieńska
-                136–138), kontakt: {PRACTICE.email}.
-              </p>
-              <p>
-                <strong className="font-medium text-[#1D2220]">2. Cel i zakres przetwarzania:</strong>{' '}
-                Dane (imię, numer telefonu, adres e-mail oraz dobrowolna treść wiadomości)
-                przetwarzane są wyłącznie w celu odpowiedzi na zapytanie i ustalenia terminu
-                konsultacji (art. 6 ust. 1 lit. a i b RODO). W pierwszym zgłoszeniu proszę o
-                niezamieszczanie szczegółowej dokumentacji ani wrażliwych danych medycznych —
-                szczegóły omawiamy bezpiecznie podczas spotkania.
-              </p>
-              <p>
-                <strong className="font-medium text-[#1D2220]">3. Tajemnica zawodowa:</strong>{' '}
-                Informacje powierzane podczas kontaktu i spotkań podlegają tajemnicy zawodowej
-                psychologa i nie są udostępniane podmiotom nieuprawnionym. Wiadomość z formularza
-                przekazywana jest szyfrowanym połączeniem HTTPS na skrzynkę e-mail gabinetu.
-              </p>
-              <p>
-                <strong className="font-medium text-[#1D2220]">4. Prawa osoby:</strong> Masz prawo
-                dostępu do swoich danych, ich sprostowania, usunięcia lub ograniczenia przetwarzania
-                w dowolnym momencie, pisząc na adres {PRACTICE.email}, a także prawo wniesienia
-                skargi do Prezesa Urzędu Ochrony Danych Osobowych.
-              </p>
+            <div className="mt-6 space-y-5 text-[14px] font-light leading-[1.8] text-[var(--text-secondary)]">
+              {p.sections.map((sec) => (
+                <p key={sec.heading}>
+                  <strong className="font-medium text-[var(--text-ink)]">{sec.heading}</strong>{' '}
+                  {sec.body}
+                </p>
+              ))}
             </div>
 
-            <div className="mt-8 border-t border-[#1D2220]/11 pt-5">
+            <div className="mt-8 border-t border-[var(--border-subtle)] pt-5">
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-full bg-[#2B423B] px-6 py-2.5 text-[13px] font-medium text-[#F6F3EE] hover:bg-[#1A2723]"
+                className="rounded-full bg-[var(--btn-primary-bg)] px-6 py-2.5 text-[13px] font-medium text-[var(--btn-primary-text)] hover:bg-[var(--btn-primary-hover)]"
               >
-                Rozumiem
+                {p.confirmBtn}
               </button>
             </div>
           </motion.div>

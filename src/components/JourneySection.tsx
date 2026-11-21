@@ -7,7 +7,8 @@ import {
   useTransform,
   type MotionValue,
 } from 'framer-motion';
-import { PRACTICE } from '../data/practice';
+import { usePreferences } from '../context/PreferencesContext';
+import type { PracticeData } from '../data/practice.ru';
 import {
   BotanicalDrawSvg,
   EASE_EDITORIAL,
@@ -23,19 +24,19 @@ interface JourneySectionProps {
 }
 
 interface StackCardProps {
-  step: (typeof PRACTICE.journey.steps)[number];
+  step: PracticeData['journey']['steps'][number];
+  stepPrefix: string;
+  cardFooter: string;
   index: number;
   total: number;
   parentProgress: MotionValue<number>;
   enableStack: boolean;
 }
 
-/**
- * Codrops / Awwwards Sticky Stacking Card (Desktop/Tablet `md:sticky` only —
- * mobile cards remain full scale & full brightness without phantom shrinking!).
- */
 const StackingStepCard: React.FC<StackCardProps> = ({
   step,
+  stepPrefix,
+  cardFooter,
   index,
   total,
   parentProgress,
@@ -56,18 +57,17 @@ const StackingStepCard: React.FC<StackCardProps> = ({
     <div style={{ top: `${102 + index * 24}px` }} className="mb-8 last:mb-0 md:sticky">
       <motion.article
         style={{ scale }}
-        className="relative overflow-hidden border border-[#1D2220]/12 bg-[#FAF8F4] shadow-[0_28px_65px_-34px_rgba(26,39,35,0.28)] origin-top"
+        className="relative origin-top overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-paper)] shadow-[var(--shadow-card-lg)]"
       >
-        {/* Pure GPU depth scrim as newer cards glide over */}
         <motion.div
           aria-hidden="true"
           style={{ opacity: dimOpacity }}
-          className="pointer-events-none absolute inset-0 z-20 bg-[#1A2723]"
+          className="pointer-events-none absolute inset-0 z-20 bg-[#0A100E]"
         />
 
         <div className="grid grid-cols-1 md:grid-cols-12">
           {/* Editorial Photography Half */}
-          <div className="relative aspect-[4/3] overflow-hidden bg-[#E5DDD1] md:col-span-5 md:aspect-auto md:min-h-[290px]">
+          <div className="relative aspect-[4/3] overflow-hidden bg-[var(--bg-img-frame)] md:col-span-5 md:aspect-auto md:min-h-[290px]">
             <motion.img
               src={step.image}
               alt={step.imageAlt}
@@ -85,8 +85,8 @@ const StackingStepCard: React.FC<StackCardProps> = ({
                     : 'object-center'
               }`}
             />
-            <span className="font-editorial absolute left-4 top-4 rounded-full bg-[#1A2723]/82 px-3.5 py-1 text-base italic text-[#F6F3EE] backdrop-blur-md">
-              Krok {step.number}
+            <span className="font-editorial absolute left-4 top-4 rounded-full bg-[#1A2723]/84 px-3.5 py-1 text-base italic text-[#F6F3EE] backdrop-blur-md">
+              {stepPrefix} {step.number}
             </span>
           </div>
 
@@ -94,25 +94,25 @@ const StackingStepCard: React.FC<StackCardProps> = ({
           <div className="flex flex-col justify-between p-7 sm:p-9 md:col-span-7">
             <div>
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-editorial text-4xl font-light italic text-[#8C5E3E]">
+                <span className="font-editorial text-4xl font-light italic text-[var(--accent-amber)]">
                   {step.number}
                 </span>
-                <span className="rounded-full border border-[#1D2220]/10 bg-[#F6F3EE] px-3.5 py-1 text-[11px] font-normal text-[#4E5551]">
+                <span className="rounded-full border border-[var(--border-hairline)] bg-[var(--bg-canvas)] px-3.5 py-1 text-[11px] font-normal text-[var(--text-secondary)]">
                   {step.duration}
                 </span>
               </div>
 
-              <h3 className="font-editorial mt-5 text-[28px] font-normal leading-[1.16] text-[#1D2220] md:text-[32px]">
+              <h3 className="font-editorial mt-5 text-[28px] font-normal leading-[1.16] text-[var(--text-ink)] md:text-[32px]">
                 {step.title}
               </h3>
 
-              <p className="mt-4 text-[14.5px] font-light leading-[1.82] text-[#4E5551]">
+              <p className="mt-4 text-[14.5px] font-light leading-[1.82] text-[var(--text-secondary)]">
                 {step.description}
               </p>
             </div>
 
-            <div className="mt-7 flex items-center justify-between border-t border-[#1D2220]/10 pt-4 text-[11px] uppercase tracking-[0.18em] text-[#5D6560]">
-              <span>Gdynia · Online (PL / RU)</span>
+            <div className="mt-7 flex items-center justify-between border-t border-[var(--border-hairline)] pt-4 text-[11px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+              <span>{cardFooter}</span>
               <span>
                 {step.number} / 0{total}
               </span>
@@ -125,6 +125,7 @@ const StackingStepCard: React.FC<StackCardProps> = ({
 };
 
 export const JourneySection: React.FC<JourneySectionProps> = ({ onOpenBooking }) => {
+  const { practice, ui } = usePreferences();
   const stackRef = useRef<HTMLDivElement>(null);
   const [isDesktopStack, setIsDesktopStack] = useState<boolean>(() =>
     typeof window !== 'undefined' ? window.matchMedia('(min-width: 768px)').matches : true
@@ -150,40 +151,35 @@ export const JourneySection: React.FC<JourneySectionProps> = ({ onOpenBooking })
   });
 
   return (
-    <section id="jak-zaczac" className="relative bg-[#F6F3EE] py-14 md:py-18">
+    <section id="jak-zaczac" className="relative bg-[var(--bg-canvas)] py-14 md:py-18">
       <div className="mx-auto max-w-[1360px] px-5 sm:px-6 md:px-10 lg:px-14">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-14">
           {/* Left Sticky Editorial Intro + Drawn Botanical Line Art */}
           <div className="lg:col-span-5 lg:sticky lg:top-28">
             <Reveal>
-              <p className="eyebrow mb-4">{PRACTICE.journey.eyebrow}</p>
+              <p className="eyebrow mb-4">{practice.journey.eyebrow}</p>
             </Reveal>
 
-            <h2 className="font-editorial text-[clamp(2.2rem,3.7vw,3.5rem)] font-light leading-[1.06] tracking-[-0.02em] text-[#1D2220]">
+            <h2 className="font-editorial text-[clamp(2.2rem,3.7vw,3.5rem)] font-light leading-[1.06] tracking-[-0.02em] text-[var(--text-ink)]">
               <MaskedLines
-                lines={[
-                  'Pierwszy krok bywa',
-                  'najtrudniejszy.',
-                  'Dalej idziemy spokojnie.',
-                ]}
-                italicSubstring="Dalej idziemy spokojnie."
+                lines={ui.journey.lines}
+                italicSubstring={ui.journey.italicSubstring}
               />
             </h2>
 
             <Reveal delay={0.16}>
-              <p className="mt-6 max-w-[420px] text-[15px] font-light leading-[1.82] text-[#4E5551]">
-                Nie musisz mieć gotowych odpowiedzi ani sprecyzowanego planu. Pierwsze konsultacje
-                służą temu, byśmy mogli spokojnie zrozumieć, z czym się mierzysz.
+              <p className="mt-6 max-w-[420px] text-[15px] font-light leading-[1.82] text-[var(--text-secondary)]">
+                {ui.journey.lead}
               </p>
             </Reveal>
 
             <Reveal delay={0.22} className="mt-8">
               <MagneticButton
-                onClick={() => onOpenBooking(undefined, 'Konsultacja psychologiczna')}
-                cursorLabel="Umów"
-                className="group inline-flex items-center gap-2.5 rounded-full border border-[#2B423B] bg-transparent px-7 py-3.5 text-[13px] font-medium text-[#2B423B] transition-colors duration-300 hover:bg-[#2B423B] hover:text-[#F6F3EE]"
+                onClick={() => onOpenBooking(undefined, 'consultation')}
+                cursorLabel={ui.cursors.book}
+                className="group inline-flex items-center gap-2.5 rounded-full border border-[var(--accent-emphasis)] bg-transparent px-7 py-3.5 text-[13px] font-medium text-[var(--accent-emphasis)] transition-colors duration-300 hover:bg-[var(--btn-primary-bg)] hover:text-[var(--btn-primary-text)]"
               >
-                <SlotRollText label="Umów pierwszą konsultację" italicHover />
+                <SlotRollText label={ui.journey.cta} italicHover />
                 <KineticArrow className="h-4 w-4" />
               </MagneticButton>
             </Reveal>
@@ -195,12 +191,14 @@ export const JourneySection: React.FC<JourneySectionProps> = ({ onOpenBooking })
 
           {/* Right Sticky Stacking Photographic Card Deck */}
           <div ref={stackRef} className="relative pb-6 lg:col-span-7">
-            {PRACTICE.journey.steps.map((step, idx) => (
+            {practice.journey.steps.map((step, idx) => (
               <StackingStepCard
                 key={step.number}
                 step={step}
+                stepPrefix={ui.journey.stepPrefix}
+                cardFooter={ui.journey.cardFooter}
                 index={idx}
-                total={PRACTICE.journey.steps.length}
+                total={practice.journey.steps.length}
                 parentProgress={smoothProgress}
                 enableStack={isDesktopStack}
               />

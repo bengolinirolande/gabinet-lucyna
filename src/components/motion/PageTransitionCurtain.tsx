@@ -1,6 +1,7 @@
 import React from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ROUTES, type PageId } from '../../types/navigation';
+import { type PageId } from '../../types/navigation';
+import { usePreferences } from '../../context/PreferencesContext';
 
 interface PageTransitionCurtainProps {
   active: boolean;
@@ -12,7 +13,7 @@ const EASE_CURTAIN_OUT = [0.22, 1, 0.36, 1] as const;
 
 /**
  * Signature Awwwards / Barba.js-style full-screen editorial curtain transition.
- * Blocks accidental click-through while covering, displays the chapter title,
+ * Blocks accidental click-through while covering, displays the localized chapter title,
  * and lifts cleanly upward to relay into the new page's masked headline reveal.
  */
 export const PageTransitionCurtain: React.FC<PageTransitionCurtainProps> = ({
@@ -20,7 +21,8 @@ export const PageTransitionCurtain: React.FC<PageTransitionCurtainProps> = ({
   targetPage,
 }) => {
   const reduced = useReducedMotion();
-  const meta = ROUTES[targetPage];
+  const { routes, ui } = usePreferences();
+  const meta = routes[targetPage];
 
   if (reduced) return null;
 
@@ -40,7 +42,7 @@ export const PageTransitionCurtain: React.FC<PageTransitionCurtainProps> = ({
             pointerEvents: 'none',
             transition: { duration: 0.52, ease: EASE_CURTAIN_OUT },
           }}
-          className="pointer-events-auto fixed inset-0 z-[96] flex flex-col items-center justify-center bg-[#1A2723] px-6 text-center text-[#F6F3EE]"
+          className="pointer-events-auto fixed inset-0 z-[96] flex flex-col items-center justify-center bg-[var(--bg-deep)] px-6 text-center text-[#F6F3EE]"
         >
           <motion.span
             initial={{ opacity: 0, y: 8 }}
@@ -49,7 +51,7 @@ export const PageTransitionCurtain: React.FC<PageTransitionCurtainProps> = ({
             transition={{ duration: 0.28, delay: 0.08 }}
             className="text-[10px] uppercase tracking-[0.28em] text-[#C9A484]"
           >
-            Rozdział {meta.chapter} · {meta.curtainSubtitle}
+            {ui.chapterLabel} {meta.chapter} · {meta.curtainSubtitle}
           </motion.span>
 
           <div className="mt-3 overflow-hidden">

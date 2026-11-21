@@ -8,53 +8,9 @@ import {
   type PanInfo,
 } from 'framer-motion';
 import { ArrowLeft, ArrowRight, BadgeCheck } from 'lucide-react';
-import { PRACTICE } from '../data/practice';
+import { usePreferences } from '../context/PreferencesContext';
 import { EASE_EDITORIAL, Reveal } from './motion/MotionPrimitives';
 
-interface ReflectionQuote {
-  id: string;
-  quote: string;
-  author: string;
-  context: string;
-  location: string;
-}
-
-const REFLECTIONS: ReflectionQuote[] = [
-  {
-    id: 'r1',
-    quote:
-      'Serdecznie polecam Panią psycholog. Akceptuje Pani moje dziwactwa, nie ocenia, a wspiera. Czuję się bezpiecznie i mam dzięki temu odwagę do zmian koniecznych do lepszego życia. Pani z dużą wiedzą i doświadczeniem, co da się odczuć. Dziękuję.',
-    author: 'Anita',
-    context: 'Psychoterapia · maj 2026 · ZnanyLekarz.pl',
-    location: 'Wizyta zweryfikowana · 5,0',
-  },
-  {
-    id: 'r2',
-    quote:
-      'Pani psycholog słuchała mnie z uwagą i z takim głębokim zainteresowaniem, jakiego nigdy wcześniej nie zaznałam. Pani Lucyna nie jest osobą kogokolwiek oceniającą, tylko wspierającą i naprawdę głęboko rozumiejącą. Polecam ją każdemu, kto czuje, że potrzebuje pomocy — zazna wyłącznie wsparcia i prawdziwego zrozumienia.',
-    author: 'Monika',
-    context: 'Konsultacja psychologiczna · czerwiec 2025 · ZnanyLekarz.pl',
-    location: 'Wizyta zweryfikowana · 5,0',
-  },
-  {
-    id: 'r3',
-    quote:
-      'Swobodna atmosfera i profesjonalne podejście. Szukanie rozwiązań, nic nie jest narzucane! Na pewno Pani Lucyna pomoże odnaleźć odpowiednią drogę — tę z uśmiechem.',
-    author: 'Joanna',
-    context: 'Badania psychologiczne · maj 2025 · ZnanyLekarz.pl',
-    location: 'Wizyta zweryfikowana · 5,0',
-  },
-  {
-    id: 'r4',
-    quote:
-      'Jestem bardzo zadowolony z wizyty i na pewno umówię się kolejny raz. Długo nie mogłem się zdecydować, ale odważyłem się i jestem bardzo zadowolony.',
-    author: 'P.K.',
-    context: 'Konsultacja psychologiczna · lipiec 2025 · ZnanyLekarz.pl',
-    location: 'Wizyta zweryfikowana · 5,0',
-  },
-];
-
-// Dynamic Framer Motion variants keyed off live `custom` direction (zero stale exit direction!)
 const counterVariants = {
   enter: (dir: number) => ({ y: dir > 0 ? '100%' : '-100%', opacity: 0 }),
   center: { y: '0%', opacity: 1 },
@@ -80,6 +36,8 @@ const quoteVariants = {
 };
 
 export const TestimonialsSection: React.FC = () => {
+  const { ui, lang } = usePreferences();
+  const reflections = ui.testimonials.reflections;
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const reduced = useReducedMotion();
@@ -90,7 +48,6 @@ export const TestimonialsSection: React.FC = () => {
     offset: ['start end', 'end start'],
   });
 
-  // Opposing vertical editorial parallax across the triptych (zero horizontal clipping!)
   const colLeftY = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [14, -14]);
   const colMidY = useTransform(scrollYProgress, [0, 1], [0, 0]);
   const colRightY = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [-14, 14]);
@@ -98,7 +55,7 @@ export const TestimonialsSection: React.FC = () => {
 
   const navigate = (step: number) => {
     setDirection(step);
-    setIndex((prev) => (prev + step + REFLECTIONS.length) % REFLECTIONS.length);
+    setIndex((prev) => (prev + step + reflections.length) % reflections.length);
   };
 
   const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
@@ -109,53 +66,60 @@ export const TestimonialsSection: React.FC = () => {
     }
   };
 
-  const current = REFLECTIONS[index];
+  const current = reflections[index] ?? reflections[0];
+  const openQuote = lang === 'ru' ? '«' : '„';
+  const closeQuote = lang === 'ru' ? '»' : '”';
 
   return (
-    <section aria-label="Słowa pacjentów" className="relative bg-[#F6F3EE] py-14 md:py-18">
-      <div className="mx-auto max-w-[1360px] px-6 md:px-10 lg:px-14">
+    <section
+      aria-label={ui.testimonials.ariaLabel}
+      className="relative bg-[var(--bg-canvas)] py-14 md:py-18"
+    >
+      <div className="mx-auto max-w-[1360px] px-5 sm:px-6 md:px-10 lg:px-14">
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
           {/* Left Editorial Intro & Controls */}
           <div className="flex flex-col justify-between gap-8 lg:col-span-4">
             <div>
               <Reveal>
-                <p className="eyebrow mb-4">Głosy pacjentów</p>
+                <p className="eyebrow mb-4">{ui.testimonials.eyebrow}</p>
               </Reveal>
               <Reveal delay={0.08}>
-                <h2 className="font-editorial text-[clamp(2rem,3.3vw,3rem)] font-light leading-[1.08] tracking-[-0.02em] text-[#1D2220]">
-                  Doświadczenie osób, które zdecydowały się{' '}
-                  <em className="italic text-[#2B423B]">zrobić pierwszy krok.</em>
+                <h2 className="font-editorial text-[clamp(2rem,3.3vw,3rem)] font-light leading-[1.08] tracking-[-0.02em] text-[var(--text-ink)]">
+                  {ui.testimonials.headingPrefix}{' '}
+                  <em className="italic text-[var(--accent-emphasis)]">
+                    {ui.testimonials.headingItalic}
+                  </em>
                 </h2>
               </Reveal>
               <Reveal delay={0.16}>
-                <div className="mt-6 inline-flex items-center gap-2 text-[12px] font-light text-[#5D6560]">
-                  <BadgeCheck className="h-4 w-4 stroke-[1.5] text-[#2B423B]" />
-                  <span>Zweryfikowane opinie 5,0 / 5 z portalu ZnanyLekarz.pl</span>
+                <div className="mt-6 inline-flex items-center gap-2 text-[12px] font-light text-[var(--text-muted)]">
+                  <BadgeCheck className="h-4 w-4 shrink-0 stroke-[1.5] text-[var(--accent-emphasis)]" />
+                  <span>{ui.testimonials.verifiedNote}</span>
                 </div>
               </Reveal>
             </div>
 
-            {/* Tactile Circular Navigation Buttons + Directional Vertical Slot-Roll Counter */}
+            {/* Tactile Circular Navigation Buttons */}
             <div className="flex items-center gap-4 pt-2">
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                aria-label="Poprzednia opinia"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#1D2220]/15 bg-[#FAF8F4] text-[#1D2220] transition-all duration-300 hover:border-[#2B423B] hover:bg-[#2B423B] hover:text-[#F6F3EE]"
+                aria-label={ui.testimonials.prevAria}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border-medium)] bg-[var(--bg-paper)] text-[var(--text-ink)] transition-all duration-300 hover:border-[var(--btn-primary-bg)] hover:bg-[var(--btn-primary-bg)] hover:text-[var(--btn-primary-text)]"
               >
                 <ArrowLeft className="h-4 w-4 stroke-[1.5]" />
               </button>
               <button
                 type="button"
                 onClick={() => navigate(1)}
-                aria-label="Następna opinia"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-[#1D2220]/15 bg-[#FAF8F4] text-[#1D2220] transition-all duration-300 hover:border-[#2B423B] hover:bg-[#2B423B] hover:text-[#F6F3EE]"
+                aria-label={ui.testimonials.nextAria}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border-medium)] bg-[var(--bg-paper)] text-[var(--text-ink)] transition-all duration-300 hover:border-[var(--btn-primary-bg)] hover:bg-[var(--btn-primary-bg)] hover:text-[var(--btn-primary-text)]"
               >
                 <ArrowRight className="h-4 w-4 stroke-[1.5]" />
               </button>
 
-              <div className="ml-2 flex items-baseline gap-1 font-editorial text-lg text-[#4E5551]">
-                <span className="relative inline-block h-[1.25em] w-[1.3em] overflow-hidden align-bottom text-[#1D2220]">
+              <div className="ml-2 flex items-baseline gap-1 font-editorial text-lg text-[var(--text-secondary)]">
+                <span className="relative inline-block h-[1.25em] w-[1.3em] overflow-hidden align-bottom text-[var(--text-ink)]">
                   <AnimatePresence mode="wait" custom={direction}>
                     <motion.span
                       key={index}
@@ -171,28 +135,29 @@ export const TestimonialsSection: React.FC = () => {
                     </motion.span>
                   </AnimatePresence>
                 </span>
-                <span className="text-sm text-[#5D6560]">/ 0{REFLECTIONS.length}</span>
+                <span className="text-sm text-[var(--text-muted)]">/ 0{reflections.length}</span>
               </div>
             </div>
           </div>
 
-          {/* Right Animated Editorial Quote Canvas with Swipe & Directional Curtain Wipe */}
+          {/* Right Animated Editorial Quote Canvas */}
           <div className="lg:col-span-8">
             <div
               aria-live="polite"
-              className="relative overflow-hidden border border-[#1D2220]/11 bg-[#FAF8F4] p-8 shadow-[0_24px_60px_-38px_rgba(26,39,35,0.22)] md:p-12 lg:p-14"
+              className="relative overflow-hidden border border-[var(--border-subtle)] bg-[var(--bg-paper)] p-8 shadow-[var(--shadow-card)] md:p-12 lg:p-14"
             >
               <span
                 aria-hidden="true"
-                className="font-editorial pointer-events-none absolute right-8 top-4 select-none text-[120px] leading-none text-[#2B423B]/[0.06]"
+                style={{ color: 'var(--quote-watermark)' }}
+                className="font-editorial pointer-events-none absolute right-8 top-4 select-none text-[120px] leading-none"
               >
-                „
+                {openQuote}
               </span>
 
               <div className="min-h-[220px] sm:min-h-[200px]">
                 <AnimatePresence mode="wait" custom={direction}>
                   <motion.div
-                    key={current.id}
+                    key={`${lang}-${current.id}`}
                     custom={direction}
                     variants={quoteVariants}
                     initial="enter"
@@ -205,18 +170,22 @@ export const TestimonialsSection: React.FC = () => {
                     transition={{ duration: 0.52, ease: EASE_EDITORIAL }}
                     className="flex cursor-grab flex-col justify-between gap-8 active:cursor-grabbing"
                   >
-                    <blockquote className="font-editorial text-[24px] font-light italic leading-[1.42] text-[#1D2220] md:text-[30px]">
-                      „{current.quote}”
+                    <blockquote className="font-editorial text-[24px] font-light italic leading-[1.42] text-[var(--text-ink)] md:text-[30px]">
+                      {openQuote}
+                      {current.quote}
+                      {closeQuote}
                     </blockquote>
 
-                    <div className="flex flex-wrap items-end justify-between gap-4 border-t border-[#1D2220]/10 pt-6">
+                    <div className="flex flex-wrap items-end justify-between gap-4 border-t border-[var(--border-hairline)] pt-6">
                       <div>
-                        <p className="text-[14px] font-medium text-[#1D2220]">{current.author}</p>
-                        <p className="mt-0.5 text-[12.5px] font-light text-[#4E5551]">
+                        <p className="text-[14px] font-medium text-[var(--text-ink)]">
+                          {current.author}
+                        </p>
+                        <p className="mt-0.5 text-[12.5px] font-light text-[var(--text-secondary)]">
                           {current.context}
                         </p>
                       </div>
-                      <span className="rounded-full border border-[#1D2220]/10 bg-[#F6F3EE] px-3.5 py-1 text-[11px] uppercase tracking-[0.16em] text-[#5D6560]">
+                      <span className="rounded-full border border-[var(--border-hairline)] bg-[var(--bg-canvas)] px-3.5 py-1 text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
                         {current.location}
                       </span>
                     </div>
@@ -224,15 +193,15 @@ export const TestimonialsSection: React.FC = () => {
                 </AnimatePresence>
               </div>
 
-              {/* Interactive Progress Segmented Bars with 28px accessible touch targets */}
+              {/* Interactive Progress Segmented Bars */}
               <div className="mt-5 flex items-center gap-2">
-                {REFLECTIONS.map((item, i) => {
+                {reflections.map((item, i) => {
                   const active = i === index;
                   return (
                     <button
                       key={item.id}
                       type="button"
-                      aria-label={`Pokaż opinię ${i + 1}`}
+                      aria-label={`${ui.testimonials.showReviewAria} ${i + 1}`}
                       aria-pressed={active}
                       onClick={() => {
                         setDirection(i > index ? 1 : -1);
@@ -240,12 +209,12 @@ export const TestimonialsSection: React.FC = () => {
                       }}
                       className="flex-1 py-3"
                     >
-                      <span className="relative block h-1 w-full overflow-hidden bg-[#1D2220]/12">
+                      <span className="relative block h-1 w-full overflow-hidden bg-[var(--border-subtle)]">
                         {active && (
                           <motion.span
                             layoutId="testimonial-active-bar"
                             transition={{ type: 'spring', stiffness: 320, damping: 32 }}
-                            className="absolute inset-0 bg-[#2B423B]"
+                            className="absolute inset-0 bg-[var(--btn-primary-bg)]"
                           />
                         )}
                       </span>
@@ -257,44 +226,25 @@ export const TestimonialsSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Opposing Vertical Parallax Editorial Triptych (Zero Edge Clipping on Any Breakpoint) */}
+        {/* Opposing Vertical Parallax Editorial Triptych */}
         <div ref={stripRef} className="mt-10 py-4 md:mt-12">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {[
-              {
-                src: PRACTICE.images.officePortrait,
-                pos: 'object-top',
-                alt: 'mgr Lucyna Grochowska w gabinecie psychologicznym w Gdyni na Witominie',
-                caption: 'Gdynia Witomino · gabinet przy ul. Chwarznieńskiej',
-              },
-              {
-                src: PRACTICE.images.sanctuaryTea,
-                pos: 'object-center',
-                alt: 'Ceramiczna filiżanka herbaty na drewnianym stoliku w świetle dziennym',
-                caption: 'Spokojny rytm spotkania w nurcie psychodynamicznym',
-              },
-              {
-                src: PRACTICE.images.gdynia,
-                pos: 'object-center',
-                alt: 'Wnętrze gabinetu w Przychodni Medyczna Gdynia w Śródmieściu',
-                caption: 'Gdynia Śródmieście · Przychodnia Medyczna Gdynia',
-              },
-            ].map((frame, i) => (
+            {ui.testimonials.triptych.map((frame, i) => (
               <motion.figure
-                key={frame.caption}
+                key={frame.src}
                 style={{ y: triptychMotion[i] }}
                 className="group space-y-2.5"
               >
-                <div className="aspect-[16/10] overflow-hidden rounded-[2px] bg-[#E5DDD1]">
+                <div className="aspect-[16/10] overflow-hidden rounded-[2px] bg-[var(--bg-img-frame)]">
                   <img
                     src={frame.src}
                     alt={frame.alt}
-                    loading="lazy"
+                    loading="eager"
                     decoding="async"
                     className={`h-full w-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 ${frame.pos}`}
                   />
                 </div>
-                <figcaption className="text-[11px] uppercase tracking-[0.16em] text-[#5D6560]">
+                <figcaption className="text-[11px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
                   {frame.caption}
                 </figcaption>
               </motion.figure>

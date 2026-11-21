@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import { Wind } from 'lucide-react';
+import { PreferencesProvider, usePreferences } from './context/PreferencesContext';
 import { LenisProvider, useLenis } from './components/motion/LenisProvider';
 import { Preloader, shouldPlayPreloader } from './components/motion/Preloader';
 import { CustomCursor } from './components/motion/CustomCursor';
@@ -30,6 +31,7 @@ import { parseHashToPage, ROUTES, type PageId } from './types/navigation';
 import { syncRouteSeo } from './utils/seo';
 
 const AppShell: React.FC = () => {
+  const { lang, theme, ui } = usePreferences();
   const { scrollTo, resetScrollTop, resize, lockScroll, unlockScroll } = useLenis();
   const mainRef = useRef<HTMLElement>(null);
   const [heroReady, setHeroReady] = useState<boolean>(() => !shouldPlayPreloader());
@@ -77,15 +79,8 @@ const AppShell: React.FC = () => {
     return () => unlockScroll();
   }, [curtainOpen, lockScroll, unlockScroll]);
 
-  /**
-   * Race-free Awwwards curtain page navigation:
-   * - Handles rapid mid-curtain second clicks cleanly
-   * - Performs cross-page anchor jumps (e.g. `#wizytowka-google`) BEFORE lifting the curtain
-   * - Restores keyboard focus safely to `<main>` after route swaps
-   */
   const navigateTo = useCallback(
     (target: PageId, scrollSelector?: string) => {
-      // Same page & no transition running -> smooth scroll in place
       if (target === currentPage && !curtainOpenRef.current) {
         if (scrollSelector) {
           scrollTo(scrollSelector, { offset: -80 });
@@ -95,7 +90,6 @@ const AppShell: React.FC = () => {
         return;
       }
 
-      // Clicking back to currentPage mid-curtain -> abort transition cleanly
       if (target === currentPage && curtainOpenRef.current) {
         clearTransitionTimers();
         curtainOpenRef.current = false;
@@ -111,7 +105,6 @@ const AppShell: React.FC = () => {
 
       const positionScrollForNewPage = () => {
         if (scrollSelector) {
-          // Wait 2 animation frames for new page DOM layout before immediate anchor jump
           requestAnimationFrame(() => {
             requestAnimationFrame(() => {
               resize();
@@ -137,7 +130,6 @@ const AppShell: React.FC = () => {
       curtainOpenRef.current = true;
       setCurtainOpen(true);
 
-      // Shorten swap if curtain was already closed from a rapid second click
       const swapDelay = alreadyCovered ? 160 : 460;
       const liftDelay = swapDelay + 150;
 
@@ -163,7 +155,6 @@ const AppShell: React.FC = () => {
     [currentPage, clearTransitionTimers, resetScrollTop, resize, scrollTo]
   );
 
-  // Sync browser Back / Forward (ignoring non-route in-page fragments like `#main-content`)
   useEffect(() => {
     const syncFromLocation = () => {
       const hash = window.location.hash;
@@ -187,12 +178,12 @@ const AppShell: React.FC = () => {
   useEffect(() => {
     const rafId = requestAnimationFrame(() => resize());
     return () => cancelAnimationFrame(rafId);
-  }, [currentPage, resize]);
+  }, [currentPage, lang, resize]);
 
-  // Dynamic SEO metadata, canonical & route-specific structured data per chapter
+  // Dynamic localized SEO metadata, canonical & route-specific structured data per chapter
   useEffect(() => {
-    syncRouteSeo(currentPage);
-  }, [currentPage]);
+    syncRouteSeo(currentPage, lang);
+  }, [currentPage, lang]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -203,21 +194,20 @@ const AppShell: React.FC = () => {
   }, []);
 
   const viewReady = heroReady && !curtainOpen;
-  // Navbar active pill updates immediately on click instead of waiting 460ms
   const activeNavPage = curtainOpen ? curtainTarget : currentPage;
 
   return (
-    <div className="relative min-h-screen overflow-x-clip bg-[#F6F3EE] text-[#1D2220]">
-      {/* Accessible keyboard skip link (never mutates route hash!) */}
+    <div className="relative min-h-screen overflow-x-clip bg-[var(--bg-canvas)] text-[var(--text-ink)] transition-colors duration-300">
+      {/* Accessible keyboard skip link */}
       <a
         href="#main-content"
         onClick={(e) => {
           e.preventDefault();
           mainRef.current?.focus();
         }}
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[120] focus:rounded-full focus:bg-[#2B423B] focus:px-5 focus:py-2.5 focus:text-xs focus:font-medium focus:text-[#F6F3EE] focus:shadow-lg"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[120] focus:rounded-full focus:bg-[var(--btn-primary-bg)] focus:px-5 focus:py-2.5 focus:text-xs focus:font-medium focus:text-[var(--btn-primary-text)] focus:shadow-lg"
       >
-        Przejdź do głównej treści
+        {ui.skipToContent}
       </a>
 
       {/* Tactile paper grain */}
@@ -226,13 +216,13 @@ const AppShell: React.FC = () => {
       {/* Initial opening curtain */}
       <Preloader onComplete={handlePreloaderComplete} />
 
-      {/* Awwwards inter-page curtain transition (above cursor, below preloader) */}
+      {/* Awwwards inter-page curtain transition */}
       <PageTransitionCurtain active={curtainOpen} targetPage={curtainTarget} />
 
-      {/* Desktop-only contextual cursor (auto-resets stale labels on page switch) */}
-      <CustomCursor resetKey={currentPage} />
+      {/* Desktop-only contextual cursor */}
+      <CustomCursor resetKey={`${currentPage}-${lang}-${theme}`} />
 
-      {/* Compact 4-Chapter Architectural Navigation */}
+      {/* Compact 4-Chapter Architectural Navigation + PL/RU & Light/Dark Toggles */}
       <Navbar
         currentPage={activeNavPage}
         onNavigate={(page) => navigateTo(page)}
@@ -248,17 +238,7 @@ const AppShell: React.FC = () => {
               onNavigate={(page, anchor) => navigateTo(page, anchor)}
               onOpenBooking={(t, s) => openBooking(t, s)}
             />
-            <VelocityRibbon
-              items={[
-                'Gdynia Witomino',
-                'Psychoterapia psychodynamiczna',
-                'Gdynia Śródmieście',
-                'Psychotraumatologia',
-                'Seksuologia kliniczna',
-                'Konsultacje online · PL / RU',
-                'Stała superwizja',
-              ]}
-            />
+            <VelocityRibbon items={ui.ribbonItems} />
             <HomeDirectorySection
               onNavigate={(page) => navigateTo(page)}
               onOpenBreathing={() => setBreathingOpen(true)}
@@ -271,10 +251,10 @@ const AppShell: React.FC = () => {
           <>
             <SubpageHeader
               chapter="01"
-              eyebrow="Terapia i obszary wsparcia"
-              lines={['W czym mogę Ci', 'uważnie towarzyszyć.']}
-              italicSubstring="towarzyszyć."
-              lead="Nie musisz przychodzić z gotową diagnozą ani planem. Łączę nurt psychodynamiczny, psychotraumatologię i seksuologię kliniczną — poniżej zobaczysz główne obszary pomocy, przebieg pierwszych spotkań oraz wartości, którymi kieruję się w gabinecie."
+              eyebrow={ui.subpages.terapia.eyebrow}
+              lines={ui.subpages.terapia.lines}
+              italicSubstring={ui.subpages.terapia.italicSubstring}
+              lead={ui.subpages.terapia.lead}
               ready={viewReady}
               onBackHome={() => navigateTo('home')}
             />
@@ -287,7 +267,7 @@ const AppShell: React.FC = () => {
             <NextChapterBridge
               nextPage="o-mnie"
               tone="light"
-              teaser="Poznaj moje wykształcenie, 8-letnią praktykę kliniczną, etykę pracy oraz głosy pacjentów."
+              teaser={ui.subpages.terapia.nextTeaser}
               onNavigate={(page) => navigateTo(page)}
             />
           </>
@@ -297,10 +277,10 @@ const AppShell: React.FC = () => {
           <>
             <SubpageHeader
               chapter="02"
-              eyebrow="O mnie · mgr Lucyna Grochowska"
-              lines={['Kliniczne doświadczenie', 'i przestrzeń bez oceniania.']}
-              italicSubstring="bez oceniania."
-              lead="Łączę rzetelne przygotowanie kliniczne z uważną, ludzką obecnością. Wierzę, że głęboka zmiana zaczyna się tam, gdzie nie trzeba niczego udawać ani bronić się przed oceną."
+              eyebrow={ui.subpages.oMnie.eyebrow}
+              lines={ui.subpages.oMnie.lines}
+              italicSubstring={ui.subpages.oMnie.italicSubstring}
+              lead={ui.subpages.oMnie.lead}
               ready={viewReady}
               onBackHome={() => navigateTo('home')}
             />
@@ -311,7 +291,7 @@ const AppShell: React.FC = () => {
             <NextChapterBridge
               nextPage="gabinety"
               tone="sand"
-              teaser="Sprawdź oba gabinety w Gdyni, konsultacje online, zweryfikowane profile oraz przejrzysty cennik spotkań."
+              teaser={ui.subpages.oMnie.nextTeaser}
               onNavigate={(page) => navigateTo(page)}
             />
           </>
@@ -321,10 +301,10 @@ const AppShell: React.FC = () => {
           <>
             <SubpageHeader
               chapter="03"
-              eyebrow="Praktyka · Gdynia i online (PL / RU)"
-              lines={['Gabinety w Gdyni,', 'sesje online i cennik.']}
-              italicSubstring="online i cennik."
-              lead="Przyjmuję stacjonarnie w dwóch miejscach w Gdyni — na Witominie (ul. Chwarznieńska 136–138) oraz w Śródmieściu (ul. gen. Bema 16/2) — a także online i podczas wizyt domowych. Poniżej znajdziesz dojazd, mapę, zweryfikowane opinie, cennik oraz odpowiedzi na pytania."
+              eyebrow={ui.subpages.gabinety.eyebrow}
+              lines={ui.subpages.gabinety.lines}
+              italicSubstring={ui.subpages.gabinety.italicSubstring}
+              lead={ui.subpages.gabinety.lead}
               ready={viewReady}
               onBackHome={() => navigateTo('home')}
             />
@@ -340,9 +320,9 @@ const AppShell: React.FC = () => {
         )}
       </main>
 
-      {/* Keyed by currentPage so scroll wordmark bounds stay 100% calibrated on height change */}
+      {/* Keyed by currentPage & lang so scroll wordmark bounds stay calibrated */}
       <FooterSection
-        key={currentPage}
+        key={`${currentPage}-${lang}`}
         onNavigate={(page) => navigateTo(page)}
         onOpenBooking={() => openBooking()}
         onOpenPrivacy={() => setPrivacyOpen(true)}
@@ -358,12 +338,12 @@ const AppShell: React.FC = () => {
             exit={{ opacity: 0, y: 12 }}
             transition={{ duration: 0.45, ease: EASE_EDITORIAL }}
             onClick={() => setBreathingOpen(true)}
-            data-cursor="Oddech"
-            aria-label="Otwórz krótkie ćwiczenie oddechowe 4-4-6"
-            className="fixed bottom-6 right-6 z-40 hidden items-center gap-2.5 rounded-full border border-[#1D2220]/14 bg-[#FAF8F4]/92 px-4 py-2.5 text-[12px] font-medium text-[#2B423B] shadow-[0_14px_34px_-14px_rgba(26,39,35,0.3)] backdrop-blur-md transition-colors hover:border-[#2B423B] hover:bg-[#2B423B] hover:text-[#F6F3EE] sm:inline-flex"
+            data-cursor={ui.cursors.breath}
+            aria-label={ui.breathPillAria}
+            className="fixed bottom-6 right-6 z-40 hidden items-center gap-2.5 rounded-full border border-[var(--border-medium)] bg-[var(--bg-paper-elevated)] px-4 py-2.5 text-[12px] font-medium text-[var(--accent-emphasis)] shadow-[var(--shadow-card)] backdrop-blur-md transition-colors hover:border-[var(--btn-primary-bg)] hover:bg-[var(--btn-primary-bg)] hover:text-[var(--btn-primary-text)] sm:inline-flex"
           >
             <Wind className="h-3.5 w-3.5 stroke-[1.6]" />
-            <span>Chwila oddechu</span>
+            <span>{ui.breathPill}</span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -390,9 +370,11 @@ const AppShell: React.FC = () => {
 
 export const App: React.FC = () => (
   <MotionConfig reducedMotion="user">
-    <LenisProvider>
-      <AppShell />
-    </LenisProvider>
+    <PreferencesProvider>
+      <LenisProvider>
+        <AppShell />
+      </LenisProvider>
+    </PreferencesProvider>
   </MotionConfig>
 );
 

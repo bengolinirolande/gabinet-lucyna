@@ -57,7 +57,7 @@ export const MaskedLines: React.FC<MaskedLinesProps> = ({
         const content = hasItalic ? (
           <>
             {line.split(italicSubstring)[0]}
-            <em className="italic font-normal text-[#2B423B]">{italicSubstring}</em>
+            <em className="italic font-normal text-[var(--accent-emphasis)]">{italicSubstring}</em>
             {line.split(italicSubstring)[1]}
           </>
         ) : (
@@ -195,7 +195,7 @@ export const HairlineDivider: React.FC<HairlineDividerProps> = ({
         ease: EASE_EDITORIAL,
       }}
       style={{ transformOrigin: 'left center' }}
-      className={`h-px w-full ${light ? 'bg-[#F6F3EE]/16' : 'bg-[#1D2220]/12'} ${className}`}
+      className={`h-px w-full ${light ? 'bg-[#F6F3EE]/16' : 'bg-[var(--border-subtle)]'} ${className}`}
     />
   );
 };
@@ -276,7 +276,7 @@ export const CurtainImage: React.FC<CurtainImageProps> = ({
           },
         },
       }}
-      className={`group/img relative overflow-hidden bg-[#E7E0D5] ${aspectClass} ${className}`}
+      className={`group/img relative overflow-hidden bg-[var(--bg-img-frame)] ${aspectClass} ${className}`}
     >
       <motion.div
         style={{ y }}
@@ -372,11 +372,13 @@ const RibbonTrack: React.FC<{ items: string[]; dark: boolean }> = ({ items, dark
     {items.map((item, i) => (
       <React.Fragment key={`${item}-${i}`}>
         <span
-          className={`font-editorial whitespace-nowrap text-[24px] font-light tracking-[-0.01em] md:text-[32px] ${dark ? 'text-[#F6F3EE]/80' : 'text-[#1D2220]/75'
+          className={`font-editorial whitespace-nowrap text-[24px] font-light tracking-[-0.01em] md:text-[32px] ${dark ? 'text-[#F6F3EE]/80' : 'text-[var(--text-ink-soft)]'
             }`}
         >
           {i % 2 === 1 ? (
-            <em className={`italic ${dark ? 'text-[#C9A484]' : 'text-[#8C5E3E]'}`}>{item}</em>
+            <em className={`italic ${dark ? 'text-[#C9A484]' : 'text-[var(--accent-amber)]'}`}>
+              {item}
+            </em>
           ) : (
             item
           )}
@@ -384,7 +386,7 @@ const RibbonTrack: React.FC<{ items: string[]; dark: boolean }> = ({ items, dark
         <svg
           aria-hidden="true"
           viewBox="0 0 14 14"
-          className={`h-3 w-3 shrink-0 ${dark ? 'text-[#C9A484]/55' : 'text-[#2B423B]/40'}`}
+          className={`h-3 w-3 shrink-0 ${dark ? 'text-[#C9A484]/55' : 'text-[var(--ribbon-spark)]'}`}
           fill="currentColor"
         >
           <path d="M7 0L8.6 5.4L14 7L8.6 8.6L7 14L5.4 8.6L0 7L5.4 5.4L7 0Z" />
@@ -458,8 +460,8 @@ export const VelocityRibbon: React.FC<{
         if (e.pointerType === 'mouse') hoveredRef.current = false;
       }}
       className={`overflow-hidden border-y py-3.5 select-none ${dark
-        ? 'border-[#F6F3EE]/12 bg-[#16211D]'
-        : 'border-[#1D2220]/10 bg-[#FAF8F4]/75'
+        ? 'border-[#F6F3EE]/12 bg-[var(--bg-deep-ribbon)]'
+        : 'border-[var(--border-hairline)] bg-[var(--bg-paper-soft)]'
         }`}
     >
       <motion.div
@@ -481,7 +483,7 @@ export const BotanicalDrawSvg: React.FC<{
   light?: boolean;
 }> = ({ className = '', light = false }) => {
   const reduced = useReducedMotion();
-  const stroke = light ? 'rgba(201, 164, 132, 0.5)' : 'rgba(43, 66, 59, 0.34)';
+  const stroke = light ? 'rgba(201, 164, 132, 0.5)' : 'var(--botanical-stroke)';
 
   return (
     <svg aria-hidden="true" viewBox="0 0 180 220" fill="none" className={className}>
