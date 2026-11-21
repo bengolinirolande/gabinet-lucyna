@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --color-canvas: #F6F3EE;
+  --color-surface: #EFEAE1;
+  --color-paper: #FAF8F4;
+  --color-ink: #1D2220;
+  --color-ink-secondary: #4E5551;
+  --color-ink-muted: #5D6560;
+  --color-pine: #2B423B;
+  --color-pine-deep: #1A2723;
+  --color-pine-soft: #3D5B51;
+  --color-amber: #8C5E3E;
+  --color-sand: #D8CFC2;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    scrollbar-gutter: stable;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  ::selection {
+    background-color: #2B423B;
+    color: #F6F3EE;
+  }
+
+  /* Accessible editorial keyboard focus ring (invisible for mouse, crisp for keyboard) */
+  :focus-visible {
+    outline: 2px solid #2B423B;
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  footer :focus-visible,
+  [data-dark-surface] :focus-visible {
+    outline-color: #C9A484;
+  }
+
+  /* Custom quiet scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #F6F3EE;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(43, 66, 59, 0.25);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(43, 66, 59, 0.45);
+  }
+}
+
+@layer components {
+
+  /* Editorial typography helpers (layered so Tailwind utilities always override cleanly) */
+  .font-editorial {
+    font-family: var(--font-serif);
+    font-feature-settings: "liga" 1, "kern" 1, "dlig" 1;
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  /* Signature Awwwards hairline underline link */
+  .editorial-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .editorial-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .editorial-link:hover::after,
+  .editorial-link:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+
+  /* Hairline underline always visible, retracts gently on hover */
+  .editorial-link-persistent {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .editorial-link-persistent::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    height: 1px;
+    background-color: currentColor;
+    opacity: 0.4;
+    transform: scaleX(1);
+    transform-origin: left center;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+  }
+
+  .editorial-link-persistent:hover::after {
+    opacity: 1;
+    transform: scaleX(0.35);
+  }
+
+  /* Ultra-subtle organic paper grain overlay (zero GPU cost) */
+  .paper-grain {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    opacity: 0.026;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
+  }
+
+  /* Fine hairline rules */
+  .hairline-t {
+    border-top: 1px solid rgba(29, 34, 32, 0.11);
+  }
+
+  .hairline-b {
+    border-bottom: 1px solid rgba(29, 34, 32, 0.11);
+  }
+
+  .hairline-all {
+    border: 1px solid rgba(29, 34, 32, 0.11);
+  }
+}
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
