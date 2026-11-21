@@ -184,9 +184,36 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
             </div>
 
             <p className="pt-2 text-[12.5px] font-light leading-relaxed text-[#F6F3EE]/55">
-              Jeśli nie odbieram telefonu, najprawdopodobniej prowadzę sesję. Napisz SMS lub skorzystaj z
-              formularza — oddzwonię po zakończeniu spotkań.
+              Jeśli nie odbieram telefonu, najprawdopodobniej prowadzę sesję. Skorzystaj z formularza
+              lub oficjalnych kalendarzy online:
             </p>
+
+            <div className="flex flex-wrap items-center gap-4 pt-1 text-[12px] text-[#C9A484]">
+              <a
+                href={PRACTICE.znanyLekarzUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="editorial-link hover:text-[#F6F3EE]"
+              >
+                ZnanyLekarz
+              </a>
+              <a
+                href={PRACTICE.twojPsychologUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="editorial-link hover:text-[#F6F3EE]"
+              >
+                TwójPsycholog
+              </a>
+              <a
+                href={PRACTICE.facebookUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="editorial-link hover:text-[#F6F3EE]"
+              >
+                Facebook
+              </a>
+            </div>
           </div>
 
           {/* Gabinety — derived from PRACTICE.locations single source of truth */}
@@ -258,7 +285,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
         {/* Quiet Editorial Legal Row */}
         <div className="flex flex-col items-start justify-between gap-4 pt-8 text-[12px] font-light text-[#F6F3EE]/50 sm:flex-row sm:items-center">
           <p>
-            © {new Date().getFullYear()} {PRACTICE.fullName} · Gabinet Psychologiczny Trójmiasto
+            © {new Date().getFullYear()} {PRACTICE.fullName} · Gabinet Psychologiczny · Gdynia &amp; Online
           </p>
           <div className="flex items-center gap-6">
             <button

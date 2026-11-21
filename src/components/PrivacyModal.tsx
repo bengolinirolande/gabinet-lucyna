@@ -79,8 +79,8 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ open, onClose }) => 
               <p>
                 <strong className="font-medium text-[#1D2220]">1. Administrator danych:</strong>{' '}
                 Administratorem danych osobowych przekazywanych za pośrednictwem formularza
-                kontaktowego jest {PRACTICE.fullName} — Prywatny Gabinet Psychologiczny (Gdańsk /
-                Gdynia), kontakt: {PRACTICE.email}.
+                kontaktowego jest {PRACTICE.fullName} — Prywatny Gabinet Psychologiczny (Gdynia ·
+                ul. Chwarznieńska 136–138), kontakt: {PRACTICE.email}.
               </p>
               <p>
                 <strong className="font-medium text-[#1D2220]">2. Cel przetwarzania:</strong> Dane

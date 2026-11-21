@@ -78,7 +78,11 @@ const StackingStepCard: React.FC<StackCardProps> = ({
               viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 1.15, ease: EASE_EDITORIAL }}
               className={`h-full w-full object-cover ${
-                index === 2 ? 'object-[50%_55%]' : 'object-center'
+                index === 1
+                  ? 'object-[50%_18%]'
+                  : index === 2
+                    ? 'object-[50%_55%]'
+                    : 'object-center'
               }`}
             />
             <span className="font-editorial absolute left-4 top-4 rounded-full bg-[#1A2723]/82 px-3.5 py-1 text-base italic text-[#F6F3EE] backdrop-blur-md">
@@ -108,7 +112,7 @@ const StackingStepCard: React.FC<StackCardProps> = ({
             </div>
 
             <div className="mt-7 flex items-center justify-between border-t border-[#1D2220]/10 pt-4 text-[11px] uppercase tracking-[0.18em] text-[#5D6560]">
-              <span>Gabinet Trójmiasto · Online</span>
+              <span>Gdynia · Online (PL / RU)</span>
               <span>
                 {step.number} / 0{total}
               </span>
@@ -168,18 +172,18 @@ export const JourneySection: React.FC<JourneySectionProps> = ({ onOpenBooking })
 
             <Reveal delay={0.16}>
               <p className="mt-6 max-w-[420px] text-[15px] font-light leading-[1.82] text-[#4E5551]">
-                Nie musisz mieć sprecyzowanego celu ani gotowych słów. 15-minutowa rozmowa wstępna
-                pozwala spokojnie sprawdzić, czy ten kierunek jest dla Ciebie.
+                Nie musisz mieć gotowych odpowiedzi ani sprecyzowanego planu. Pierwsze konsultacje
+                służą temu, byśmy mogli spokojnie zrozumieć, z czym się mierzysz.
               </p>
             </Reveal>
 
             <Reveal delay={0.22} className="mt-8">
               <MagneticButton
-                onClick={() => onOpenBooking(undefined, 'Bezpłatna rozmowa telefoniczna (15 min)')}
-                cursorLabel="Rozmowa"
+                onClick={() => onOpenBooking(undefined, 'Konsultacja psychologiczna')}
+                cursorLabel="Umów"
                 className="group inline-flex items-center gap-2.5 rounded-full border border-[#2B423B] bg-transparent px-7 py-3.5 text-[13px] font-medium text-[#2B423B] transition-colors duration-300 hover:bg-[#2B423B] hover:text-[#F6F3EE]"
               >
-                <SlotRollText label="Umów bezpłatną rozmowę 15 min" italicHover />
+                <SlotRollText label="Umów pierwszą konsultację" italicHover />
                 <KineticArrow className="h-4 w-4" />
               </MagneticButton>
             </Reveal>

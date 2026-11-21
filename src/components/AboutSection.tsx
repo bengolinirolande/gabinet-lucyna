@@ -69,18 +69,19 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                 </>
               )}
 
-              {/* Quiet Editorial Candid Photography + Monograph Identity & Ethics Plate */}
+              {/* Authentic In-Office Photograph of mgr Lucyna Grochowska + Monograph Identity Plate */}
               <Reveal delay={0.14}>
                 <div className="overflow-hidden border border-[#1D2220]/11 bg-[#FAF8F4] shadow-[0_18px_45px_-30px_rgba(26,39,35,0.2)]">
                   <CurtainImage
-                    src={PRACTICE.images.detail}
-                    alt="Chwila przed sesją w gabinecie psychologicznym w Gdańsku — notatnik i ceramiczna filiżanka w porannym świetle"
-                    aspectClass="aspect-[16/10]"
-                    parallaxStrength={14}
+                    src={PRACTICE.images.officePortrait}
+                    alt="mgr Lucyna Grochowska w swoim gabinecie psychologicznym w Gdyni"
+                    aspectClass="aspect-[4/3]"
+                    imgClassName="object-[50%_18%]"
+                    parallaxStrength={12}
                     immediate={compactHeader}
                     ready={ready}
                     delay={compactHeader ? 0.12 : 0}
-                    cursorLabel="Uważność"
+                    cursorLabel="Gabinet"
                   />
 
                   <div className="p-5 sm:p-6">
@@ -93,7 +94,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                           {PRACTICE.role}
                         </p>
                       </div>
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#2B423B]/8 text-[#2B423B]">
+                      <span
+                        title="Dyplomy zweryfikowane przez TwójPsycholog.pl"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#2B423B]/8 text-[#2B423B]"
+                      >
                         <ShieldCheck className="h-4 w-4 stroke-[1.4]" />
                       </span>
                     </div>
@@ -103,25 +107,29 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                         <dt className="text-[10px] uppercase tracking-[0.18em] text-[#5D6560]">
                           Nurt pracy
                         </dt>
-                        <dd className="mt-0.5 font-medium text-[#1D2220]">CBT · Terapia Schematów</dd>
+                        <dd className="mt-0.5 font-medium text-[#1D2220]">Psychodynamiczny</dd>
                       </div>
                       <div>
                         <dt className="text-[10px] uppercase tracking-[0.18em] text-[#5D6560]">
-                          Superwizja
+                          Specjalizacje
                         </dt>
-                        <dd className="mt-0.5 font-medium text-[#1D2220]">Stała (PTTPB / PTP)</dd>
+                        <dd className="mt-0.5 font-medium text-[#1D2220]">
+                          Trauma · Seksuologia
+                        </dd>
                       </div>
                       <div>
                         <dt className="text-[10px] uppercase tracking-[0.18em] text-[#5D6560]">
-                          Pacjenci
+                          Języki i standard
                         </dt>
-                        <dd className="mt-0.5 font-medium text-[#1D2220]">Dorośli · Pary</dd>
+                        <dd className="mt-0.5 font-medium text-[#1D2220]">
+                          PL / RU · Superwizja
+                        </dd>
                       </div>
                       <div>
                         <dt className="text-[10px] uppercase tracking-[0.18em] text-[#5D6560]">
                           Lokalizacja
                         </dt>
-                        <dd className="mt-0.5 font-medium text-[#1D2220]">Gdańsk · Gdynia · Online</dd>
+                        <dd className="mt-0.5 font-medium text-[#1D2220]">Gdynia · Online</dd>
                       </div>
                     </dl>
                   </div>

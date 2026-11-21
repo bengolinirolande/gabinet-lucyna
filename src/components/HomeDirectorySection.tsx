@@ -23,36 +23,38 @@ const CHAPTER_CARDS: {
   title: string;
   summary: string;
   image: string;
+  imagePosition?: string;
   cta: string;
 }[] = [
   {
     page: 'terapia',
     num: '01',
     eyebrow: 'Obszary i proces',
-    title: 'Terapia i pierwsza wizyta',
+    title: 'Terapia i obszary pomocy',
     summary:
-      'Lęk, wypalenie zawodowe, relacje, kryzysy i poczucie wartości. Zobacz, w jakich nurtach pracuję i jak wyglądają 3 pierwsze kroki.',
-    image: PRACTICE.images.gdansk,
+      'Stany lękowe, depresja, psychotraumatologia, relacje i terapia par, seksuologia kliniczna oraz kryzysy. Nurt psychodynamiczny i bezpieczny proces.',
+    image: PRACTICE.images.gdynia,
     cta: 'Zobacz obszary pracy',
   },
   {
     page: 'o-mnie',
     num: '02',
-    eyebrow: 'Monografia',
+    eyebrow: '8 lat praktyki · Superwizja',
     title: 'O mnie i doświadczenie',
     summary:
-      'Moje podejście bez zimnego dystansu, wykształcenie kliniczne, stała superwizja PTTPB/PTP oraz anonimowe refleksje pacjentów.',
-    image: PRACTICE.images.detail,
+      'Wykształcenie (UKW, Triada, UAM, Vis Salutis), praktyka szpitalna i prywatna, zweryfikowane dyplomy oraz prawdziwe opinie pacjentów 5,0/5.',
+    image: PRACTICE.images.officePortrait,
+    imagePosition: 'object-[50%_18%]',
     cta: 'Poznaj moje podejście',
   },
   {
     page: 'gabinety',
     num: '03',
-    eyebrow: 'Trójmiasto · Google 5,0',
-    title: 'Gabinety, mapa i cennik',
+    eyebrow: 'Gdynia · Online · PL / RU',
+    title: 'Gabinety, opinie i cennik',
     summary:
-      'Gdańsk Wrzeszcz (przy SKM), Gdynia Śródmieście i sesje online. Interaktywna mapa, Wizytówka Google, przejrzysty cennik oraz FAQ.',
-    image: PRACTICE.images.gdynia,
+      'Gdynia Witomino (ul. Chwarznieńska 136–138), Medyczna Gdynia (ul. Bema 16/2) i sesje online. Mapa Gdyni, profile ZnanyLekarz i TwójPsycholog oraz cennik od 200 zł.',
+    image: PRACTICE.images.gdansk,
     cta: 'Sprawdź dojazd i cennik',
   },
 ];
@@ -61,8 +63,7 @@ export const HomeDirectorySection: React.FC<HomeDirectorySectionProps> = ({
   onNavigate,
   onOpenBreathing,
 }) => {
-  const individualPrice = PRACTICE.pricing.items[1]?.price ?? '220 zł';
-  const introPrice = PRACTICE.pricing.items[0]?.price ?? '0 zł';
+  const consultationPrice = PRACTICE.pricing.items[0]?.price ?? '200 zł';
 
   return (
     <section id="przewodnik" className="relative bg-[#EFEAE1]/55 py-16 md:py-20">
@@ -131,7 +132,7 @@ export const HomeDirectorySection: React.FC<HomeDirectorySectionProps> = ({
                     alt={card.title}
                     loading="lazy"
                     decoding="async"
-                    className="h-full w-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+                    className={`h-full w-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 ${card.imagePosition ?? 'object-center'}`}
                   />
                   <span className="font-editorial absolute left-4 top-4 rounded-full bg-[#1A2723]/82 px-3 py-0.5 text-sm italic text-[#F6F3EE] backdrop-blur-md">
                     {card.num}
@@ -175,10 +176,10 @@ export const HomeDirectorySection: React.FC<HomeDirectorySectionProps> = ({
               </div>
               <div>
                 <p className="text-[13.5px] font-medium text-[#1D2220]">
-                  Profil Firmy w Google · {PRACTICE.googleProfile.reviewCount} opinii
+                  ZnanyLekarz · {PRACTICE.googleProfile.reviewCount} zweryfikowanych opinii
                 </p>
                 <p className="mt-0.5 text-[12px] font-light text-[#4E5551]">
-                  „Niezwykły spokój, empatia i konkretna praca nad lękiem.”
+                  „Nie ocenia, a wspiera. Czuję się bezpiecznie i mam odwagę do zmian.”
                 </p>
               </div>
             </div>
@@ -186,17 +187,17 @@ export const HomeDirectorySection: React.FC<HomeDirectorySectionProps> = ({
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-y border-[#1D2220]/10 py-3.5 text-[12.5px] font-light text-[#4E5551] lg:col-span-5 lg:border-x lg:border-y-0 lg:px-6 lg:py-0">
               <span className="inline-flex items-center gap-1.5 text-[#1D2220]">
                 <MapPin className="h-3.5 w-3.5 text-[#2B423B]" />
-                Gdańsk Wrzeszcz · Gdynia · Online
+                Gdynia (2 adresy) · Online
               </span>
               <span>
-                Sesja 50 min · <strong className="font-medium text-[#1D2220]">{individualPrice}</strong>
+                Wizyty od <strong className="font-medium text-[#1D2220]">{consultationPrice}</strong>
               </span>
               <span>
-                Rozmowa 15 min · <strong className="font-medium text-[#2B423B]">{introPrice}</strong>
+                Języki: <strong className="font-medium text-[#2B423B]">PL / RU</strong>
               </span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2.5 lg:col-span-3 lg:justify-end">
+            <div className="flex flex-wrap items-center gap-2 lg:col-span-3 lg:justify-end">
               <button
                 type="button"
                 onClick={() => onNavigate('gabinety')}
@@ -206,13 +207,13 @@ export const HomeDirectorySection: React.FC<HomeDirectorySectionProps> = ({
                 <KineticArrow className="h-3.5 w-3.5" />
               </button>
               <a
-                href={PRACTICE.googleProfile.profileUrl}
+                href={PRACTICE.znanyLekarzUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Otwórz Wizytówkę Google w nowej karcie"
+                aria-label="Otwórz profil ZnanyLekarz w nowej karcie"
                 className="inline-flex items-center gap-1.5 rounded-full border border-[#1D2220]/14 px-3.5 py-2.5 text-[12px] text-[#4E5551] transition-colors hover:border-[#2B423B] hover:text-[#2B423B]"
               >
-                <span>Google</span>
+                <span>ZnanyLekarz</span>
                 <ExternalLink className="h-3 w-3" />
               </a>
             </div>

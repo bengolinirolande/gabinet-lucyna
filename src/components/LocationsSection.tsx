@@ -22,7 +22,7 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
   ready = true,
   onOpenBooking,
 }) => {
-  const [selectedId, setSelectedId] = useState<LocationItem['id']>('gdansk');
+  const [selectedId, setSelectedId] = useState<LocationItem['id']>('witomino');
   const [hasSwitched, setHasSwitched] = useState(false);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -67,17 +67,17 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
         >
           {compactHeader ? (
             <div>
-              <p className="eyebrow">Wybierz lokalizację · Gdańsk, Gdynia lub Online</p>
+              <p className="eyebrow">Wybierz lokalizację · Gdynia Witomino, Śródmieście lub Online</p>
             </div>
           ) : (
             <div>
               <Reveal>
-                <p className="eyebrow mb-4">Gabinety w Trójmieście i online</p>
+                <p className="eyebrow mb-4">Gabinety w Gdyni i online (PL / RU)</p>
               </Reveal>
               <h2 className="font-editorial text-[clamp(2.3rem,4.1vw,3.75rem)] font-light leading-[1.04] tracking-[-0.02em] text-[#1D2220]">
                 <MaskedLines
-                  lines={['Kameralne przestrzenie', 'w Gdańsku i Gdyni.']}
-                  italicSubstring="Gdańsku i Gdyni."
+                  lines={['Kameralne przestrzenie', 'w Gdyni oraz online.']}
+                  italicSubstring="Gdyni oraz online."
                 />
               </h2>
             </div>
@@ -196,7 +196,9 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
                         alt={current.secondaryCaption}
                         loading="lazy"
                         decoding="async"
-                        className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                        className={`h-full w-full object-cover transition-transform duration-700 hover:scale-105 ${
+                          current.id === 'witomino' ? 'object-[50%_18%]' : 'object-center'
+                        }`}
                       />
                     </div>
                     <figcaption className="px-1.5 pt-2 pb-1 text-[10.5px] font-light leading-snug text-[#4E5551]">
@@ -261,11 +263,11 @@ export const LocationsSection: React.FC<LocationsSectionProps> = ({
                       onOpenBooking(
                         undefined,
                         undefined,
-                        current.id === 'gdansk'
-                          ? 'Gdańsk Wrzeszcz'
-                          : current.id === 'gdynia'
+                        current.id === 'witomino'
+                          ? 'Gdynia Witomino'
+                          : current.id === 'srodmiescie'
                             ? 'Gdynia Śródmieście'
-                            : 'Online (wideo)'
+                            : 'Online (wideo / telefon)'
                       )
                     }
                     className="group editorial-link-persistent text-[13.5px] font-medium text-[#2B423B] hover:text-[#1A2723]"

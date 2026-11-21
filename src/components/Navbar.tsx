@@ -107,7 +107,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   : 'text-[#5D6560] group-hover:text-[#2B423B]'
               }`}
             >
-              Psycholog · Trójmiasto
+              Psycholog · Gdynia &amp; Online
             </span>
           </button>
 

@@ -23,34 +23,34 @@ const REFLECTIONS: ReflectionQuote[] = [
   {
     id: 'r1',
     quote:
-      'Pierwszy raz w życiu poczułam, że nie muszę tłumaczyć się ze swojego zmęczenia ani udawać silniejszej, niż jestem. Już po kilku tygodniach spotkań w Gdańsku napięcie, które nosiłam od lat, zaczęło wyraźnie odpuszczać.',
-    author: 'Katarzyna, 34 l.',
-    context: 'Psychoterapia indywidualna · Lęk i perfekcjonizm',
-    location: 'Gdańsk Wrzeszcz',
+      'Serdecznie polecam Panią psycholog. Akceptuje Pani moje dziwactwa, nie ocenia a wspiera. Czuję się bezpiecznie i mam dzięki temu odwagę do zmian koniecznych do lepszego życia. Pani z dużą wiedzą i doświadczeniem, co da się odczuć. Dziękuję.',
+    author: 'Anita',
+    context: 'Psychoterapia · maj 2026 · ZnanyLekarz.pl',
+    location: 'Opinia zweryfikowana · 5,0',
   },
   {
     id: 'r2',
     quote:
-      'Pani Lucyna łączy ogromny spokój z niezwykłą konkretnością. Zamiast ogólników dostałem przestrzeń do zrozumienia swoich mechanizmów i bardzo praktyczne narzędzia, które realnie pomogły mi wyjść z wypalenia zawodowego.',
-    author: 'Michał, 41 l.',
-    context: 'Psychoterapia indywidualna · Wypalenie i stres',
-    location: 'Gdynia / Hybrydowo',
+      'Pani psycholog słuchała mnie z uwagą i z takim głębokim zainteresowaniem, jakiego nigdy wcześniej nie zaznałam. Pani Lucyna nie jest osobą kogokolwiek oceniającą, tylko wspierającą i naprawdę głęboko rozumiejącą. Polecam ją każdemu, kto czuje, że potrzebuje pomocy — zazna wyłącznie wsparcia i prawdziwego zrozumienia.',
+    author: 'Monika',
+    context: 'Konsultacja psychologiczna · czerwiec 2025 · ZnanyLekarz.pl',
+    location: 'Weryfikacja wizyty · 5,0',
   },
   {
     id: 'r3',
     quote:
-      'Bardzo bałam się pierwszej wizyty i tego, że zabraknie mi słów. Okazało się, że od pierwszych minut rozmowa płynie naturalnie, bez pośpiechu i oceniania. Najlepsza decyzja, jaką podjęłam dla siebie w ostatnich latach.',
-    author: 'Aleksandra, 29 l.',
-    context: 'Psychoterapia indywidualna · Relacje i granice',
-    location: 'Konsultacje Online',
+      'Swobodna atmosfera i profesjonalne podejście. Szukanie rozwiązań, nic nie jest narzucane! Na pewno Pani Lucyna pomoże odnaleźć odpowiednią drogę — tę z uśmiechem.',
+    author: 'Joanna',
+    context: 'Badania psychologiczne · maj 2025 · ZnanyLekarz.pl',
+    location: 'Weryfikacja wizyty · 5,0',
   },
   {
     id: 'r4',
     quote:
-      'Przyszliśmy z mężem w momencie, kiedy każda rozmowa kończyła się milczeniem albo kłótnią. Spotkania pomogły nam na nowo usłyszeć siebie nawzajem — bez obwiniania, w atmosferze pełnego szacunku dla obu stron.',
-    author: 'Anna i Piotr',
-    context: 'Konsultacje dla par · Komunikacja i odbudowa bliskości',
-    location: 'Gdańsk Wrzeszcz',
+      'Jestem bardzo zadowolony z wizyty i na pewno umówię się kolejny raz. Długo nie mogłem się zdecydować, ale odważyłem się i jestem bardzo zadowolony.',
+    author: 'P.K.',
+    context: 'Konsultacja psychologiczna · lipiec 2025 · ZnanyLekarz.pl',
+    location: 'Weryfikacja wizyty · 5,0',
   },
 ];
 
@@ -130,7 +130,7 @@ export const TestimonialsSection: React.FC = () => {
               <Reveal delay={0.16}>
                 <div className="mt-6 inline-flex items-center gap-2 text-[12px] font-light text-[#5D6560]">
                   <BadgeCheck className="h-4 w-4 stroke-[1.5] text-[#2B423B]" />
-                  <span>Anonimowe refleksje · Z zachowaniem pełnej poufności</span>
+                  <span>Zweryfikowane opinie 5,0 / 5 z portalu ZnanyLekarz.pl</span>
                 </div>
               </Reveal>
             </div>
@@ -261,9 +261,21 @@ export const TestimonialsSection: React.FC = () => {
         <div ref={stripRef} className="mt-10 py-4 md:mt-12">
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
             {[
-              { src: PRACTICE.images.gdansk, caption: 'Gdańsk Wrzeszcz · kamienica i poranne światło' },
-              { src: PRACTICE.images.sanctuaryTea, caption: 'Spokojny rytm rozmowy bez pośpiechu' },
-              { src: PRACTICE.images.gdynia, caption: 'Gdynia Śródmieście · modernistyczna cisza' },
+              {
+                src: PRACTICE.images.officePortrait,
+                pos: 'object-[50%_18%]',
+                caption: 'Gdynia Witomino · gabinet przy ul. Chwarznieńskiej',
+              },
+              {
+                src: PRACTICE.images.sanctuaryTea,
+                pos: 'object-center',
+                caption: 'Spokojny rytm spotkania w nurcie psychodynamicznym',
+              },
+              {
+                src: PRACTICE.images.gdynia,
+                pos: 'object-center',
+                caption: 'Gdynia Śródmieście · Przychodnia Medyczna Gdynia',
+              },
             ].map((frame, i) => (
               <motion.figure
                 key={frame.caption}
@@ -276,7 +288,7 @@ export const TestimonialsSection: React.FC = () => {
                     alt={frame.caption}
                     loading="lazy"
                     decoding="async"
-                    className="h-full w-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+                    className={`h-full w-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 ${frame.pos}`}
                   />
                 </div>
                 <figcaption className="text-[11px] uppercase tracking-[0.16em] text-[#5D6560]">

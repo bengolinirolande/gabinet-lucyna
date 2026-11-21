@@ -14,8 +14,8 @@ export const ROUTES: Record<PageId, RouteMeta> = {
     id: 'home',
     hash: '#/',
     navLabel: 'Start',
-    curtainTitle: 'Lucyna Kamińska',
-    curtainSubtitle: 'Gabinet Psychologiczny · Trójmiasto',
+    curtainTitle: 'Lucyna Grochowska',
+    curtainSubtitle: 'Psycholog · Psychotraumatolog · Gdynia',
     chapter: '00',
   },
   terapia: {
@@ -23,7 +23,7 @@ export const ROUTES: Record<PageId, RouteMeta> = {
     hash: '#/terapia',
     navLabel: 'Terapia',
     curtainTitle: 'Terapia i obszary pracy',
-    curtainSubtitle: 'CBT · Terapia Schematów · Pierwsza wizyta',
+    curtainSubtitle: 'Psychodynamiczna · Psychotraumatologia · Seksuologia',
     chapter: '01',
   },
   'o-mnie': {
@@ -31,15 +31,15 @@ export const ROUTES: Record<PageId, RouteMeta> = {
     hash: '#/o-mnie',
     navLabel: 'O mnie',
     curtainTitle: 'O mnie i doświadczenie',
-    curtainSubtitle: 'Wykształcenie · Superwizja · Głosy pacjentów',
+    curtainSubtitle: '8 lat praktyki · Superwizja · Opinie 5,0',
     chapter: '02',
   },
   gabinety: {
     id: 'gabinety',
     hash: '#/gabinety',
     navLabel: 'Gabinety i cennik',
-    curtainTitle: 'Gabinety, Google i cennik',
-    curtainSubtitle: 'Gdańsk Wrzeszcz · Gdynia · Online',
+    curtainTitle: 'Gabinety, opinie i cennik',
+    curtainSubtitle: 'Gdynia Witomino · Śródmieście · Online',
     chapter: '03',
   },
 };

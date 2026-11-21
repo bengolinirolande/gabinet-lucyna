@@ -51,12 +51,10 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenBooking }) => {
                     </p>
                     <button
                       type="button"
-                      onClick={() =>
-                        onOpenBooking(undefined, 'Bezpłatna rozmowa telefoniczna (15 min)')
-                      }
+                      onClick={() => onOpenBooking(undefined, 'Konsultacja psychologiczna')}
                       className="group editorial-link mt-0.5 text-[12px] font-normal text-[#2B423B]"
                     >
-                      <span>Porozmawiajmy bezpłatnie 15 min</span>
+                      <span>Umów pierwszą konsultację (50 min)</span>
                       <KineticArrow className="h-3 w-3" />
                     </button>
                   </div>

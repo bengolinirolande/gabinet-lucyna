@@ -22,27 +22,27 @@ interface BalticGalleryInterludeProps {
 const MOOD_PROMPTS = [
   {
     id: 'spokoj',
-    label: 'Szukam ulgi od napięcia',
-    topic: 'Lęk, przewlekły stres i ataki paniki',
-    title: 'Kiedy układ nerwowy od dawna pracuje na wysokich obrotach.',
+    label: 'Szukam ulgi od lęku i smutku',
+    topic: 'Stany lękowe, nerwice i depresja',
+    title: 'Kiedy napięcie, lęk lub przygnębienie odbierają codzienny oddech.',
     response:
-      'Pierwszym krokiem nie jest „wzięcie się w garść”, ale bezpieczne zatrzymanie. Podczas pierwszych spotkań wspólnie porządkujemy to, co napędza lęk i wprowadzamy proste, oparte na neurobiologii techniki regulacji.',
+      'Pierwszym krokiem nie jest „wzięcie się w garść”, ale pozwolenie sobie na przyjęcie pomocy. Podczas konsultacji spokojnie poznajemy źródła cierpienia, aby krok po kroku mogła pojawić się prawdziwa ulga.',
   },
   {
-    id: 'zrozumienie',
-    label: 'Czuję przeciążenie i wypalenie',
-    topic: 'Wypalenie zawodowe i perfekcjonizm',
-    title: 'Kiedy sukcesy przestały cieszyć, a zmęczenie nie mija po urlopie.',
+    id: 'trauma',
+    label: 'Niosę trudne doświadczenia',
+    topic: 'Psychotraumatologia i praca z traumą',
+    title: 'Kiedy bolesne przeżycia lub doświadczenie przemocy wciąż dają o sobie znać.',
     response:
-      'Przyglądamy się przekonaniom, które każą Ci ciągle wymagać od siebie więcej. Bez oceniania i bez gotowych sloganów coachingowych — odzyskujesz granice, energię i prawo do odpoczynku bez poczucia winy.',
+      'Jako psychotraumatolog towarzyszę w bezpiecznym, stopniowym przepracowaniu urazów, straty oraz poczucia utraty gruntu — bez pośpiechu, bez oceniania i z pełnym szacunkiem dla Twoich granic.',
   },
   {
     id: 'relacje',
-    label: 'Chcę zdrowszych relacji',
-    topic: 'Relacje, granice i style przywiązania',
-    title: 'Kiedy bliskość bywa źródłem lęku, albo wciąż dopasowujesz się do innych.',
+    label: 'Chcę zdrowszych relacji i bliskości',
+    topic: 'Relacje, związki i terapia dla par',
+    title: 'Kiedy trudno o bezpieczną bliskość, zaufanie lub poczucie własnej wartości.',
     response:
-      'Praca w nurcie Terapii Schematów pozwala łagodnie zobaczyć, skąd biorą się powtarzalne scenariusze w związkach — i krok po kroku nauczyć się budować relacje oparte na wzajemności i szacunku.',
+      'Praca w nurcie psychodynamicznym oraz konsultacje dla par i seksuologiczne pomagają zrozumieć powtarzalne mechanizmy w związkach i budować relację ze sobą oraz z bliskimi na solidniejszym fundamencie.',
   },
 ];
 

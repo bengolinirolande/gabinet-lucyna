@@ -1,6 +1,6 @@
 import React, { useMemo, useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown, Phone, Star } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, Star } from 'lucide-react';
 import { PRACTICE } from '../data/practice';
 import { type PageId } from '../types/navigation';
 import { useLenis } from './motion/LenisProvider';
@@ -24,15 +24,12 @@ function getTodayClinicLabel(): string {
       weekday: 'short',
     }).format(new Date());
 
-    if (weekday === 'Mon' || weekday === 'Wed' || weekday === 'Thu') {
-      return 'Dziś przyjmuję: Gdańsk Wrzeszcz & Online';
+    if (weekday === 'Sat' || weekday === 'Sun') {
+      return 'Gdynia Witomino · Śródmieście · Online';
     }
-    if (weekday === 'Tue' || weekday === 'Fri') {
-      return 'Dziś przyjmuję: Gdynia Śródmieście & Online';
-    }
-    return 'Najbliższe sesje: poniedziałek · Gdańsk & Online';
+    return 'Gdynia (2 gabinety) & Online · PL / RU';
   } catch {
-    return '54°N · 18°E · Zatoka Gdańska';
+    return '54°N · 18°E · Gdynia & Online';
   }
 }
 
@@ -146,11 +143,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
               <button
                 type="button"
-                onClick={() => onOpenBooking(undefined, 'Bezpłatna rozmowa telefoniczna (15 min)')}
+                onClick={() => onNavigate('o-mnie')}
                 className="group editorial-link-persistent py-1 text-[13.5px] font-medium text-[#1D2220] transition-colors hover:text-[#2B423B]"
               >
-                <Phone className="h-3.5 w-3.5 stroke-[1.5] text-[#8C5E3E]" />
                 <SlotRollText label={PRACTICE.hero.secondaryCta} />
+                <ArrowUpRight className="h-3.5 w-3.5 stroke-[1.5] text-[#8C5E3E] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </button>
             </motion.div>
 
@@ -182,7 +179,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   <Star className="h-4 w-4 fill-[#C4924A] text-[#C4924A]" />
                 </p>
                 <p className="text-[12px] font-light tracking-[0.02em] text-[#5D6560] underline decoration-[#1D2220]/20 underline-offset-4 group-hover:text-[#2B423B]">
-                  {PRACTICE.googleProfile.reviewCount} opinii Google
+                  {PRACTICE.googleProfile.reviewCount} opinii · ZnanyLekarz
                 </p>
               </button>
             </motion.div>
@@ -199,11 +196,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               >
                 <CurtainImage
                   src={PRACTICE.images.portrait}
-                  alt={`${PRACTICE.fullName} — psycholog i psychoterapeutka w Trójmieście`}
-                  aspectClass="aspect-[4/5]"
+                  alt={`${PRACTICE.fullName} — psycholog, psychotraumatolog i psychoterapeutka w Gdyni`}
+                  aspectClass="aspect-[15/16]"
                   className="rounded-[2px] shadow-[0_30px_70px_-30px_rgba(26,39,35,0.28)]"
                   imgClassName="object-top"
-                  parallaxStrength={20}
+                  parallaxStrength={16}
                   immediate
                   ready={ready}
                   priority
@@ -214,7 +211,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               {/* Outer Parallax Wrapper + Inner Entrance Wrapper */}
               <motion.div
                 style={{ y: badgeParallaxY }}
-                className="relative -mt-9 ml-4 mr-4 sm:-ml-8 sm:mr-8 sm:max-w-[320px]"
+                className="relative -mt-9 ml-4 mr-4 sm:-ml-8 sm:mr-8 sm:max-w-[336px]"
               >
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -229,7 +226,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     {PRACTICE.fullName}
                   </p>
                   <p className="mt-1.5 text-[12px] font-light leading-relaxed text-[#4E5551]">
-                    Gdańsk Wrzeszcz · Gdynia Śródmieście · Konsultacje online
+                    Gdynia Witomino · Śródmieście · Online · PL / RU
                   </p>
                 </motion.div>
               </motion.div>

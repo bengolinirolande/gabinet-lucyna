@@ -101,7 +101,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
               transition={{ duration: 0.48, delay: 0.1, ease: EASE_EDITORIAL }}
               className="text-[10px] uppercase tracking-[0.26em] text-[#F6F3EE]/75"
             >
-              Psycholog · Gdańsk · Gdynia · Online
+              Psycholog · Psychotraumatolog · Gdynia &amp; Online
             </motion.span>
           </div>
         </motion.div>

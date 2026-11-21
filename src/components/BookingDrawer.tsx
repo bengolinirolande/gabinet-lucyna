@@ -30,27 +30,35 @@ interface BookingDrawerProps {
   onOpenPrivacy: () => void;
 }
 
-const individualPrice = PRACTICE.pricing.items[1]?.price ?? '220 zł';
-const couplesPrice = PRACTICE.pricing.items[2]?.price ?? '340 zł';
-
 const SESSION_TYPES = [
-  `Pierwsza konsultacja wstępna (50 min · ${individualPrice})`,
-  'Bezpłatna rozmowa telefoniczna (15 min · 0 zł)',
-  `Psychoterapia indywidualna (50 min · ${individualPrice})`,
-  `Konsultacja dla par (80 min · ${couplesPrice})`,
+  'Konsultacja psychologiczna / wstępna (50 min · 200–210 zł)',
+  'Psychoterapia indywidualna — psychodynamiczna (50–60 min · 200–210 zł)',
+  'Konsultacja psychotraumatologiczna / seksuologiczna (50 min · 200–210 zł)',
+  'Terapia dla par · Badania · Wizyta domowa (od 200 zł / 430 zł)',
 ];
 
-const INTRO_CALL_OPTION = SESSION_TYPES[1];
-
-const LOCATIONS = ['Gdańsk Wrzeszcz', 'Gdynia Śródmieście', 'Online (wideo)'] as const;
+const LOCATIONS = [
+  'Gdynia Witomino',
+  'Gdynia Śródmieście',
+  'Online (wideo / telefon)',
+] as const;
 type LocationOption = (typeof LOCATIONS)[number];
 
 const TIME_SLOTS = ['Poranek (08:30–12:00)', 'Popołudnie (12:00–16:00)', 'Wieczór (16:00–20:00)'];
 
 const LOCATION_OPEN_WEEKDAYS: Record<LocationOption, { days: number[]; label: string }> = {
-  'Gdańsk Wrzeszcz': { days: [1, 3, 4], label: 'Poniedziałki, środy i czwartki (09:00–20:00)' },
-  'Gdynia Śródmieście': { days: [2, 5], label: 'Wtorki i piątki (10:00–19:00)' },
-  'Online (wideo)': { days: [1, 2, 3, 4, 5], label: 'Poniedziałek – piątek (08:30–20:00)' },
+  'Gdynia Witomino': {
+    days: [1, 2, 3, 4, 5],
+    label: 'ul. Chwarznieńska 136–138 · Wizyty umawiane indywidualnie (PL / RU)',
+  },
+  'Gdynia Śródmieście': {
+    days: [1, 2, 3, 4, 5],
+    label: 'Przychodnia Medyczna Gdynia, ul. gen. Bema 16/2 · Centrum Gdyni',
+  },
+  'Online (wideo / telefon)': {
+    days: [1, 2, 3, 4, 5],
+    label: 'Wideokonsultacja lub rozmowa telefoniczna (język polski / rosyjski)',
+  },
 };
 
 function getUpcomingDaysForWeekdays(allowedDays: number[]): string[] {
@@ -77,10 +85,15 @@ function getUpcomingDaysForWeekdays(allowedDays: number[]): string[] {
 function resolveSessionPreset(raw?: string): string {
   if (!raw) return SESSION_TYPES[0];
   const lower = raw.toLowerCase();
-  if (lower.includes('15 min') || lower.includes('rozmowa telefoniczna')) return SESSION_TYPES[1];
-  if (lower.includes('par')) return SESSION_TYPES[3];
-  if (lower.includes('konsultacj')) return SESSION_TYPES[0];
-  if (lower.includes('indywidualn')) return SESSION_TYPES[2];
+  if (lower.includes('par') || lower.includes('domow') || lower.includes('badani')) {
+    return SESSION_TYPES[3];
+  }
+  if (lower.includes('seksuolog') || lower.includes('traum')) {
+    return SESSION_TYPES[2];
+  }
+  if (lower.includes('psychoterapia') || lower.includes('indywidualn')) {
+    return SESSION_TYPES[1];
+  }
   return SESSION_TYPES[0];
 }
 
@@ -99,14 +112,10 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
 
   const [sessionType, setSessionType] = useState(SESSION_TYPES[0]);
   const [location, setLocation] = useState<LocationOption>(LOCATIONS[0]);
-  const isPhoneIntro = sessionType === INTRO_CALL_OPTION;
 
   const dateOptions = useMemo(
-    () =>
-      getUpcomingDaysForWeekdays(
-        isPhoneIntro ? [1, 2, 3, 4, 5] : LOCATION_OPEN_WEEKDAYS[location].days
-      ),
-    [location, isPhoneIntro]
+    () => getUpcomingDaysForWeekdays(LOCATION_OPEN_WEEKDAYS[location].days),
+    [location]
   );
 
   const [preferredDay, setPreferredDay] = useState('Najbliższy wolny termin');
@@ -182,7 +191,7 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
   };
 
   const recipientEmail = PRACTICE.bookingRecipientEmail;
-  const effectiveLocationLabel = isPhoneIntro ? 'Rozmowa telefoniczna (15 min)' : location;
+  const effectiveLocationLabel = location;
   const trimmedNameDisplay = name.trim();
 
   const summaryPlainText = [
@@ -403,44 +412,40 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                   </fieldset>
 
                   {/* 2. Lokalizacja */}
-                  {!isPhoneIntro && (
-                    <fieldset className="space-y-2">
-                      <legend className="block text-[10.5px] uppercase tracking-[0.18em] text-[#5D6560]">
-                        2. Lokalizacja
-                      </legend>
-                      <div className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-3">
-                        {LOCATIONS.map((loc) => {
-                          const active = location === loc;
-                          return (
-                            <button
-                              key={loc}
-                              type="button"
-                              aria-pressed={active}
-                              onClick={() => handleLocationChange(loc)}
-                              className={`border px-2.5 py-2.5 text-center text-[12px] leading-tight transition-all duration-300 ${
-                                active
-                                  ? 'border-[#2B423B] bg-[#2B423B]/10 font-medium text-[#2B423B]'
-                                  : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#4E5551] hover:border-[#2B423B]/40'
-                              }`}
-                            >
-                              {loc}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </fieldset>
-                  )}
+                  <fieldset className="space-y-2">
+                    <legend className="block text-[10.5px] uppercase tracking-[0.18em] text-[#5D6560]">
+                      2. Lokalizacja
+                    </legend>
+                    <div className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-3">
+                      {LOCATIONS.map((loc) => {
+                        const active = location === loc;
+                        return (
+                          <button
+                            key={loc}
+                            type="button"
+                            aria-pressed={active}
+                            onClick={() => handleLocationChange(loc)}
+                            className={`border px-2.5 py-2.5 text-center text-[12px] leading-tight transition-all duration-300 ${
+                              active
+                                ? 'border-[#2B423B] bg-[#2B423B]/10 font-medium text-[#2B423B]'
+                                : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#4E5551] hover:border-[#2B423B]/40'
+                            }`}
+                          >
+                            {loc}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </fieldset>
 
                   {/* 3. Preferowany dzień i pora */}
                   <fieldset className="space-y-2.5">
                     <legend className="flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.18em] text-[#5D6560]">
                       <Calendar className="h-3.5 w-3.5 text-[#8C5E3E]" />
-                      <span>{isPhoneIntro ? '2.' : '3.'} Preferowany dzień i pora</span>
+                      <span>3. Preferowany dzień i pora</span>
                     </legend>
                     <p className="text-[11.5px] font-light text-[#5D6560]">
-                      {isPhoneIntro
-                        ? 'Rozmowa telefoniczna: poniedziałek – piątek (08:30–20:00)'
-                        : `${location}: ${LOCATION_OPEN_WEEKDAYS[location].label}`}
+                      {`${location}: ${LOCATION_OPEN_WEEKDAYS[location].label}`}
                     </p>
                     <div className="flex flex-wrap gap-1.5">
                       {dateOptions.map((day) => {
@@ -638,6 +643,28 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                         <Phone className="h-3.5 w-3.5 stroke-[1.5]" />
                         <span>{PRACTICE.phoneDisplay}</span>
                       </a>
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#1D2220]/9 pt-2.5 text-[11px] text-[#5D6560]">
+                      <span>Wolisz kalendarz zewnętrzny?</span>
+                      <div className="flex items-center gap-3">
+                        <a
+                          href={PRACTICE.twojPsychologUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-[#2B423B] underline decoration-[#2B423B]/35 underline-offset-2 hover:text-[#1A2723]"
+                        >
+                          TwójPsycholog.pl
+                        </a>
+                        <a
+                          href={PRACTICE.znanyLekarzUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-[#2B423B] underline decoration-[#2B423B]/35 underline-offset-2 hover:text-[#1A2723]"
+                        >
+                          ZnanyLekarz.pl
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </motion.form>

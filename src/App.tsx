@@ -193,8 +193,8 @@ const AppShell: React.FC = () => {
     const meta = ROUTES[currentPage];
     document.title =
       currentPage === 'home'
-        ? 'mgr Lucyna Kamińska — Psycholog i Psychoterapeutka | Gdańsk · Gdynia · Online'
-        : `${meta.curtainTitle} — mgr Lucyna Kamińska | Trójmiasto`;
+        ? 'mgr Lucyna Grochowska — Psycholog, Psychotraumatolog, Psychoterapeutka | Gdynia · Online'
+        : `${meta.curtainTitle} — mgr Lucyna Grochowska | Gdynia`;
   }, [currentPage]);
 
   useEffect(() => {
@@ -253,13 +253,13 @@ const AppShell: React.FC = () => {
             />
             <VelocityRibbon
               items={[
-                'Gdańsk Wrzeszcz',
-                'Bezpieczna relacja',
+                'Gdynia Witomino',
+                'Psychoterapia psychodynamiczna',
                 'Gdynia Śródmieście',
-                'CBT · Terapia Schematów',
-                'Konsultacje Online',
-                'Stała superwizja PTTPB',
-                'Trójmiasto',
+                'Psychotraumatologia',
+                'Seksuologia kliniczna',
+                'Konsultacje Online · PL / RU',
+                'Stała superwizja',
               ]}
             />
             <HomeDirectorySection
@@ -277,7 +277,7 @@ const AppShell: React.FC = () => {
               eyebrow="Terapia i obszary pracy"
               lines={['W czym mogę Ci', 'uważnie towarzyszyć.']}
               italicSubstring="towarzyszyć."
-              lead="Pracuję z osobami dorosłymi i parami w nurtach o potwierdzonej skuteczności (CBT, Terapia Schematów). Poniżej znajdziesz główne obszary wsparcia, przebieg pierwszych spotkań oraz filozofię mojej pracy."
+              lead="Pracuję w nurcie psychodynamicznym (w trakcie certyfikacji), jako psychotraumatolog oraz seksuolog kliniczny w trakcie certyfikacji. Poniżej znajdziesz główne obszary pomocy, przebieg pierwszych spotkań oraz moją filozofię pracy."
               ready={viewReady}
               onBackHome={() => navigateTo('home')}
             />
@@ -290,7 +290,7 @@ const AppShell: React.FC = () => {
             <NextChapterBridge
               nextPage="o-mnie"
               tone="light"
-              teaser="Poznaj moje wykształcenie kliniczne, standardy superwizji oraz anonimowe słowa pacjentów."
+              teaser="Poznaj moje wykształcenie (UKW, Triada, UAM, Vis Salutis), 8-letnie doświadczenie kliniczne oraz zweryfikowane opinie pacjentów."
               onNavigate={(page) => navigateTo(page)}
             />
           </>
@@ -300,10 +300,10 @@ const AppShell: React.FC = () => {
           <>
             <SubpageHeader
               chapter="02"
-              eyebrow="O mnie · mgr Lucyna Kamińska"
-              lines={['Kliniczna rzetelność', 'i ludzka obecność.']}
-              italicSubstring="ludzka obecność."
-              lead="Od ponad dekady towarzyszę osobom z Trójmiasta i online w odzyskiwaniu spokoju, sprawczości i zdrowszych relacji. Bez pośpiechu, bez oceniania, w oparciu o stałą superwizję."
+              eyebrow="O mnie · mgr Lucyna Grochowska"
+              lines={['Kliniczne doświadczenie', 'i przestrzeń bez oceniania.']}
+              italicSubstring="bez oceniania."
+              lead="Od 8 lat łączę praktykę w publicznych placówkach zdrowia psychicznego z gabinetem prywatnym. Pracuję pod stałą superwizją, w języku polskim i rosyjskim, z głębokim poszanowaniem historii każdej osoby."
               ready={viewReady}
               onBackHome={() => navigateTo('home')}
             />
@@ -314,7 +314,7 @@ const AppShell: React.FC = () => {
             <NextChapterBridge
               nextPage="gabinety"
               tone="sand"
-              teaser="Sprawdź gabinety w Gdańsku Wrzeszczu i Gdyni Śródmieściu, mapę Trójmiasta, Wizytówkę Google 5,0 oraz cennik."
+              teaser="Sprawdź oba gabinety w Gdyni (ul. Chwarznieńska i Medyczna Gdynia), konsultacje online, profile ZnanyLekarz / TwójPsycholog oraz cennik."
               onNavigate={(page) => navigateTo(page)}
             />
           </>
@@ -324,10 +324,10 @@ const AppShell: React.FC = () => {
           <>
             <SubpageHeader
               chapter="03"
-              eyebrow="Praktyka · Trójmiasto i Online"
-              lines={['Gabinety, Google 5,0', 'i przejrzysty cennik.']}
+              eyebrow="Praktyka · Gdynia i Online (PL / RU)"
+              lines={['Gabinety, opinie 5,0', 'i przejrzysty cennik.']}
               italicSubstring="przejrzysty cennik."
-              lead="Przyjmuję stacjonarnie przy SKM w Gdańsku Wrzeszczu i Gdyni Śródmieściu oraz online. Tutaj znajdziesz adresy, mapę dojazdu, Wizytówkę Google, cennik oraz odpowiedzi na najczęstsze pytania."
+              lead="Przyjmuję stacjonarnie w Gdyni Witominie (ul. Chwarznieńska 136–138), w Przychodni Medyczna Gdynia (ul. gen. Bema 16/2) oraz online. Tutaj znajdziesz dojazd, mapę Gdyni, zweryfikowane opinie, cennik oraz odpowiedzi na pytania."
               ready={viewReady}
               onBackHome={() => navigateTo('home')}
             />

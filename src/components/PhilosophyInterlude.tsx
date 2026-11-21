@@ -8,7 +8,7 @@ import {
   Reveal,
 } from './motion/MotionPrimitives';
 
-const QUOTE_ACCENT = 'łagodniejszą, trwalszą relację ze sobą.';
+const QUOTE_ACCENT = 'poczuć prawdziwą ulgę w codziennym funkcjonowaniu.';
 
 export const PhilosophyInterlude: React.FC = () => {
   const reduced = useReducedMotion();

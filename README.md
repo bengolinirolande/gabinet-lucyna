@@ -1,6 +1,10 @@
-# Gabinet Psychologiczny i Psychoterapeutyczny — Trójmiasto (Gdańsk · Gdynia · Online)
+# mgr Lucyna Grochowska — Gabinet Psychologiczny i Psychoterapeutyczny (Gdynia · Online)
 
-Nowoczesna, edytorska strona prywatnej praktyki psychologicznej zaprojektowana w estetyce **Minimal Editorial Luxury** (Awwwards / FWA / Codrops / czołowe gabinety solo z NYC i LA).
+Nowoczesna, edytorska strona prywatnej praktyki psychologicznej **mgr Lucyny Grochowskiej** (psycholog, psychotraumatolog, psychoterapeutka w nurcie psychodynamicznym i seksuolog kliniczny w trakcie certyfikacji), zsynchronizowana z oficjalnymi profilami:
+- [ZnanyLekarz.pl](https://www.znanylekarz.pl/profil/lucyna-grochowska)
+- [TwójPsycholog.pl](https://twojpsycholog.pl/profil-psychologa/lucyna-grochowska-11618)
+
+Podgląd online (GitHub Pages): **https://bengolinirolande.github.io/gabinet-lucyna/**
 
 ## Uruchomienie lokalne
 
@@ -13,53 +17,20 @@ Strona działa pod adresem `http://localhost:5173`.
 
 ## Struktura strony (4 kompaktowe widoki)
 
-Strona jest podzielona na 4 przejrzyste widoki z pełnoekranowym przejściem edytorskim (hash routing, bez przeładowania strony i gotowe pod dowolny hosting statyczny):
+- **Start** (`#/`) — otwarcie z prawdziwym portretem mgr Lucyny Grochowskiej, powolna wstęga specjalizacji i lokalizacji, katalog rozdziałów, pasek zaufania ZnanyLekarz `5,0`, ćwiczenie oddechu 4–4–6 oraz kadr Zatoki Gdańskiej.
+- **Terapia** (`#/terapia`) — 6 obszarów wsparcia (stany lękowe/depresja, psychotraumatologia, relacje i pary, seksuologia kliniczna, tożsamość/osobowość, interwencja kryzysowa/uzależnienia), przebieg pierwszych spotkań oraz filozofia pracy.
+- **O mnie** (`#/o-mnie`) — bio z prawdziwym zdjęciem w gabinecie, wykształcenie (UKW, Triada, UAM, Vis Salutis), 8-letnie doświadczenie kliniczne, standardy superwizji i zweryfikowane opinie 5,0 z ZnanyLekarz.pl.
+- **Gabinety i cennik** (`#/gabinety`) — Gdynia Witomino (`ul. Chwarznieńska 136–138`), Gdynia Śródmieście (`Przychodnia Medyczna Gdynia, ul. gen. Bema 16/2`), Online (`PL / RU`), cennik od 200 zł, sekcja profili z mapą Gdyni oraz FAQ.
 
-- **Start** (`#/`) — otwarcie z bieżącym statusem gabinetu, powolna wstęga Trójmiasta, katalog rozdziałów, Wizytówka Google 5,0, ćwiczenie oddechu 4–4–6 oraz kadr Zatoki Gdańskiej.
-- **Terapia** (`#/terapia`) — obszary wsparcia z podglądem edytorskim, proces pierwszej wizyty i filozofia pracy.
-- **O mnie** (`#/o-mnie`) — bio, kwalifikacje i akredytacje, manifest przewijany ze scrollem oraz opinie pacjentów.
-- **Gabinety i cennik** (`#/gabinety`) — Gdańsk Wrzeszcz, Gdynia Śródmieście, Online, przejrzysty cennik, Wizytówka Google z mapą Zatoki Gdańskiej oraz FAQ.
-
-## Budowanie wersji produkcyjnej
-
-```bash
-npm run build
-```
-
-Gotowe pliki statyczne trafią do folderu `dist/`.
-
----
-
-## Jak podpiąć swój e-mail pod rezerwacje (1 zmiana!)
+## Jak podpiąć docelowy e-mail pod rezerwacje (1 zmiana)
 
 1. Otwórz plik `src/data/practice.ts`.
-2. Na samej górze pliku zmień pole `bookingRecipientEmail` na swój prawdziwy adres e-mail (np. Gmail lub adres w domenie gabinetu):
-   ```ts
-   bookingRecipientEmail: 'twoj.email@gmail.com',
-   ```
-3. Otwórz stronę, wypełnij raz testowo panel **Umów konsultację** i kliknij **Wyślij rezerwację na e-mail gabinetu**.
-4. Na podaną skrzynkę przyjdzie jednorazowy e-mail aktywacyjny od **FormSubmit** — kliknij przycisk potwierdzenia.
-5. Od tego momentu **każda rezerwacja ze strony trafia automatycznie jako czytelna tabela na Twój e-mail** (z ustawionym `Reply-To` na adres pacjenta i ochroną antyspamową `_honey`).
+2. Zmień pole `bookingRecipientEmail` (oraz `email` i opcjonalnie prywatny `phoneDisplay`) na docelowy adres skrzynki gabinetu.
+3. Po publikacji wyślij raz testowo formularz **Umów konsultację** i kliknij jednorazowy link aktywacyjny od **FormSubmit**, który przyjdzie na podany adres.
+4. Od tego momentu każda rezerwacja ze strony trafia bezpośrednio jako tabela na wskazaną skrzynkę.
 
-## Podpięcie Wizytówki Google (Google Business Profile)
+## Spis fotografii (`public/images/`)
 
-W tym samym pliku `src/data/practice.ts` w obiekcie `googleProfile` podmień:
-- `rating` i `reviewCount` (aktualna ocena i liczba opinii),
-- `profileUrl` (link do Twojej Wizytówki Google),
-- `writeReviewUrl` (bezpośredni link „Poproś o opinie” z panelu Google),
-- `mapsGdanskUrl` / `mapsGdyniaUrl` (linki nawigacji do gabinetów),
-- `featuredReviews` (wybrane cytaty opinii).
-
-## Spis fotografii edytorskich (`public/images/`)
-
-- `portrait-lucyna.jpg` — portret główny (3:4)
-- `lucyna-detail.jpg` — kadr detalu „O mnie” (4:3)
-- `gabinet-gdansk.jpg` — wnętrze gabinetu Gdańsk Wrzeszcz (4:3)
-- `gdansk-kamienica-entrance.jpg` — podwórze kamienicy Gdańsk Wrzeszcz (4:3)
-- `gabinet-gdynia.jpg` — wnętrze gabinetu Gdynia Śródmieście (4:3)
-- `baltic-shore-calm.jpg` — poranek nad Zatoką Gdańską / Orłowo (16:9)
-- `baltic-pine-path.jpg` — nadmorska ścieżka sosnowa w Trójmieście (4:3)
-- `editorial-sanctuary-tea.jpg` — kompozycja z herbatą na dębowym stole (4:3)
-- `editorial-light-architecture.jpg` — architektura światła i trawertynu (3:4)
-- `still-life-calm.jpg` — kompozycja nastrojowa do sekcji Filozofia pracy (3:4)
-- `sanctuary-corner.jpg` — kącik z fotelem w sekcji FAQ (3:4)
+- `portrait-lucyna.jpg` — prawdziwy portret główny mgr Lucyny Grochowskiej (z TwójPsycholog.pl)
+- `lucyna-office.jpg` — prawdziwe zdjęcie mgr Lucyny Grochowskiej w gabinecie (z TwójPsycholog.pl)
+- Pozostałe kadry (`gabinet-gdynia.jpg`, `gabinet-gdansk.jpg`, `baltic-shore-calm.jpg`, `baltic-pine-path.jpg`, `editorial-sanctuary-tea.jpg`, `editorial-light-architecture.jpg`, `still-life-calm.jpg`, `sanctuary-corner.jpg`, `lucyna-detail.jpg`, `gdansk-kamienica-entrance.jpg`) — spójne fotografie edytorskie klimatu Gdyni i Trójmiasta.

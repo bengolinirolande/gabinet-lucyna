@@ -84,7 +84,7 @@ export const ScrollManifestoBand: React.FC = () => {
             style={{ scaleX: flankingScale, transformOrigin: 'right center' }}
             className="h-px w-12 bg-[#1D2220]/25"
           />
-          <span>Gdańsk · Sopot · Gdynia · Online</span>
+          <span>Gdynia · Sopot · Gdańsk · Online (PL / RU)</span>
           <motion.span
             style={{ scaleX: flankingScale, transformOrigin: 'left center' }}
             className="h-px w-12 bg-[#1D2220]/25"
