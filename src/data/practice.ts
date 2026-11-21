@@ -1,5 +1,5 @@
 // Centralna konfiguracja danych gabinetu mgr Lucyny Grochowskiej
-// 100% danych zsynchronizowane z oficjalnymi profilami:
+// Dane zsynchronizowane z oficjalnymi profilami:
 // - https://www.znanylekarz.pl/profil/lucyna-grochowska
 // - https://twojpsycholog.pl/profil-psychologa/lucyna-grochowska-11618
 
@@ -62,7 +62,7 @@ export const PRACTICE = {
   // KONFIGURACJA REZERWACJI — WPISZ DOCELOWY ADRES E-MAIL GABINETU
   // Uwaga: na ZnanyLekarz i TwójPsycholog nie ma podanego prywatnego e-maila
   // ani prywatnej komórki (portale maskują te dane). Wpisz tu swój e-mail,
-  // aby wszystkie rezerwacje z formularza trafiały wprost na skrzynkę.
+  // aby wszystkie zapytania z formularza trafiały prosto na skrzynkę.
   // =========================================================================
   bookingRecipientEmail: 'kontakt@lucynagrochowska.pl',
 
@@ -72,15 +72,14 @@ export const PRACTICE = {
   role: 'Psycholog · Psychotraumatolog · Psychoterapeutka',
   regionLabel: 'Gdynia · Trójmiasto · Online (PL / RU)',
   tagline:
-    'Psychoterapia psychodynamiczna, psychotraumatologia, seksuologia i pomoc psychologiczna dla dorosłych, par oraz młodzieży (od 10 lat) w Gdyni i online.',
+    'Psychoterapia psychodynamiczna, psychotraumatologia, seksuologia i pomoc psychologiczna dla dorosłych, par oraz młodzieży (od 10. roku życia) w Gdyni i online.',
   phoneDisplay: '+48 58 500 46 87',
   phoneSecondaryDisplay: '+48 58 500 46 88',
   phoneHref: 'tel:+48585004687',
   phoneSecondaryHref: 'tel:+48585004688',
   email: 'kontakt@lucynagrochowska.pl',
   clinicEmail: 'wizyta@medycznagdynia.pl',
-  availabilityStatus:
-    'Przyjmuję stacjonarnie w Gdyni (2 gabinety), online oraz na wizytach domowych · PL / RU',
+  availabilityStatus: 'Przyjmuję w Gdyni, online oraz na wizytach domowych',
 
   // Oficjalne profile zewnętrzne mgr Lucyny Grochowskiej
   znanyLekarzUrl: 'https://www.znanylekarz.pl/profil/lucyna-grochowska',
@@ -105,7 +104,7 @@ export const PRACTICE = {
       {
         author: 'Anita',
         dateLabel: 'maj 2026 · ZnanyLekarz',
-        text: 'Serdecznie polecam Panią psycholog. Akceptuje, nie ocenia a wspiera. Czuję się bezpiecznie i mam dzięki temu odwagę do zmian koniecznych do lepszego życia. Duża wiedza i doświadczenie.',
+        text: 'Serdecznie polecam Panią psycholog. Akceptuje, nie ocenia, a wspiera. Czuję się bezpiecznie i mam dzięki temu odwagę do zmian koniecznych do lepszego życia. Duża wiedza i doświadczenie.',
       },
       {
         author: 'Dg',
@@ -136,7 +135,7 @@ export const PRACTICE = {
   },
 
   hero: {
-    eyebrow: 'Psycholog · Psychotraumatolog · Gdynia & Online (PL / RU)',
+    eyebrow: 'Psycholog · Psychotraumatolog · Gdynia i online',
     headlineLines: [
       'Kiedy pozwalasz sobie',
       'na przyjęcie pomocy,',
@@ -144,13 +143,13 @@ export const PRACTICE = {
     ],
     italicWord: 'po prostu lżej.',
     subheadline:
-      'Jestem psychologiem z 8-letnim doświadczeniem klinicznym, psychotraumatologiem, psychoterapeutką pracującą w nurcie psychodynamicznym (w trakcie certyfikacji) oraz seksuologiem klinicznym w trakcie certyfikacji. Przyjmuję w Gdyni oraz online.',
+      'Jestem psychologiem z 8-letnim doświadczeniem klinicznym i psychotraumatologiem — w trakcie certyfikacji z psychoterapii psychodynamicznej oraz seksuologii klinicznej. Przyjmuję w Gdyni i online.',
     primaryCta: 'Umów konsultację',
     secondaryCta: 'Poznaj moje podejście',
     trustStats: [
       { value: '8 lat', label: 'praktyki klinicznej' },
-      { value: 'Psychodynamiczna', label: 'nurt · stała superwizja' },
-      { value: 'PL / RU', label: 'język terapii · LGBT+ friendly' },
+      { value: 'Psychodynamiczny', label: 'nurt · stała superwizja' },
+      { value: 'PL / RU', label: 'języki sesji · przyjazna LGBT+' },
     ],
   },
 
@@ -162,28 +161,28 @@ export const PRACTICE = {
     reflections: [
       {
         index: '01',
-        lead: 'Stany lękowe, nerwicowe, napady paniki lub długotrwały smutek.',
+        lead: 'Lęk, napięcie lub długotrwały smutek nie odpuszczają nawet w spokojne dni.',
         body: 'Napięcie, bezsenność, depresja, lęk społeczny albo dolegliwości psychosomatyczne, w których ciało zaczyna głośno sygnalizować przeciążenie emocjonalne.',
       },
       {
         index: '02',
-        lead: 'Niskie poczucie własnej wartości i zagubienie tożsamościowe.',
+        lead: 'Trudno Ci oprzeć się na poczuciu własnej wartości i wewnętrznej pewności.',
         body: 'Trudność w odnalezieniu wewnętrznego oparcia, pewności siebie oraz spójnej tożsamości osobistej lub zawodowej — w tym wypalenie zawodowe czy presja w sporcie.',
       },
       {
         index: '03',
-        lead: 'Trudności w tworzeniu i utrzymywaniu bliskich relacji.',
-        body: 'Powtarzające się kryzysy w związku, zdrada, rozwód lub rozstanie, samotność, trudność w znalezieniu partnera/ki oraz napięcia w sferze intymnej i seksualnej.',
+        lead: 'W bliskich relacjach wracają te same zranienia, dystans albo samotność.',
+        body: 'Powtarzające się kryzysy w związku, zdrada, rozwód lub rozstanie, samotność, trudność w znalezieniu bliskiej osoby oraz napięcia w sferze intymnej i seksualnej.',
       },
       {
         index: '04',
-        lead: 'Ślady bolesnych lub traumatycznych doświadczeń.',
+        lead: 'Ślady bolesnych lub traumatycznych przeżyć wciąż nie pozwalają odetchnąć.',
         body: 'Doświadczenie przemocy fizycznej, psychicznej lub ekonomicznej, wykorzystanie seksualne, żałoba, stany pooperacyjne albo nagły kryzys życiowy.',
       },
       {
         index: '05',
-        lead: 'Potrzeba spokojnej, nieoceniającej rozmowy w bezpiecznej przestrzeni.',
-        body: 'Szukasz miejsca w Gdyni lub online (po polsku albo po rosyjsku), gdzie możesz zostać naprawdę wysłuchana i wysłuchany — bez oceniania i z głębokim zrozumieniem.',
+        lead: 'Potrzebujesz spokojnej rozmowy w przestrzeni, w której nikt Cię nie ocenia.',
+        body: 'Szukasz miejsca w Gdyni lub online (po polsku albo po rosyjsku), gdzie zostaniesz naprawdę wysłuchana lub wysłuchany — z uważnością, dyskrecją i prawdziwym zrozumieniem.',
       },
     ],
   },
@@ -208,7 +207,7 @@ export const PRACTICE = {
       },
       {
         title: 'Zweryfikowane dyplomy i superwizja',
-        text: 'Pracuję pod stałą superwizją kliniczną, z zachowaniem tajemnicy zawodowej. Dyplomy zweryfikowane przez TwójPsycholog.pl · laureatka Orłów Medycyny · przyjazna LGBT+.',
+        text: 'Pracuję pod stałą superwizją kliniczną i z zachowaniem tajemnicy zawodowej. Moje dyplomy zostały zweryfikowane w serwisie TwójPsycholog, a gabinet jest przestrzenią przyjazną osobom LGBT+.',
       },
     ],
   },
@@ -217,15 +216,17 @@ export const PRACTICE = {
     {
       id: 'lek-depresja-nastroj',
       number: '01',
-      title: 'Stany lękowe, nerwice, depresja i nastrój',
-      subtitle: 'Odzyskiwanie równowagi emocjonalnej i spokoju w ciele',
+      title: 'Stany lękowe, nerwice i depresja',
+      subtitle: 'Odzyskiwanie wewnętrznego spokoju i równowagi',
       description:
-        'Kompleksowe wsparcie w stanach lękowych, lęku napadowym i napadach paniki, fobii społecznej, nerwicy, depresji, chorobie afektywnej dwubiegunowej (ChAD), zaburzeniach emocjonalnych, bezsenności, histerii oraz dolegliwościach psychosomatycznych.',
+        'Towarzyszę osobom, u których przewlekły lęk, obniżony nastrój lub napięcie w ciele zaczynają odbierać siły do codziennego życia. Wspólnie docieramy do źródeł objawów, aby krok po kroku odzyskać stabilność, spokojniejszy sen i realną ulgę.',
       signals: [
-        'Depresja i ChAD',
-        'Lęk napadowy i napady paniki',
-        'Fobia społeczna i nerwica',
-        'Bezsenność i psychosomatyka',
+        'Stany lękowe i nerwica',
+        'Napady paniki i lęk uogólniony',
+        'Fobia społeczna',
+        'Depresja i zaburzenia dwubiegunowe (ChAD)',
+        'Bezsenność i objawy psychosomatyczne',
+        'Zaburzenia emocjonalne i objawy konwersyjne',
       ],
       approach: 'Psychoterapia psychodynamiczna · Psychologia kliniczna · Relaksacja',
       image: './images/baltic-shore-calm.jpg',
@@ -234,14 +235,15 @@ export const PRACTICE = {
       id: 'psychotraumatologia',
       number: '02',
       title: 'Psychotraumatologia, przemoc i strata',
-      subtitle: 'Bezpieczne przepracowanie urazów i bolesnych doświadczeń',
+      subtitle: 'Odbudowa bezpieczeństwa po bolesnych doświadczeniach',
       description:
-        'Specjalistyczna terapia traumy dla osób z doświadczeniem przemocy fizycznej, psychicznej lub ekonomicznej, wykorzystania seksualnego, głębokiej żałoby oraz kryzysów zdrowotnych i stanów pooperacyjnych.',
+        'Graniczne przeżycia potrafią na długo odebrać poczucie bezpieczeństwa i zaufanie do świata. W uważnym, dostosowanym do Ciebie tempie stopniowo oswajamy ślady traumy, odzyskując sprawczość i wewnętrzne oparcie.',
       signals: [
+        'Psychoterapia traumy',
         'Przemoc fizyczna, psychiczna i ekonomiczna',
         'Wykorzystywanie seksualne',
-        'Żałoba i utrata bliskiej osoby',
-        'Stany pooperacyjne',
+        'Żałoba i strata bliskiej osoby',
+        'Wsparcie w stanach pooperacyjnych',
       ],
       approach: 'Psychotraumatologia · Psychoterapia traumy · Interwencja kryzysowa',
       image: './images/editorial-sanctuary-tea.jpg',
@@ -249,31 +251,33 @@ export const PRACTICE = {
     {
       id: 'relacje-pary-mlodziez',
       number: '03',
-      title: 'Związki, terapia par oraz dzieci i młodzież (10+)',
-      subtitle: 'Bezpieczna bliskość w parze, rodzinie i relacjach rówieśniczych',
+      title: 'Relacje, terapia par i młodzież',
+      subtitle: 'Zdrowsza bliskość w związku, rodzinie i wśród rówieśników',
       description:
-        'Pomoc osobom indywidualnym i parom w kryzysie związku, po zdradzie, w trakcie rozwodu lub rozstania, przy trudności w nawiązywaniu relacji i znalezieniu partnera/ki oraz samotności. Pod wybranym adresem wspieram także dzieci i młodzież od 10 lat (depresja, lęki, trudności rówieśnicze).',
+        'Wspieram zarówno osoby indywidualne, jak i pary przechodzące przez kryzys, oddalenie czy rozstanie. W gabinecie przy ul. Chwarznieńskiej przyjmuję również dzieci i młodzież od 10. roku życia doświadczające trudności emocjonalnych lub rówieśniczych.',
       signals: [
-        'Kryzys w związku, zdrada i rozwód',
-        'Samotność i trudności w relacjach',
-        'Terapia dla par i rodzin',
-        'Dzieci i młodzież od 10 lat',
+        'Kryzys w związku i zdrada',
+        'Rozwód lub rozstanie',
+        'Trudności w nawiązywaniu relacji',
+        'Samotność i trudność w znalezieniu bliskiej osoby',
+        'Dzieci i młodzież od 10. roku życia (depresja, relacje)',
       ],
-      approach: 'Terapia indywidualna i dla par · Wsparcie młodzieży (10+)',
+      approach: 'Terapia indywidualna i dla par · Wsparcie dzieci i młodzieży (10+)',
       image: './images/gabinet-gdynia.jpg',
     },
     {
       id: 'seksuologia',
       number: '04',
-      title: 'Seksuologia kliniczna, intymność i menopauza',
-      subtitle: 'Dyskretna, merytoryczna rozmowa o zdrowiu seksualnym',
+      title: 'Seksuologia kliniczna i intymność',
+      subtitle: 'Uważna rozmowa o bliskości i dobrostanie seksualnym',
       description:
-        'Konsultacje seksuologiczne dla osób indywidualnych i par obejmujące problemy seksualne w związku, osłabnięcie popędu seksualnego, zaburzenia erekcji lub nawilżenia, a także wsparcie psychologiczne w okresie menopauzy i klimakterium.',
+        'Sfera seksualna jest naturalną częścią zdrowia i jakości życia, choć rozmowa o niej często bywa trudna. Oferuję dyskretne, nieoceniające konsultacje indywidualne i dla par — łączące perspektywę psychologiczną z wiedzą seksuologiczną.',
       signals: [
         'Problemy seksualne w parze',
-        'Osłabnięcie popędu seksualnego',
-        'Zaburzenia erekcji / nawilżenia',
-        'Menopauza i klimakterium',
+        'Obniżone libido i spadek pożądania',
+        'Trudności z erekcją i podnieceniem',
+        'Intymność w okresie menopauzy',
+        'Bliskość i akceptacja cielesności',
       ],
       approach: 'Seksuologia kliniczna (w trakcie certyfikacji) · Edukacja i terapia',
       image: './images/still-life-calm.jpg',
@@ -282,15 +286,16 @@ export const PRACTICE = {
     {
       id: 'tozsamosc-osobowosc-rozwoj',
       number: '05',
-      title: 'Tożsamość, osobowość, praca i sport',
-      subtitle: 'Pewność siebie, psychoterapia długoterminowa i rozwój zasobów',
+      title: 'Tożsamość, osobowość i praca',
+      subtitle: 'Budowanie oparcia w sobie i psychoterapia długoterminowa',
       description:
-        'Praca nad niskim poczuciem własnej wartości, pewnością siebie, budowaniem tożsamości osobistej i zawodowej, wypaleniem i kryzysem zawodowym, trudnościami w sporcie (w tym zawodowym), a także z zaburzeniami osobowości (m.in. borderline) oraz schizofrenią / psychozami i urojeniami.',
+        'Pracuję z osobami poszukującymi spójnego poczucia własnej wartości, kierunku zawodowego, odporności w sporcie oraz wewnętrznej stabilności. Prowadzę również pogłębioną psychoterapię długoterminową dla osób z zaburzeniami osobowości oraz po doświadczeniu psychozy.',
       signals: [
+        'Niska samoocena i brak pewności siebie',
         'Osobowość borderline i inne zaburzenia osobowości',
-        'Wypalenie i rozwój kompetencji zawodowych',
-        'Schizofrenia / psychozy / urojenia',
-        'Pewność siebie i trudności w sporcie',
+        'Wypalenie, kryzys i rozwój zawodowy',
+        'Presja i kryzysy w sporcie',
+        'Wsparcie w schizofrenii i po epizodach psychotycznych',
       ],
       approach: 'Psychoterapia długoterminowa · Nurt psychodynamiczny · Diagnoza',
       image: './images/editorial-light-architecture.jpg',
@@ -300,14 +305,14 @@ export const PRACTICE = {
       id: 'kryzys-odzywianie-uzaleznienia',
       number: '06',
       title: 'Kryzysy życiowe, odżywianie i uzależnienia',
-      subtitle: 'Oparcie na życiowych zakrętach i zmiana trudnych nawyków',
+      subtitle: 'Oparcie w trudnych zmianach i praca nad nawykami',
       description:
-        'Interwencja kryzysowa i wsparcie w emigracji, kryzysie wieku średniego, syndromie pustego gniazda (opuszczenie domu przez dziecko) i wyzwaniach starości, a także terapia zaburzeń odżywiania, zmiany nawyków żywieniowych, otyłości oraz uzależnień (w tym DDA).',
+        'Kiedy nagła zmiana życiowa, samotność lub trudne nawyki przekraczają dotychczasowe zasoby, nie musisz mierzyć się z tym w pojedynkę. Łączę interwencję kryzysową z pracą nad relacją z jedzeniem oraz specjalistyczną terapią uzależnień.',
       signals: [
-        'Emigracja, kryzys wieku średniego i starość',
-        'Opuszczenie domu przez dziecko',
-        'Zaburzenia odżywiania, otyłość i nawyki',
-        'Uzależnienia i DDA',
+        'Nagły kryzys życiowy, emigracja i przesilenie wieku średniego',
+        'Syndrom pustego gniazda i wsparcie seniorów',
+        'Zaburzenia odżywiania, relacja z jedzeniem i otyłość',
+        'Uzależnienia, DDA i wsparcie bliskich',
       ],
       approach: 'Interwencja kryzysowa · Terapia uzależnień · Psychoedukacja',
       image: './images/gdansk-kamienica-entrance.jpg',
@@ -319,9 +324,9 @@ export const PRACTICE = {
     eyebrow: 'O mnie',
     headline: 'Kliniczne doświadczenie, głęboka uważność i przestrzeń bez oceniania.',
     paragraphs: [
-      'Z wykształcenia jestem psychologiem z wieloletnim doświadczeniem klinicznym (8 lat praktyki), psychotraumatologiem, a także psychoterapeutką pracującą w nurcie psychodynamicznym (w trakcie procesu certyfikacji) oraz seksuologiem klinicznym w trakcie procesu certyfikacji. Swoje doświadczenie kliniczne zdobywałam zarówno w publicznych placówkach zdrowia psychicznego, jak i w gabinecie prywatnym.',
-      'Korzystając ze swojego doświadczenia klinicznego, pracuję z osobami cierpiącymi na różnego rodzaju stany lękowe, nerwicowe i depresję, z osobami odczuwającymi cierpienie z powodu niskiego poczucia własnej wartości oraz trudności w tworzeniu relacji i utrzymywaniu bliskich związków. Pracuję również z dolegliwościami psychosomatycznymi, brakiem poczucia wewnętrznej tożsamości i trudnościami w budowaniu tożsamości zawodowej, a także prowadzę terapię osób z zaburzeniami osobowości, zaburzeniami odżywiania, uzależnieniami oraz w ramach interwencji kryzysowej.',
-      'Aby rozpocząć proces terapeutyczny, proponuję konsultacje, podczas których staram się głęboko zrozumieć, na czym polega cierpienie osoby zgłaszającej się po pomoc. Prowadzę spotkania w języku polskim i rosyjskim, pod stałą superwizją, w przestrzeni otwartej i przyjaznej LGBT+. Serdecznie zapraszam do kontaktu — pozwalając sobie na przyjęcie pomocy, dajesz sobie realną szansę na lepsze życie.',
+      'Z wykształcenia jestem psychologiem z 8-letnią praktyką kliniczną oraz psychotraumatologiem. Kształcę się w procesie certyfikacji z psychoterapii psychodynamicznej oraz seksuologii klinicznej. Zawodowe doświadczenie zdobywałam zarówno w publicznych placówkach zdrowia psychicznego i na oddziałach szpitalnych, jak i w gabinecie prywatnym.',
+      'W codziennej pracy towarzyszę osobom zmagającym się ze stanami lękowymi, nerwicami, depresją, niskim poczuciem własnej wartości oraz trudnościami w budowaniu bliskich związków. Pomagam także przy dolegliwościach psychosomatycznych, zagubieniu tożsamościowym i kryzysach zawodowych oraz prowadzę terapię zaburzeń osobowości, odżywiania, uzależnień i interwencję kryzysową.',
+      'Każdą współpracę rozpoczynam od spokojnych konsultacji, podczas których staram się głęboko zrozumieć, na czym polega Twoje cierpienie. Spotkania prowadzę po polsku i po rosyjsku, pod stałą superwizją, w przestrzeni otwartej i przyjaznej osobom LGBT+. Pozwalając sobie na przyjęcie pomocy, dajesz sobie realną szansę na lżejsze życie.',
     ],
     credentials: [
       {
@@ -364,21 +369,23 @@ export const PRACTICE = {
         items: [
           {
             period: 'Praktyka prywatna · Laureatka Orłów Medycyny',
-            title: 'Gabinet Psychologiczno-Psychoterapeutyczny — Gdynia & Online',
-            institution: 'ul. Chwarznieńska 136–138, Gdynia Witomino · Sesje stacjonarne, online i domowe',
+            title: 'Gabinet Psychologiczno-Psychoterapeutyczny — Gdynia i online',
+            institution:
+              'ul. Chwarznieńska 136–138, Gdynia Witomino · Sesje stacjonarne, online i domowe',
             detail:
               'Konsultacje psychologiczne, psychoterapeutyczne, psychotraumatologiczne i seksuologiczne, psychoterapia długoterminowa, terapia par, badania psychologiczne i relaksacja.',
           },
           {
             period: 'Przychodnia specjalistyczna · Gdynia Śródmieście',
-            title: 'Psycholog, psychotraumatolog, psychoterapeuta',
-            institution: 'Przychodnia Medyczna Gdynia (ul. gen. Józefa Bema 16/2 · Oddział A: ul. 3 Maja 30/21)',
+            title: 'Psycholog, psychotraumatolog, psychoterapeutka',
+            institution:
+              'Przychodnia Medyczna Gdynia (ul. gen. Józefa Bema 16/2 · Oddział A: ul. 3 Maja 30/21)',
             detail:
               'Konsultacje diagnostyczne i terapeutyczne, ocena stanu psychicznego, interwencja kryzysowa i psychoterapia indywidualna.',
           },
           {
             period: 'Publiczna ochrona zdrowia psychicznego',
-            title: 'Psycholog kliniczny',
+            title: 'Psycholog w poradni zdrowia psychicznego',
             institution: 'Poradnia Zdrowia Psychicznego MSWiA w Gdańsku',
             detail:
               'Wieloletnia praktyka kliniczna w publicznej poradni zdrowia psychicznego — diagnoza i wsparcie terapeutyczne.',
@@ -389,7 +396,7 @@ export const PRACTICE = {
             institution:
               'Regionalny Szpital Specjalistyczny w Grudziądzu (Oddział Neurochirurgii) · Szpital Uniwersytecki im. dr. A. Jurasza w Bydgoszczy · DPS Łosienice',
             detail:
-              'Praca kliniczna z pacjentami na oddziałach szpitalnych, w stanach pooperacyjnych, kryzysach zdrowotnych oraz wsparcie seniorów.',
+              'Praca psychologiczna z pacjentami oddziałów szpitalnych, w stanach pooperacyjnych i kryzysach zdrowotnych, a także wsparcie seniorów.',
           },
         ],
       },
@@ -409,14 +416,14 @@ export const PRACTICE = {
             title: 'Przestrzeń przyjazna LGBT+ · Tajemnica zawodowa · Orły Medycyny',
             institution: 'Kodeks Etyczno-Zawodowy Psychologa · RODO',
             detail:
-              'Bezpieczna, nieoceniająca przestrzeń dla każdego pacjenta, pełna poufność oraz laureat plebiscytu Orły Medycyny.',
+              'Bezpieczna, nieoceniająca przestrzeń dla każdej osoby, pełna poufność oraz wyróżnienie w plebiscycie Orły Medycyny.',
           },
           {
             period: 'Dostępność i języki',
             title: 'Sesje po polsku i rosyjsku · Dorośli, pary i młodzież (10+)',
-            institution: 'Gdynia (2 lokalizacje), Online oraz Wizyty domowe',
+            institution: 'Gdynia (2 lokalizacje), online oraz wizyty domowe',
             detail:
-              'Prowadzę konsultacje i terapię w języku polskim i rosyjskim. Przyjmuję dorosłych, pary oraz (przy ul. Chwarznieńskiej) dzieci i młodzież od 10 roku życia.',
+              'Prowadzę konsultacje i terapię w języku polskim i rosyjskim. Przyjmuję dorosłych, pary oraz (przy ul. Chwarznieńskiej) dzieci i młodzież od 10. roku życia.',
           },
         ],
       },
@@ -452,7 +459,7 @@ export const PRACTICE = {
         image: './images/editorial-light-architecture.jpg',
         imageAlt: 'Miękkie poranne światło na gładkim łuku tynku — metafora ulgi i spokoju',
         description:
-          'Wspólnie ustalamy ramy współpracy i rozpoczynamy proces w nurcie psychodynamicznym lub psychoterapię traumy — aby z czasem mogło dojść do głębokiej emocjonalnej zmiany i trwałej ulgi.',
+          'Wspólnie ustalamy ramy współpracy i rozpoczynamy proces w nurcie psychodynamicznym lub psychoterapię traumy — aby z czasem mogło dojść do głębokiej zmiany emocjonalnej i trwałej ulgi.',
       },
     ],
   },
@@ -461,14 +468,14 @@ export const PRACTICE = {
     {
       id: 'witomino',
       city: 'Gdynia Witomino',
-      district: 'Witomino-Radiostacja · Gabinet Psychologiczno-Psychoterapeutyczny',
+      district: 'Gabinet prywatny · Witomino-Radiostacja',
       badge: 'Gabinet prywatny',
       address: 'ul. Chwarznieńska 136–138, 81-602 Gdynia',
       transit:
-        'Wejście do budynku tak jak do rehabilitacji, następnie w lewo — trzeci gabinet za szklanymi drzwiami.',
+        'Wejście do budynku wspólne z rehabilitacją, następnie w lewo — trzeci gabinet za szklanymi drzwiami.',
       parking:
         'Płatność: gotówka w gabinecie, BLIK, przelew na konto lub Revolut · Wygodny dojazd ZKM i z Obwodnicy.',
-      hours: 'Dorośli, pary oraz dzieci i młodzież od 10 lat · Terminy także przez TwójPsycholog.pl',
+      hours: 'Dorośli, pary oraz dzieci i młodzież od 10. roku życia · Terminy także na TwójPsycholog.pl',
       ambiance:
         'Kameralny, autorski gabinet prywatny wyróżniony w plebiscycie Orły Medycyny. Spokojna i przyjazna przestrzeń, w której od pierwszych minut możesz poczuć się bezpiecznie.',
       image: './images/gabinet-gdynia.jpg',
@@ -481,7 +488,7 @@ export const PRACTICE = {
     {
       id: 'srodmiescie',
       city: 'Gdynia Śródmieście',
-      district: 'Śródmieście · Przychodnia Medyczna Gdynia',
+      district: 'Przychodnia Medyczna Gdynia',
       badge: 'Medyczna Gdynia',
       address: 'ul. gen. Józefa Bema 16/2, 81-381 Gdynia (Oddział A: ul. 3 Maja 30/21)',
       transit:
@@ -490,7 +497,7 @@ export const PRACTICE = {
         'Rejestracja przychodni: 58 500 46 87 / 58 500 46 88 · wizyta@medycznagdynia.pl (wizyty prywatne).',
       hours: 'Konsultacje stacjonarne dla dorosłych · Rezerwacja przez ZnanyLekarz lub Medyczną Gdynię',
       ambiance:
-        'Placówka medyczna w samym centrum Gdyni — bardzo wygodny dojazd kolejką SKM z całego Trójmiasta (Gdynia, Sopot, Gdańsk) oraz Małego Trójmiasta.',
+        'Placówka medyczna w samym centrum Gdyni — bardzo wygodny dojazd kolejką SKM z całego Trójmiasta (Gdynia, Sopot, Gdańsk) i okolic.',
       image: './images/gabinet-gdansk.jpg',
       secondaryImage: './images/baltic-shore-calm.jpg',
       secondaryCaption: 'Gdynia Śródmieście · blisko Bulwaru Nadmorskiego i SKM',
@@ -502,13 +509,14 @@ export const PRACTICE = {
       id: 'online',
       city: 'Online',
       district: 'Polska i zagranica · Polski / Rosyjski',
-      badge: 'Wideo & Telefon',
+      badge: 'Wideo i telefon',
       address: 'Szyfrowana wideokonsultacja lub konsultacja telefoniczna (PL / RU)',
       transit:
-        'Łączysz się z dowolnego miejsca — przy konsultacji telefonicznej to ja dzwonię do pacjenta o umówionej godzinie.',
+        'Łączysz się z dowolnego miejsca — przy konsultacji telefonicznej to ja dzwonię do Ciebie o umówionej godzinie.',
       parking:
         'Płatność: przelew na konto · Możliwość przygotowania wcześniejszej dokumentacji medycznej lub wyników badań.',
-      hours: 'Przygotuj się 10 min przed sesją (sprawdź połączenie, kamerę i mikrofon) · Dorośli i pary',
+      hours:
+        'Usiądź spokojnie ok. 10 minut przed sesją (sprawdź połączenie, kamerę i mikrofon) · Dorośli i pary',
       ambiance:
         'Pełna dyskrecja, uważność i ciągłość terapii także podczas wyjazdów czy pobytu za granicą. Elastyczne łączenie sesji online ze spotkaniami w Gdyni.',
       image: './images/editorial-sanctuary-tea.jpg',
@@ -522,27 +530,27 @@ export const PRACTICE = {
     eyebrow: 'Pełny cennik i zakres usług',
     headline: 'Przejrzyste warunki od pierwszego spotkania.',
     subheadline:
-      'Przyjmuję wyłącznie w ramach wizyt prywatnych. Poniżej pełne zestawienie usług i cen z profili TwójPsycholog.pl oraz ZnanyLekarz.pl.',
+      'Przyjmuję wyłącznie w ramach wizyt prywatnych. Poniżej znajdziesz aktualny cennik konsultacji, psychoterapii oraz wizyt domowych — spójny z moimi profilami w serwisach TwójPsycholog i ZnanyLekarz.',
     items: [
       {
         id: 'consultation',
-        name: 'Konsultacja psychologiczna · psychoterapeutyczna · psychotraumatologiczna',
-        duration: '50 minut · Witomino: 200 zł · Medyczna Gdynia / ZnanyLekarz: 210 zł',
-        price: '200–210 zł',
-        note: 'Pierwsza konsultacja wstępna, poradnictwo psychologiczne, konsultacja seksuologiczna oraz konsultacja dla par (Gdynia lub Online).',
+        name: 'Konsultacja psychologiczna i wstępna',
+        duration: '50 min · Witomino: 200\u00A0zł · Medyczna Gdynia / ZnanyLekarz: 210\u00A0zł',
+        price: '200–210\u00A0zł',
+        note: 'Pierwsza konsultacja wstępna, poradnictwo psychologiczne, konsultacja psychoterapeutyczna, psychotraumatologiczna, seksuologiczna oraz dla par (Gdynia lub online).',
       },
       {
         id: 'psychotherapy',
         name: 'Psychoterapia indywidualna (nurt psychodynamiczny)',
-        duration: '60 min (ul. Chwarznieńska: 200 zł) · 50 min (ZnanyLekarz: 210 zł)',
-        price: '200–210 zł',
+        duration: '60 min (Witomino: 200\u00A0zł) · 50 min (ZnanyLekarz: 210\u00A0zł)',
+        price: '200–210\u00A0zł',
         note: 'Regularne spotkania psychoterapii krótko- i długoterminowej, w tym psychoterapia traumy oraz terapia uzależnień.',
         highlighted: true,
       },
       {
         id: 'diagnostics-support',
-        name: 'Interwencja kryzysowa · Badania · Ocena stanu psychicznego · Psychoedukacja · Relaksacja',
-        duration: '50 minut · Wizyty prywatne (Gdynia / Online)',
+        name: 'Interwencja kryzysowa, badania i psychoedukacja',
+        duration: '50 min · Wizyty prywatne (Gdynia / online)',
         price: 'od 210 zł',
         note: 'Interwencja kryzysowa (210 zł), ocena stanu psychicznego (210 zł), psychoedukacja (210 zł), relaksacja (210 zł) oraz badania psychologiczne (od 210 zł).',
       },
@@ -555,7 +563,7 @@ export const PRACTICE = {
       },
     ] as PricingItem[],
     policies: [
-      'Akceptowane formy płatności: gotówka w gabinecie, BLIK, przelew na konto oraz Revolut (wizyty wyłącznie prywatne, bez NFZ i ubezpieczycieli).',
+      'Akceptowane formy płatności: gotówka w gabinecie, BLIK, przelew na konto oraz Revolut (wizyty wyłącznie prywatne, bez NFZ i pakietów ubezpieczeniowych).',
       'Język prowadzenia sesji: język polski oraz język rosyjski (stacjonarnie w Gdyni, online oraz podczas wizyt domowych).',
       'Wszystkie spotkania objęte są bezwzględną tajemnicą zawodową i prowadzone pod stałą superwizją kliniczną.',
     ],
@@ -565,32 +573,32 @@ export const PRACTICE = {
     {
       question: 'Jak trafić do gabinetu prywatnego przy ul. Chwarznieńskiej 136–138?',
       answer:
-        'Wejście do budynku znajduje się tak jak do rehabilitacji — po wejściu należy skręcić w lewo, to trzeci gabinet za szklanymi drzwiami. Przy budynku dostępne są wygodne miejsca postojowe oraz przystanki ZKM.',
+        'Wejście do budynku jest wspólne z rehabilitacją — po wejściu skręć w lewo, to trzeci gabinet za szklanymi drzwiami. Przy budynku dostępne są wygodne miejsca postojowe oraz przystanki ZKM.',
     },
     {
       question: 'Jak wygląda pierwsza konsultacja i czy muszę się przygotować?',
       answer:
-        'Nie musisz przygotowywać gotowego scenariusza. Podczas pierwszych konsultacji spokojnie rozmawiamy o tym, co sprowadza Cię do gabinetu i na czym polega Twoje cierpienie. Przy sesjach online warto usiąść 10 minut wcześniej, sprawdzić mikrofon/kamerę i ewentualnie mieć pod ręką wcześniejszą dokumentację medyczną.',
+        'Nie musisz przygotowywać gotowego scenariusza. Podczas pierwszych konsultacji spokojnie rozmawiamy o tym, co sprowadza Cię do gabinetu i na czym polega Twoje cierpienie. Przy sesjach online warto usiąść 10 minut wcześniej, sprawdzić mikrofon i kamerę oraz ewentualnie mieć pod ręką wcześniejszą dokumentację medyczną.',
     },
     {
       question: 'W jakim nurcie pracujesz i czym jest psychoterapia psychodynamiczna?',
       answer:
-        'Pracuję w nurcie psychodynamicznym (w trakcie procesu certyfikacji), jako psychotraumatolog oraz seksuolog kliniczny w trakcie certyfikacji. Podejście psychodynamiczne pozwala sięgnąć głębiej niż powierzchowne objawy — zrozumieć źródła powtarzających się emocji i relacji, co prowadzi do trwałej ulgi.',
+        'Jestem psychotraumatologiem oraz pracuję w nurcie psychodynamicznym i obszarze seksuologii klinicznej (w obu w trakcie certyfikacji). Podejście psychodynamiczne pozwala sięgnąć głębiej niż same objawy — zrozumieć źródła powtarzających się emocji i wzorców relacyjnych, co prowadzi do trwałej ulgi.',
     },
     {
       question: 'Czy przyjmujesz online, w języku rosyjskim oraz na wizytach domowych?',
       answer:
-        'Tak. Oprócz obu gabinetów w Gdyni (ul. Chwarznieńska 136–138 oraz Przychodnia Medyczna Gdynia) prowadzę wideokonsultacje i konsultacje telefoniczne (przy telefonicznej to ja dzwonię o umówionej porze), a także wizyty domowe (430 zł). Sesje odbywają się po polsku i po rosyjsku.',
+        'Tak. Oprócz obu gabinetów w Gdyni (ul. Chwarznieńska 136–138 oraz Przychodnia Medyczna Gdynia) prowadzę wideokonsultacje i konsultacje telefoniczne (przy rozmowie telefonicznej to ja dzwonię do Ciebie o umówionej godzinie), a także wizyty domowe (430 zł). Sesje odbywają się po polsku i po rosyjsku.',
     },
     {
       question: 'Z jakimi osobami pracujesz — czy przyjmujesz pary i młodzież?',
       answer:
-        'Przyjmuję osoby dorosłe (terapia indywidualna oraz terapia dla par), a w gabinecie przy ul. Chwarznieńskiej również dzieci i młodzież od 10 roku życia. Gabinet jest otwartą, bezpieczną przestrzenią przyjazną osobom LGBT+.',
+        'Przyjmuję osoby dorosłe (terapia indywidualna oraz terapia dla par), a w gabinecie przy ul. Chwarznieńskiej również dzieci i młodzież od 10. roku życia. Gabinet jest otwartą, bezpieczną przestrzenią przyjazną osobom LGBT+.',
     },
     {
-      question: 'Jakie formy płatności akceptujesz i czy przyjmujesz na NFZ / w ramach pakietów?',
+      question: 'Jakie formy płatności akceptujesz i czy przyjmujesz na NFZ lub w ramach pakietów?',
       answer:
-        'Przyjmuję wyłącznie w ramach wizyt prywatnych (bez NFZ oraz prywatnych ubezpieczeń medycznych). Akceptuję gotówkę w gabinecie, BLIK, przelew na konto oraz Revolut. Ceny konsultacji i psychoterapii wynoszą 200 zł (ul. Chwarznieńska) lub 210 zł (Medyczna Gdynia / ZnanyLekarz), badania psychologiczne od 210 zł, a wizyta domowa 430 zł.',
+        'Przyjmuję wyłącznie w ramach wizyt prywatnych (bez NFZ oraz prywatnych pakietów medycznych). Akceptuję gotówkę w gabinecie, BLIK, przelew na konto oraz Revolut. Konsultacja i psychoterapia kosztują 200 zł (ul. Chwarznieńska) lub 210 zł (Medyczna Gdynia / ZnanyLekarz), badania psychologiczne od 210 zł, a wizyta domowa 430 zł.',
     },
   ] as FaqItem[],
 

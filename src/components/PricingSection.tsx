@@ -56,10 +56,10 @@ const SpotlightPricingCard: React.FC<{
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 motion-reduce:hidden"
         />
 
-        <div className="relative z-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-baseline">
-          <div>
+        <div className="relative z-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-start sm:gap-6">
+          <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="text-[11px] uppercase tracking-[0.18em] text-[#5D6560]">
+              <span className="text-[11px] uppercase tracking-[0.15em] text-[#5D6560]">
                 {item.duration}
               </span>
               {item.highlighted && (
@@ -68,13 +68,13 @@ const SpotlightPricingCard: React.FC<{
                 </span>
               )}
             </div>
-            <h3 className="font-editorial mt-2 text-[26px] font-normal leading-snug text-[#1D2220] md:text-[30px]">
+            <h3 className="font-editorial mt-2 text-[24px] font-normal leading-[1.2] text-[#1D2220] md:text-[27px]">
               {item.name}
             </h3>
           </div>
 
-          <div className="flex items-baseline gap-2 sm:text-right">
-            <span className="font-editorial text-4xl font-normal tracking-tight text-[#2B423B] md:text-[42px]">
+          <div className="flex shrink-0 items-baseline gap-2 sm:pt-1 sm:text-right">
+            <span className="font-editorial whitespace-nowrap text-[30px] font-normal leading-none tracking-tight text-[#2B423B] md:text-[34px]">
               {item.price}
             </span>
           </div>
@@ -96,8 +96,8 @@ const SpotlightPricingCard: React.FC<{
 
 export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenBooking }) => {
   return (
-    <section id="cennik" className="relative bg-[#F6F3EE] py-16 md:py-22">
-      <div className="mx-auto max-w-[1360px] px-6 md:px-10 lg:px-14">
+    <section id="cennik" className="relative bg-[#F6F3EE] py-14 md:py-18">
+      <div className="mx-auto max-w-[1360px] px-5 sm:px-6 md:px-10 lg:px-14">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
           {/* Left Transparency & Baltic Path Visual Column */}
           <div className="lg:col-span-5">

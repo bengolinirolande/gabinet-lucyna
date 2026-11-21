@@ -23,10 +23,10 @@ const REFLECTIONS: ReflectionQuote[] = [
   {
     id: 'r1',
     quote:
-      'Serdecznie polecam Panią psycholog. Akceptuje Pani moje dziwactwa, nie ocenia a wspiera. Czuję się bezpiecznie i mam dzięki temu odwagę do zmian koniecznych do lepszego życia. Pani z dużą wiedzą i doświadczeniem, co da się odczuć. Dziękuję.',
+      'Serdecznie polecam Panią psycholog. Akceptuje Pani moje dziwactwa, nie ocenia, a wspiera. Czuję się bezpiecznie i mam dzięki temu odwagę do zmian koniecznych do lepszego życia. Pani z dużą wiedzą i doświadczeniem, co da się odczuć. Dziękuję.',
     author: 'Anita',
     context: 'Psychoterapia · maj 2026 · ZnanyLekarz.pl',
-    location: 'Opinia zweryfikowana · 5,0',
+    location: 'Wizyta zweryfikowana · 5,0',
   },
   {
     id: 'r2',
@@ -34,7 +34,7 @@ const REFLECTIONS: ReflectionQuote[] = [
       'Pani psycholog słuchała mnie z uwagą i z takim głębokim zainteresowaniem, jakiego nigdy wcześniej nie zaznałam. Pani Lucyna nie jest osobą kogokolwiek oceniającą, tylko wspierającą i naprawdę głęboko rozumiejącą. Polecam ją każdemu, kto czuje, że potrzebuje pomocy — zazna wyłącznie wsparcia i prawdziwego zrozumienia.',
     author: 'Monika',
     context: 'Konsultacja psychologiczna · czerwiec 2025 · ZnanyLekarz.pl',
-    location: 'Weryfikacja wizyty · 5,0',
+    location: 'Wizyta zweryfikowana · 5,0',
   },
   {
     id: 'r3',
@@ -42,7 +42,7 @@ const REFLECTIONS: ReflectionQuote[] = [
       'Swobodna atmosfera i profesjonalne podejście. Szukanie rozwiązań, nic nie jest narzucane! Na pewno Pani Lucyna pomoże odnaleźć odpowiednią drogę — tę z uśmiechem.',
     author: 'Joanna',
     context: 'Badania psychologiczne · maj 2025 · ZnanyLekarz.pl',
-    location: 'Weryfikacja wizyty · 5,0',
+    location: 'Wizyta zweryfikowana · 5,0',
   },
   {
     id: 'r4',
@@ -50,7 +50,7 @@ const REFLECTIONS: ReflectionQuote[] = [
       'Jestem bardzo zadowolony z wizyty i na pewno umówię się kolejny raz. Długo nie mogłem się zdecydować, ale odważyłem się i jestem bardzo zadowolony.',
     author: 'P.K.',
     context: 'Konsultacja psychologiczna · lipiec 2025 · ZnanyLekarz.pl',
-    location: 'Weryfikacja wizyty · 5,0',
+    location: 'Wizyta zweryfikowana · 5,0',
   },
 ];
 
@@ -112,7 +112,7 @@ export const TestimonialsSection: React.FC = () => {
   const current = REFLECTIONS[index];
 
   return (
-    <section aria-label="Słowa pacjentów" className="relative bg-[#F6F3EE] py-16 md:py-22">
+    <section aria-label="Słowa pacjentów" className="relative bg-[#F6F3EE] py-14 md:py-18">
       <div className="mx-auto max-w-[1360px] px-6 md:px-10 lg:px-14">
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
           {/* Left Editorial Intro & Controls */}
@@ -263,17 +263,20 @@ export const TestimonialsSection: React.FC = () => {
             {[
               {
                 src: PRACTICE.images.officePortrait,
-                pos: 'object-[50%_18%]',
+                pos: 'object-top',
+                alt: 'mgr Lucyna Grochowska w gabinecie psychologicznym w Gdyni na Witominie',
                 caption: 'Gdynia Witomino · gabinet przy ul. Chwarznieńskiej',
               },
               {
                 src: PRACTICE.images.sanctuaryTea,
                 pos: 'object-center',
+                alt: 'Ceramiczna filiżanka herbaty na drewnianym stoliku w świetle dziennym',
                 caption: 'Spokojny rytm spotkania w nurcie psychodynamicznym',
               },
               {
                 src: PRACTICE.images.gdynia,
                 pos: 'object-center',
+                alt: 'Wnętrze gabinetu w Przychodni Medyczna Gdynia w Śródmieściu',
                 caption: 'Gdynia Śródmieście · Przychodnia Medyczna Gdynia',
               },
             ].map((frame, i) => (
@@ -285,7 +288,7 @@ export const TestimonialsSection: React.FC = () => {
                 <div className="aspect-[16/10] overflow-hidden rounded-[2px] bg-[#E5DDD1]">
                   <img
                     src={frame.src}
-                    alt={frame.caption}
+                    alt={frame.alt}
                     loading="lazy"
                     decoding="async"
                     className={`h-full w-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 ${frame.pos}`}

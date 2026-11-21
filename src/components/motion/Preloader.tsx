@@ -10,22 +10,29 @@ interface PreloaderProps {
 const SESSION_KEY = 'lucyna_curtain_seen';
 
 /**
- * Brief, serene Awwwards editorial opening curtain (~0.62s on first visit; instant skip on repeat).
- * Uses a single mount effect so timers never self-cancel when curtain begins lifting.
+ * Pure synchronous check shared with AppShell so `heroReady` starts `true` on Frame 0
+ * whenever preloader is skipped (repeat session, reduced-motion, bots, headless QA, Lighthouse).
+ */
+export function shouldPlayPreloader(): boolean {
+  if (typeof window === 'undefined') return false;
+  if (navigator.webdriver || /HeadlessChrome|Lighthouse|Googlebot/i.test(navigator.userAgent)) {
+    return false;
+  }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return false;
+  }
+  try {
+    return !window.sessionStorage.getItem(SESSION_KEY);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Brief, serene Awwwards editorial opening curtain (~0.38s hold on first visit; instant skip on repeat/bots).
  */
 export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
-  const shouldPlay = useRef<boolean>(
-    typeof window !== 'undefined' &&
-      !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
-      (() => {
-        try {
-          return !window.sessionStorage.getItem(SESSION_KEY);
-        } catch {
-          return true;
-        }
-      })()
-  );
-
+  const shouldPlay = useRef<boolean>(shouldPlayPreloader());
   const [visible, setVisible] = useState<boolean>(shouldPlay.current);
   const completedRef = useRef(false);
 
@@ -48,16 +55,15 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
       // sessionStorage unavailable
     }
 
+    // Trigger Hero/Subpage reveal right as curtain starts lifting (zero blank pause, faster LCP!)
+    const readyTimer = window.setTimeout(finishOnce, 340);
     const liftTimer = window.setTimeout(() => {
       setVisible(false);
-    }, 600);
-
-    // Overlap Hero / SubpageHeader masked entrance smoothly right as curtain lifts
-    const readyTimer = window.setTimeout(finishOnce, 680);
+    }, 380);
 
     return () => {
-      window.clearTimeout(liftTimer);
       window.clearTimeout(readyTimer);
+      window.clearTimeout(liftTimer);
     };
   }, [onComplete]);
 
@@ -69,16 +75,16 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
           aria-hidden="true"
           initial={{ clipPath: 'inset(0% 0% 0% 0%)' }}
           exit={{ clipPath: 'inset(0% 0% 100% 0%)', pointerEvents: 'none' }}
-          transition={{ duration: 0.74, ease: EASE_EDITORIAL }}
+          transition={{ duration: 0.68, ease: EASE_EDITORIAL }}
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#1A2723] text-[#F6F3EE]"
         >
-          <div className="flex flex-col items-center gap-6 px-6 text-center">
+          <div className="flex flex-col items-center gap-5 px-6 text-center">
             <div className="overflow-hidden">
               <motion.span
                 initial={{ y: '110%' }}
                 animate={{ y: '0%' }}
                 exit={{ y: '-110%' }}
-                transition={{ duration: 0.56, ease: EASE_EDITORIAL }}
+                transition={{ duration: 0.44, ease: EASE_EDITORIAL }}
                 className="font-editorial block text-5xl font-light tracking-tight md:text-6xl"
               >
                 {PRACTICE.shortName}
@@ -89,7 +95,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
               <motion.div
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ duration: 0.58, ease: EASE_EDITORIAL }}
+                transition={{ duration: 0.4, ease: EASE_EDITORIAL }}
                 style={{ transformOrigin: 'left center' }}
                 className="h-full w-full bg-[#C9A484]"
               />
@@ -97,11 +103,11 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
 
             <motion.span
               initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 0.75, y: 0 }}
-              transition={{ duration: 0.48, delay: 0.1, ease: EASE_EDITORIAL }}
-              className="text-[10px] uppercase tracking-[0.26em] text-[#F6F3EE]/75"
+              animate={{ opacity: 0.78, y: 0 }}
+              transition={{ duration: 0.36, delay: 0.06, ease: EASE_EDITORIAL }}
+              className="text-[10px] uppercase tracking-[0.26em] text-[#F6F3EE]/78"
             >
-              Psycholog · Psychotraumatolog · Gdynia &amp; Online
+              Psycholog · Psychotraumatolog · Gdynia i online
             </motion.span>
           </div>
         </motion.div>

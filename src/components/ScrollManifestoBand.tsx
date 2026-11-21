@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 
 const MANIFESTO_TEXT =
-  'Terapia nie polega na tym, by stać się kimś innym. Polega na tym, by w bezpiecznej relacji odzyskać spokój, jasność i kontakt z samym sobą.';
+  'Terapia nie polega na tym, by stać się kimś innym. Polega na tym, by w bezpiecznej relacji odzyskać spokój, jasność i kontakt ze sobą.';
 
 const ScrubbedWord: React.FC<{
   word: string;
@@ -11,8 +11,8 @@ const ScrubbedWord: React.FC<{
   highlight: boolean;
   reduced: boolean;
 }> = ({ word, range, progress, highlight, reduced }) => {
-  const opacity = useTransform(progress, range, reduced ? [1, 1] : [0.16, 1]);
-  const y = useTransform(progress, range, reduced ? [0, 0] : [6, 0]);
+  const opacity = useTransform(progress, range, reduced ? [1, 1] : [0.42, 1]);
+  const y = useTransform(progress, range, reduced ? [0, 0] : [4, 0]);
 
   return (
     <span className="relative mr-[0.26em] inline-block">
@@ -31,18 +31,18 @@ export const ScrollManifestoBand: React.FC = () => {
   const reduced = Boolean(useReducedMotion());
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start 82%', 'end 42%'],
+    offset: ['start 92%', 'center 52%'],
   });
 
   const words = MANIFESTO_TEXT.split(' ');
   const highlightWords = new Set(['bezpiecznej', 'relacji', 'spokój,', 'jasność', 'sobą.']);
-  const flankingScale = useTransform(scrollYProgress, [0.62, 0.98], reduced ? [1, 1] : [0.15, 1]);
+  const flankingScale = useTransform(scrollYProgress, [0.55, 0.98], reduced ? [1, 1] : [0.2, 1]);
 
   return (
     <section
       ref={containerRef}
       aria-label="Manifest terapeutyczny"
-      className="relative overflow-hidden bg-[#F6F3EE] py-16 md:py-24"
+      className="relative overflow-hidden bg-[#F6F3EE] py-14 md:py-18"
     >
       <motion.div
         aria-hidden="true"
@@ -79,12 +79,12 @@ export const ScrollManifestoBand: React.FC = () => {
           })}
         </p>
 
-        <div className="mt-14 flex items-center justify-center gap-4 text-[11px] uppercase tracking-[0.24em] text-[#5D6560]">
+        <div className="mt-10 flex items-center justify-center gap-4 text-[11px] uppercase tracking-[0.24em] text-[#5D6560]">
           <motion.span
             style={{ scaleX: flankingScale, transformOrigin: 'right center' }}
             className="h-px w-12 bg-[#1D2220]/25"
           />
-          <span>Gdynia · Sopot · Gdańsk · Online (PL / RU)</span>
+          <span>Gdynia · Trójmiasto · Online (PL / RU)</span>
           <motion.span
             style={{ scaleX: flankingScale, transformOrigin: 'left center' }}
             className="h-px w-12 bg-[#1D2220]/25"

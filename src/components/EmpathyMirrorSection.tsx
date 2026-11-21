@@ -21,23 +21,23 @@ const ReflectionRow: React.FC<{
   const reduced = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: rowRef,
-    offset: ['start 88%', 'center 48%'],
+    offset: ['start 95%', 'start 62%'],
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 1], reduced ? [1, 1] : [0.36, 1]);
-  const x = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [14, 0]);
-  const barScaleY = useTransform(scrollYProgress, [0, 1], reduced ? [1, 1] : [0.15, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 1], reduced ? [1, 1] : [0.7, 1]);
+  const x = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [10, 0]);
+  const barScaleY = useTransform(scrollYProgress, [0, 1], reduced ? [1, 1] : [0.25, 1]);
 
   return (
     <motion.article
       ref={rowRef}
       style={{ opacity, x }}
-      className="group relative border-b border-[#1D2220]/11 py-9 first:border-t md:py-11"
+      className="group relative border-b border-[#1D2220]/11 py-7 first:border-t md:py-8"
     >
       <motion.span
         aria-hidden="true"
         style={{ scaleY: barScaleY, transformOrigin: 'top center' }}
-        className="absolute left-0 top-9 bottom-9 hidden w-[2px] bg-[#8C5E3E]/75 sm:block md:top-11 md:bottom-11"
+        className="absolute left-0 top-7 bottom-7 hidden w-[2px] bg-[#8C5E3E]/75 sm:block md:top-8 md:bottom-8"
       />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-12 sm:pl-7">
@@ -61,7 +61,7 @@ export const EmpathyMirrorSection: React.FC<EmpathyMirrorSectionProps> = ({ onOp
   return (
     <section
       id="czy-to-brzmi-znajomo"
-      className="relative overflow-x-clip bg-[#EFEAE1]/55 py-16 md:py-24"
+      className="relative overflow-x-clip bg-[#EFEAE1]/55 py-14 md:py-18"
     >
       <div className="mx-auto max-w-[1360px] px-6 md:px-10 lg:px-14">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">

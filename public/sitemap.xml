@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Po przejściu na własną domenę .pl i History API dodaj osobne wpisy dla /terapia, /o-mnie oraz /gabinety -->
+  <url>
+    <loc>https://bengolinirolande.github.io/gabinet-lucyna/</loc>
+    <lastmod>2026-11-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

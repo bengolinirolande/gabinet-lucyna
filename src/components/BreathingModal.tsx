@@ -162,9 +162,9 @@ export const BreathingModal: React.FC<BreathingModalProps> = ({ open, onClose })
                 transition={{ duration: 0.4 }}
                 className="space-y-1.5"
               >
-                <h3 className="font-editorial text-3xl font-light text-[#F6F3EE]">
+                <h2 className="font-editorial text-3xl font-light text-[#F6F3EE]">
                   {current.label}
-                </h3>
+                </h2>
                 <p className="text-[13px] font-light text-[#F6F3EE]/65">{current.hint}</p>
               </motion.div>
             </AnimatePresence>

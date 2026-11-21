@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
-import { ROUTES, type PageId } from '../types/navigation';
+import { handleRouteLinkClick, ROUTES, type PageId } from '../types/navigation';
 import {
   EASE_EDITORIAL,
   KineticArrow,
@@ -29,17 +29,17 @@ export const SubpageHeader: React.FC<SubpageHeaderProps> = ({
   onBackHome,
 }) => {
   return (
-    <section className="relative border-b border-[#1D2220]/9 bg-[#F6F3EE] pt-24 pb-8 md:pt-30 md:pb-12">
-      <div className="mx-auto max-w-[1360px] px-6 md:px-10 lg:px-14">
-        <div className="mb-7 flex items-center justify-between gap-4 border-b border-[#1D2220]/10 pb-3.5">
-          <button
-            type="button"
-            onClick={onBackHome}
+    <section className="relative border-b border-[#1D2220]/9 bg-[#F6F3EE] pt-22 pb-7 md:pt-26 md:pb-10">
+      <div className="mx-auto max-w-[1360px] px-5 sm:px-6 md:px-10 lg:px-14">
+        <div className="mb-5 flex items-center justify-between gap-4 border-b border-[#1D2220]/10 pb-3">
+          <a
+            href={ROUTES.home.hash}
+            onClick={(e) => handleRouteLinkClick(e, onBackHome)}
             className="editorial-link text-[12px] font-medium text-[#4E5551] transition-colors hover:text-[#2B423B]"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             <span>Powrót na stronę główną</span>
-          </button>
+          </a>
           <span className="text-[10.5px] uppercase tracking-[0.22em] text-[#8C5E3E]">
             Rozdział {chapter}
           </span>
@@ -51,11 +51,11 @@ export const SubpageHeader: React.FC<SubpageHeaderProps> = ({
               initial={{ opacity: 0, y: 10 }}
               animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
               transition={{ duration: 0.65, delay: 0.04, ease: EASE_EDITORIAL }}
-              className="eyebrow mb-3.5"
+              className="eyebrow mb-3"
             >
               {eyebrow}
             </motion.p>
-            <h1 className="font-editorial text-[clamp(2.45rem,4.6vw,4.35rem)] font-light leading-[1.0] tracking-[-0.025em] text-[#1D2220]">
+            <h1 className="font-editorial text-[clamp(2.35rem,4.4vw,4.15rem)] font-light leading-[1.01] tracking-[-0.025em] text-[#1D2220]">
               <MaskedLines
                 lines={lines}
                 italicSubstring={italicSubstring}
@@ -69,8 +69,8 @@ export const SubpageHeader: React.FC<SubpageHeaderProps> = ({
             <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-              transition={{ duration: 0.75, delay: 0.22, ease: EASE_EDITORIAL }}
-              className="max-w-[460px] text-[15px] font-light leading-[1.8] text-[#4E5551] lg:ml-auto"
+              transition={{ duration: 0.72, delay: 0.18, ease: EASE_EDITORIAL }}
+              className="max-w-[460px] text-[15px] font-light leading-[1.78] text-[#4E5551] lg:ml-auto"
             >
               {lead}
             </motion.p>
@@ -89,8 +89,8 @@ interface NextChapterBridgeProps {
 }
 
 /**
- * Editorial "Next Chapter" closing bridge with surface-alternation support
- * and zero-re-render warm radial cursor spotlight sheen.
+ * Editorial "Next Chapter" closing bridge with surface-alternation support,
+ * crawlable `<a href>`, and zero-re-render warm radial cursor spotlight sheen.
  */
 export const NextChapterBridge: React.FC<NextChapterBridgeProps> = ({
   nextPage,
@@ -100,7 +100,7 @@ export const NextChapterBridge: React.FC<NextChapterBridgeProps> = ({
 }) => {
   const meta = ROUTES[nextPage];
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     e.currentTarget.style.setProperty('--mx', `${e.clientX - rect.left}px`);
     e.currentTarget.style.setProperty('--my', `${e.clientY - rect.top}px`);
@@ -108,17 +108,17 @@ export const NextChapterBridge: React.FC<NextChapterBridgeProps> = ({
 
   return (
     <section
-      className={`relative py-12 md:py-16 ${
+      className={`relative py-10 md:py-14 ${
         tone === 'sand' ? 'bg-[#EFEAE1]/55' : 'bg-[#F6F3EE]'
       }`}
     >
-      <div className="mx-auto max-w-[1360px] px-6 md:px-10 lg:px-14">
-        <button
-          type="button"
+      <div className="mx-auto max-w-[1360px] px-5 sm:px-6 md:px-10 lg:px-14">
+        <a
+          href={meta.hash}
           data-cursor="Dalej"
           onMouseMove={handleMouseMove}
-          onClick={() => onNavigate(nextPage)}
-          className="group relative flex w-full flex-col items-start justify-between gap-6 overflow-hidden border border-[#1D2220]/11 bg-[#FAF8F4] p-7 text-left transition-all duration-500 hover:border-[#2B423B]/45 hover:shadow-[0_24px_55px_-34px_rgba(26,39,35,0.24)] sm:flex-row sm:items-center md:p-9"
+          onClick={(e) => handleRouteLinkClick(e, () => onNavigate(nextPage))}
+          className="group relative flex w-full flex-col items-start justify-between gap-6 overflow-hidden border border-[#1D2220]/11 bg-[#FAF8F4] p-6 text-left transition-all duration-500 hover:border-[#2B423B]/45 hover:shadow-[0_24px_55px_-34px_rgba(26,39,35,0.24)] sm:flex-row sm:items-center md:p-8"
         >
           <span
             aria-hidden="true"
@@ -141,7 +141,7 @@ export const NextChapterBridge: React.FC<NextChapterBridgeProps> = ({
             <SlotRollText label="Przejdź dalej" italicHover />
             <KineticArrow className="h-4 w-4" />
           </span>
-        </button>
+        </a>
       </div>
     </section>
   );

@@ -18,7 +18,7 @@ export const PhilosophyInterlude: React.FC = () => {
     <section
       data-dark-surface="true"
       aria-labelledby="philosophy-heading"
-      className="relative overflow-hidden bg-[#1A2723] py-18 text-[#F6F3EE] md:py-24"
+      className="relative overflow-hidden bg-[#1A2723] py-14 text-[#F6F3EE] md:py-18"
     >
       <h2 id="philosophy-heading" className="sr-only">
         Filozofia pracy terapeutycznej
@@ -87,7 +87,7 @@ export const PhilosophyInterlude: React.FC = () => {
           </div>
         </div>
 
-        <HairlineDivider light className="my-16 md:my-24" />
+        <HairlineDivider light className="my-12 md:my-14" />
 
         {/* 4 Clinical Pillars with Subtle Warm Amber Top Accent on Hover */}
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">

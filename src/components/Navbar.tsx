@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
 import { ArrowUpRight, Menu, X } from 'lucide-react';
 import { PRACTICE } from '../data/practice';
-import { NAV_ORDER, ROUTES, type PageId } from '../types/navigation';
+import { handleRouteLinkClick, NAV_ORDER, ROUTES, type PageId } from '../types/navigation';
 import { useLenis } from './motion/LenisProvider';
 import {
   EASE_EDITORIAL,
@@ -84,15 +84,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           />
         )}
 
-        <div className="mx-auto flex max-w-[1360px] items-center justify-between px-6 md:px-10 lg:px-14">
+        <div className="mx-auto flex max-w-[1360px] items-center justify-between px-5 sm:px-6 md:px-10 lg:px-14">
           {/* Brand Mark */}
-          <button
-            type="button"
-            onClick={() => handleNavClick('home')}
+          <a
+            href={ROUTES.home.hash}
+            onClick={(e) => handleRouteLinkClick(e, () => handleNavClick('home'))}
             className="group flex items-baseline gap-3 text-left"
           >
             <span
-              className={`font-editorial text-2xl font-medium tracking-tight transition-colors duration-300 md:text-[26px] ${mobileOpen ? 'text-[#F6F3EE]' : 'text-[#1D2220]'
+              className={`font-editorial text-[22px] font-medium tracking-tight transition-colors duration-300 sm:text-2xl md:text-[26px] ${mobileOpen ? 'text-[#F6F3EE]' : 'text-[#1D2220]'
                 }`}
             >
               {PRACTICE.shortName}
@@ -103,9 +103,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                 : 'text-[#5D6560] group-hover:text-[#2B423B]'
                 }`}
             >
-              Psycholog · Gdynia &amp; Online
+              Psycholog · Gdynia i online
             </span>
-          </button>
+          </a>
 
           {/* Clean 4-Chapter Desktop Navigation with Active Pill */}
           <nav
@@ -116,11 +116,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               const meta = ROUTES[pageId];
               const active = currentPage === pageId;
               return (
-                <button
+                <a
                   key={pageId}
-                  type="button"
+                  href={meta.hash}
                   aria-current={active ? 'page' : undefined}
-                  onClick={() => handleNavClick(pageId)}
+                  onClick={(e) => handleRouteLinkClick(e, () => handleNavClick(pageId))}
                   className={`group relative rounded-full px-4 py-1.5 text-[12.5px] tracking-[0.02em] transition-colors duration-300 ${active
                     ? 'font-medium text-[#F6F3EE]'
                     : 'font-normal text-[#1D2220]/78 hover:text-[#1D2220]'
@@ -136,7 +136,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <span className="relative z-10">
                     <SlotRollText label={meta.navLabel} />
                   </span>
-                </button>
+                </a>
               );
             })}
           </nav>
@@ -193,8 +193,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     key={pageId}
                     className="overflow-hidden border-b border-[#F6F3EE]/12 pb-3.5"
                   >
-                    <motion.button
-                      type="button"
+                    <motion.a
+                      href={meta.hash}
                       aria-current={active ? 'page' : undefined}
                       initial={{ y: '100%', opacity: 0 }}
                       animate={{ y: '0%', opacity: 1 }}
@@ -204,7 +204,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         duration: 0.55,
                         ease: EASE_EDITORIAL,
                       }}
-                      onClick={() => handleNavClick(pageId)}
+                      onClick={(e) => handleRouteLinkClick(e, () => handleNavClick(pageId))}
                       className={`font-editorial flex w-full items-baseline justify-between text-left text-4xl font-light tracking-tight transition-colors ${active ? 'italic text-[#C9A484]' : 'text-[#F6F3EE] hover:text-[#C9A484]'
                         }`}
                     >
@@ -212,7 +212,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <span className="font-sans text-[11px] tracking-[0.2em] text-[#F6F3EE]/40">
                         {meta.chapter}
                       </span>
-                    </motion.button>
+                    </motion.a>
                   </div>
                 );
               })}

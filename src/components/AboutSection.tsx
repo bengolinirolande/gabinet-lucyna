@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ShieldCheck } from 'lucide-react';
 import { PRACTICE, type CredentialGroup } from '../data/practice';
 import {
@@ -22,9 +22,6 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
   const [activeTab, setActiveTab] = useState<CredentialGroup['id']>('education');
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  const currentGroup =
-    PRACTICE.about.credentials.find((c) => c.id === activeTab) ?? PRACTICE.about.credentials[0];
-
   const handleTabKeyDown = (e: React.KeyboardEvent, idx: number) => {
     const count = PRACTICE.about.credentials.length;
     let nextIdx = idx;
@@ -46,7 +43,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
       className={`relative bg-[#EFEAE1]/55 ${compactHeader ? 'pt-10 pb-16 md:pt-12 md:pb-20' : 'py-16 md:py-24'
         }`}
     >
-      <div className="mx-auto max-w-[1360px] px-6 md:px-10 lg:px-14">
+      <div className="mx-auto max-w-[1360px] px-5 sm:px-6 md:px-10 lg:px-14">
         {!compactHeader && <HairlineDivider className="mb-14 md:mb-18" />}
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
@@ -75,9 +72,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                     src={PRACTICE.images.officePortrait}
                     alt="mgr Lucyna Grochowska w swoim gabinecie psychologicznym w Gdyni"
                     aspectClass="aspect-[4/3]"
-                    imgClassName="object-[50%_18%]"
-                    parallaxStrength={12}
+                    imgClassName="object-top"
+                    parallaxStrength={0}
                     immediate={compactHeader}
+                    priority={compactHeader}
                     ready={ready}
                     delay={compactHeader ? 0.12 : 0}
                     cursorLabel="Gabinet"
@@ -152,12 +150,16 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
               ))}
             </div>
 
-            {/* Interactive Credentials Tabs with Spring FLIP Pill & Proper WAI-ARIA */}
-            <Reveal delay={0.2} className="mt-14 border-t border-[#1D2220]/11 pt-10">
+            {/* Interactive Credentials Tabs with Spring FLIP Pill & Proper WAI-ARIA + SEO-Crawlable Panels */}
+            <Reveal delay={0.18} className="mt-9 border-t border-[#1D2220]/11 pt-8">
+              <h2 className="eyebrow mb-4">
+                Wykształcenie, doświadczenie kliniczne i standardy pracy
+              </h2>
+
               <div
                 role="tablist"
                 aria-label="Kwalifikacje i standardy"
-                className="inline-flex flex-wrap gap-1.5 rounded-full border border-[#1D2220]/11 bg-[#FAF8F4]/80 p-1.5"
+                className="inline-flex max-w-full flex-wrap gap-1.5 rounded-2xl border border-[#1D2220]/11 bg-[#FAF8F4]/80 p-1.5 sm:rounded-full"
               >
                 {PRACTICE.about.credentials.map((tab, idx) => {
                   const active = tab.id === activeTab;
@@ -175,7 +177,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                       aria-controls={`cred-panel-${tab.id}`}
                       onKeyDown={(e) => handleTabKeyDown(e, idx)}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`relative rounded-full px-5 py-2.5 text-[12.5px] font-medium tracking-[0.02em] transition-colors duration-300 ${active ? 'text-[#F6F3EE]' : 'text-[#4E5551] hover:text-[#1D2220]'
+                      className={`relative rounded-full px-3.5 py-2 text-[12px] font-medium tracking-[0.02em] transition-colors duration-300 sm:px-5 sm:py-2.5 sm:text-[12.5px] ${active ? 'text-[#F6F3EE]' : 'text-[#4E5551] hover:text-[#1D2220]'
                         }`}
                     >
                       {active && (
@@ -191,39 +193,43 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                 })}
               </div>
 
-              <div className="mt-8 min-h-[300px]">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={currentGroup.id}
-                    id={`cred-panel-${currentGroup.id}`}
-                    role="tabpanel"
-                    aria-labelledby={`cred-tab-${currentGroup.id}`}
-                    initial={{ opacity: 0, y: 14 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.42, ease: EASE_EDITORIAL }}
-                    className="divide-y divide-[#1D2220]/10"
-                  >
-                    {currentGroup.items.map((entry) => (
-                      <div key={entry.title} className="py-6 first:pt-2">
-                        <div className="flex flex-wrap items-baseline justify-between gap-2">
-                          <span className="text-[11px] uppercase tracking-[0.18em] text-[#8C5E3E]">
-                            {entry.period}
-                          </span>
-                          <span className="text-[12px] font-light text-[#5D6560]">
-                            {entry.institution}
-                          </span>
+              {/* All 3 panels stay mounted in DOM for complete SEO crawlability (MSWiA, Szpital im. Jurasza, Orły Medycyny) */}
+              <div className="mt-6 min-h-[280px]">
+                {PRACTICE.about.credentials.map((group) => {
+                  const isActive = group.id === activeTab;
+                  return (
+                    <motion.div
+                      key={group.id}
+                      id={`cred-panel-${group.id}`}
+                      role="tabpanel"
+                      aria-labelledby={`cred-tab-${group.id}`}
+                      hidden={!isActive}
+                      initial={false}
+                      animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 8 }}
+                      transition={{ duration: 0.36, ease: EASE_EDITORIAL }}
+                      className="divide-y divide-[#1D2220]/10"
+                    >
+                      {group.items.map((entry) => (
+                        <div key={entry.title} className="py-5 first:pt-2">
+                          <div className="flex flex-wrap items-baseline justify-between gap-2">
+                            <span className="text-[11px] uppercase tracking-[0.18em] text-[#8C5E3E]">
+                              {entry.period}
+                            </span>
+                            <span className="text-[12px] font-light text-[#5D6560]">
+                              {entry.institution}
+                            </span>
+                          </div>
+                          <h3 className="font-editorial mt-2 text-[23px] font-normal leading-snug text-[#1D2220]">
+                            {entry.title}
+                          </h3>
+                          <p className="mt-2 text-[14px] font-light leading-[1.75] text-[#4E5551]">
+                            {entry.detail}
+                          </p>
                         </div>
-                        <h3 className="font-editorial mt-2 text-[23px] font-normal leading-snug text-[#1D2220]">
-                          {entry.title}
-                        </h3>
-                        <p className="mt-2 text-[14px] font-light leading-[1.75] text-[#4E5551]">
-                          {entry.detail}
-                        </p>
-                      </div>
-                    ))}
-                  </motion.div>
-                </AnimatePresence>
+                      ))}
+                    </motion.div>
+                  );
+                })}
               </div>
             </Reveal>
           </div>

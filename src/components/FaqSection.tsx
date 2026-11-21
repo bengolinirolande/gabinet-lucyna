@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 import { PRACTICE } from '../data/practice';
 import {
@@ -19,7 +19,7 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenBooking }) => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="relative bg-[#F6F3EE] py-16 md:py-22">
+    <section id="faq" className="relative bg-[#F6F3EE] py-14 md:py-18">
       <div className="mx-auto max-w-[1360px] px-6 md:px-10 lg:px-14">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
           {/* Left Sticky Editorial Intro + Warm Human Portrait Anchor + Sanctuary Corner Photo */}
@@ -40,7 +40,9 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenBooking }) => {
                 <div className="mt-5 flex items-center gap-4 border border-[#1D2220]/10 bg-[#FAF8F4] p-4">
                   <img
                     src={PRACTICE.images.portrait}
-                    alt={PRACTICE.fullName}
+                    alt="mgr Lucyna Grochowska — psycholog Gdynia"
+                    width={48}
+                    height={48}
                     loading="lazy"
                     decoding="async"
                     className="h-12 w-12 shrink-0 rounded-full object-cover object-top"
@@ -130,27 +132,20 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenBooking }) => {
                     </button>
                   </h3>
 
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        id={panelId}
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.5, ease: EASE_EDITORIAL }}
-                        className="relative z-10 overflow-hidden"
-                      >
-                        <motion.p
-                          initial={{ y: 8, opacity: 0 }}
-                          animate={{ y: 0, opacity: 1 }}
-                          transition={{ duration: 0.42, delay: 0.06, ease: EASE_EDITORIAL }}
-                          className="max-w-[660px] pb-7 pl-9 pr-4 text-[15px] font-light leading-[1.82] text-[#4E5551] sm:pl-14"
-                        >
-                          {item.answer}
-                        </motion.p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {/* Keep all 6 FAQ answers in DOM via smooth CSS grid-row transition to match FAQPage JSON-LD */}
+                  <div
+                    id={panelId}
+                    aria-hidden={!isOpen}
+                    className={`relative z-10 grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="max-w-[660px] pb-7 pl-9 pr-4 text-[15px] font-light leading-[1.82] text-[#4E5551] sm:pl-14">
+                        {item.answer}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               );
             })}

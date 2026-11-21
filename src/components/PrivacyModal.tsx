@@ -78,25 +78,29 @@ export const PrivacyModal: React.FC<PrivacyModalProps> = ({ open, onClose }) => 
             <div className="mt-6 space-y-5 text-[14px] font-light leading-[1.8] text-[#4E5551]">
               <p>
                 <strong className="font-medium text-[#1D2220]">1. Administrator danych:</strong>{' '}
-                Administratorem danych osobowych przekazywanych za pośrednictwem formularza
-                kontaktowego jest {PRACTICE.fullName} — Prywatny Gabinet Psychologiczny (Gdynia ·
-                ul. Chwarznieńska 136–138), kontakt: {PRACTICE.email}.
+                Administratorem danych osobowych przekazywanych przez formularz kontaktowy jest{' '}
+                {PRACTICE.fullName} — Prywatny Gabinet Psychologiczny (Gdynia, ul. Chwarznieńska
+                136–138), kontakt: {PRACTICE.email}.
               </p>
               <p>
-                <strong className="font-medium text-[#1D2220]">2. Cel przetwarzania:</strong> Dane
-                (imię, numer telefonu, adres e-mail oraz dobrowolna treść wiadomości) przetwarzane są
-                wyłącznie w celu odpowiedzi na zapytanie, umówienia terminu konsultacji oraz
-                realizacji usług psychologicznych (art. 6 ust. 1 lit. a i b RODO).
+                <strong className="font-medium text-[#1D2220]">2. Cel i zakres przetwarzania:</strong>{' '}
+                Dane (imię, numer telefonu, adres e-mail oraz dobrowolna treść wiadomości)
+                przetwarzane są wyłącznie w celu odpowiedzi na zapytanie i ustalenia terminu
+                konsultacji (art. 6 ust. 1 lit. a i b RODO). W pierwszym zgłoszeniu proszę o
+                niezamieszczanie szczegółowej dokumentacji ani wrażliwych danych medycznych —
+                szczegóły omawiamy bezpiecznie podczas spotkania.
               </p>
               <p>
                 <strong className="font-medium text-[#1D2220]">3. Tajemnica zawodowa:</strong>{' '}
-                Wszelkie informacje powierzane podczas kontaktu oraz spotkań terapeutycznych podlegają
-                bezwzględnej tajemnicy zawodowej psychologa i nie są udostępniane podmiotom trzecim.
+                Informacje powierzane podczas kontaktu i spotkań podlegają tajemnicy zawodowej
+                psychologa i nie są udostępniane podmiotom nieuprawnionym. Wiadomość z formularza
+                przekazywana jest szyfrowanym połączeniem HTTPS na skrzynkę e-mail gabinetu.
               </p>
               <p>
                 <strong className="font-medium text-[#1D2220]">4. Prawa osoby:</strong> Masz prawo
                 dostępu do swoich danych, ich sprostowania, usunięcia lub ograniczenia przetwarzania
-                w dowolnym momencie, pisząc na adres {PRACTICE.email}.
+                w dowolnym momencie, pisząc na adres {PRACTICE.email}, a także prawo wniesienia
+                skargi do Prezesa Urzędu Ochrony Danych Osobowych.
               </p>
             </div>
 

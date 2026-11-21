@@ -71,7 +71,7 @@ const StackingStepCard: React.FC<StackCardProps> = ({
             <motion.img
               src={step.image}
               alt={step.imageAlt}
-              loading="lazy"
+              loading="eager"
               decoding="async"
               initial={reduced ? { scale: 1 } : { scale: 1.07 }}
               whileInView={{ scale: 1 }}
@@ -79,7 +79,7 @@ const StackingStepCard: React.FC<StackCardProps> = ({
               transition={{ duration: 1.15, ease: EASE_EDITORIAL }}
               className={`h-full w-full object-cover ${
                 index === 1
-                  ? 'object-[50%_18%]'
+                  ? 'object-top'
                   : index === 2
                     ? 'object-[50%_55%]'
                     : 'object-center'
@@ -150,23 +150,23 @@ export const JourneySection: React.FC<JourneySectionProps> = ({ onOpenBooking })
   });
 
   return (
-    <section id="jak-zaczac" className="relative bg-[#F6F3EE] py-18 md:py-24">
-      <div className="mx-auto max-w-[1360px] px-6 md:px-10 lg:px-14">
-        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
+    <section id="jak-zaczac" className="relative bg-[#F6F3EE] py-14 md:py-18">
+      <div className="mx-auto max-w-[1360px] px-5 sm:px-6 md:px-10 lg:px-14">
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-14">
           {/* Left Sticky Editorial Intro + Drawn Botanical Line Art */}
           <div className="lg:col-span-5 lg:sticky lg:top-28">
             <Reveal>
-              <p className="eyebrow mb-5">{PRACTICE.journey.eyebrow}</p>
+              <p className="eyebrow mb-4">{PRACTICE.journey.eyebrow}</p>
             </Reveal>
 
-            <h2 className="font-editorial text-[clamp(2.3rem,3.9vw,3.65rem)] font-light leading-[1.06] tracking-[-0.02em] text-[#1D2220]">
+            <h2 className="font-editorial text-[clamp(2.2rem,3.7vw,3.5rem)] font-light leading-[1.06] tracking-[-0.02em] text-[#1D2220]">
               <MaskedLines
                 lines={[
                   'Pierwszy krok bywa',
                   'najtrudniejszy.',
-                  'Upraszczam wszystko dalej.',
+                  'Dalej idziemy spokojnie.',
                 ]}
-                italicSubstring="Upraszczam wszystko dalej."
+                italicSubstring="Dalej idziemy spokojnie."
               />
             </h2>
 

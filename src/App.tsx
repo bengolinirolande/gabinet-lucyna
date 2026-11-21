@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion';
 import { Wind } from 'lucide-react';
 import { LenisProvider, useLenis } from './components/motion/LenisProvider';
-import { Preloader } from './components/motion/Preloader';
+import { Preloader, shouldPlayPreloader } from './components/motion/Preloader';
 import { CustomCursor } from './components/motion/CustomCursor';
 import { PageTransitionCurtain } from './components/motion/PageTransitionCurtain';
 import { Navbar } from './components/Navbar';
@@ -27,11 +27,12 @@ import { BreathingModal } from './components/BreathingModal';
 import { PrivacyModal } from './components/PrivacyModal';
 import { EASE_EDITORIAL, VelocityRibbon } from './components/motion/MotionPrimitives';
 import { parseHashToPage, ROUTES, type PageId } from './types/navigation';
+import { syncRouteSeo } from './utils/seo';
 
 const AppShell: React.FC = () => {
   const { scrollTo, resetScrollTop, resize, lockScroll, unlockScroll } = useLenis();
   const mainRef = useRef<HTMLElement>(null);
-  const [heroReady, setHeroReady] = useState(false);
+  const [heroReady, setHeroReady] = useState<boolean>(() => !shouldPlayPreloader());
   const [currentPage, setCurrentPage] = useState<PageId>(() =>
     typeof window !== 'undefined' ? parseHashToPage(window.location.hash) : 'home'
   );
@@ -188,13 +189,9 @@ const AppShell: React.FC = () => {
     return () => cancelAnimationFrame(rafId);
   }, [currentPage, resize]);
 
-  // Dynamic browser tab title per chapter
+  // Dynamic SEO metadata, canonical & route-specific structured data per chapter
   useEffect(() => {
-    const meta = ROUTES[currentPage];
-    document.title =
-      currentPage === 'home'
-        ? 'mgr Lucyna Grochowska — Psycholog, Psychotraumatolog, Psychoterapeutka | Gdynia · Online'
-        : `${meta.curtainTitle} — mgr Lucyna Grochowska | Gdynia`;
+    syncRouteSeo(currentPage);
   }, [currentPage]);
 
   useEffect(() => {
@@ -210,7 +207,7 @@ const AppShell: React.FC = () => {
   const activeNavPage = curtainOpen ? curtainTarget : currentPage;
 
   return (
-    <div className="relative min-h-screen bg-[#F6F3EE] text-[#1D2220]">
+    <div className="relative min-h-screen overflow-x-clip bg-[#F6F3EE] text-[#1D2220]">
       {/* Accessible keyboard skip link (never mutates route hash!) */}
       <a
         href="#main-content"
@@ -258,7 +255,7 @@ const AppShell: React.FC = () => {
                 'Gdynia Śródmieście',
                 'Psychotraumatologia',
                 'Seksuologia kliniczna',
-                'Konsultacje Online · PL / RU',
+                'Konsultacje online · PL / RU',
                 'Stała superwizja',
               ]}
             />
@@ -274,10 +271,10 @@ const AppShell: React.FC = () => {
           <>
             <SubpageHeader
               chapter="01"
-              eyebrow="Terapia i obszary pracy"
+              eyebrow="Terapia i obszary wsparcia"
               lines={['W czym mogę Ci', 'uważnie towarzyszyć.']}
               italicSubstring="towarzyszyć."
-              lead="Pracuję w nurcie psychodynamicznym (w trakcie certyfikacji), jako psychotraumatolog oraz seksuolog kliniczny w trakcie certyfikacji. Poniżej znajdziesz główne obszary pomocy, przebieg pierwszych spotkań oraz moją filozofię pracy."
+              lead="Nie musisz przychodzić z gotową diagnozą ani planem. Łączę nurt psychodynamiczny, psychotraumatologię i seksuologię kliniczną — poniżej zobaczysz główne obszary pomocy, przebieg pierwszych spotkań oraz wartości, którymi kieruję się w gabinecie."
               ready={viewReady}
               onBackHome={() => navigateTo('home')}
             />
@@ -290,7 +287,7 @@ const AppShell: React.FC = () => {
             <NextChapterBridge
               nextPage="o-mnie"
               tone="light"
-              teaser="Poznaj moje wykształcenie (UKW, Triada, UAM, Vis Salutis), 8-letnie doświadczenie kliniczne oraz zweryfikowane opinie pacjentów."
+              teaser="Poznaj moje wykształcenie, 8-letnią praktykę kliniczną, etykę pracy oraz głosy pacjentów."
               onNavigate={(page) => navigateTo(page)}
             />
           </>
@@ -303,7 +300,7 @@ const AppShell: React.FC = () => {
               eyebrow="O mnie · mgr Lucyna Grochowska"
               lines={['Kliniczne doświadczenie', 'i przestrzeń bez oceniania.']}
               italicSubstring="bez oceniania."
-              lead="Od 8 lat łączę praktykę w publicznych placówkach zdrowia psychicznego z gabinetem prywatnym. Pracuję pod stałą superwizją, w języku polskim i rosyjskim, z głębokim poszanowaniem historii każdej osoby."
+              lead="Łączę rzetelne przygotowanie kliniczne z uważną, ludzką obecnością. Wierzę, że głęboka zmiana zaczyna się tam, gdzie nie trzeba niczego udawać ani bronić się przed oceną."
               ready={viewReady}
               onBackHome={() => navigateTo('home')}
             />
@@ -314,7 +311,7 @@ const AppShell: React.FC = () => {
             <NextChapterBridge
               nextPage="gabinety"
               tone="sand"
-              teaser="Sprawdź oba gabinety w Gdyni (ul. Chwarznieńska i Medyczna Gdynia), konsultacje online, profile ZnanyLekarz / TwójPsycholog oraz cennik."
+              teaser="Sprawdź oba gabinety w Gdyni, konsultacje online, zweryfikowane profile oraz przejrzysty cennik spotkań."
               onNavigate={(page) => navigateTo(page)}
             />
           </>
@@ -324,10 +321,10 @@ const AppShell: React.FC = () => {
           <>
             <SubpageHeader
               chapter="03"
-              eyebrow="Praktyka · Gdynia i Online (PL / RU)"
-              lines={['Gabinety, opinie 5,0', 'i przejrzysty cennik.']}
-              italicSubstring="przejrzysty cennik."
-              lead="Przyjmuję stacjonarnie w Gdyni Witominie (ul. Chwarznieńska 136–138), w Przychodni Medyczna Gdynia (ul. gen. Bema 16/2) oraz online. Tutaj znajdziesz dojazd, mapę Gdyni, zweryfikowane opinie, cennik oraz odpowiedzi na pytania."
+              eyebrow="Praktyka · Gdynia i online (PL / RU)"
+              lines={['Gabinety w Gdyni,', 'sesje online i cennik.']}
+              italicSubstring="online i cennik."
+              lead="Przyjmuję stacjonarnie w dwóch miejscach w Gdyni — na Witominie (ul. Chwarznieńska 136–138) oraz w Śródmieściu (ul. gen. Bema 16/2) — a także online i podczas wizyt domowych. Poniżej znajdziesz dojazd, mapę, zweryfikowane opinie, cennik oraz odpowiedzi na pytania."
               ready={viewReady}
               onBackHome={() => navigateTo('home')}
             />

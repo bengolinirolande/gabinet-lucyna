@@ -29,6 +29,8 @@ interface MaskedLinesProps {
 
 /**
  * Editorial split-line clip-mask reveal with subtle Locomotive-style organic tilt settle.
+ * Uses Framer Motion native `whileInView` variant propagation on the OUTER unclipped wrapper
+ * so IntersectionObserver NEVER stalls on clipped inner lines or React useInView hook lag.
  */
 export const MaskedLines: React.FC<MaskedLinesProps> = ({
   lines,
@@ -43,7 +45,13 @@ export const MaskedLines: React.FC<MaskedLinesProps> = ({
   const reduced = useReducedMotion();
 
   return (
-    <span className={`block ${className}`}>
+    <motion.span
+      className={`block ${className}`}
+      initial={reduced ? 'visible' : 'hidden'}
+      {...(immediate
+        ? { animate: ready || reduced ? 'visible' : 'hidden' }
+        : { whileInView: 'visible', viewport: { once: true, amount: 0.05 } })}
+    >
       {lines.map((line, idx) => {
         const hasItalic = italicSubstring && line.includes(italicSubstring);
         const content = hasItalic ? (
@@ -60,26 +68,20 @@ export const MaskedLines: React.FC<MaskedLinesProps> = ({
           <span key={idx} className="block overflow-hidden pb-[0.14em] -mb-[0.14em]">
             <motion.span
               className={`block origin-bottom-left ${lineClassName}`}
-              initial={
-                reduced
+              variants={{
+                hidden: reduced
                   ? { opacity: 1, y: 0, rotate: 0 }
-                  : { y: '112%', rotate: 1.8, opacity: 0.01 }
-              }
-              {...(immediate
-                ? {
-                    animate:
-                      ready || reduced
-                        ? { y: '0%', rotate: 0, opacity: 1 }
-                        : { y: '112%', rotate: 1.8, opacity: 0.01 },
-                  }
-                : {
-                    whileInView: { y: '0%', rotate: 0, opacity: 1 },
-                    viewport: { once: true, amount: 0.3 },
-                  })}
-              transition={{
-                duration: reduced ? 0.01 : 0.96,
-                delay: reduced ? 0 : delay + idx * stagger,
-                ease: EASE_EDITORIAL,
+                  : { y: '108%', rotate: 1.5, opacity: 0.01 },
+                visible: {
+                  y: '0%',
+                  rotate: 0,
+                  opacity: 1,
+                  transition: {
+                    duration: reduced ? 0.01 : 0.78,
+                    delay: reduced ? 0 : delay + idx * stagger,
+                    ease: EASE_EDITORIAL,
+                  },
+                },
               }}
             >
               {content}
@@ -87,7 +89,7 @@ export const MaskedLines: React.FC<MaskedLinesProps> = ({
           </span>
         );
       })}
-    </span>
+    </motion.span>
   );
 };
 
@@ -114,9 +116,8 @@ export const SlotRollText: React.FC<SlotRollTextProps> = ({
       </span>
       <span
         aria-hidden="true"
-        className={`absolute inset-x-0 top-full block transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full ${
-          italicHover ? 'font-editorial italic text-[1.12em] leading-[1.05]' : ''
-        }`}
+        className={`absolute inset-x-0 top-full block transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full ${italicHover ? 'font-editorial italic text-[1.12em] leading-[1.05]' : ''
+          }`}
       >
         {hoverLabel ?? label}
       </span>
@@ -211,12 +212,14 @@ interface CurtainImageProps {
   delay?: number;
   cursorLabel?: string;
   priority?: boolean;
+  width?: number;
+  height?: number;
 }
 
 /**
  * Awwwards-signature image frame:
  * Always mounts <img> immediately (zero LCP delay), animates clip-path curtain unveil,
- * de-zoom settle, and scroll-linked GPU parallax.
+ * de-zoom settle, and scroll-linked GPU parallax (zero top crop when parallaxStrength === 0).
  */
 export const CurtainImage: React.FC<CurtainImageProps> = ({
   src,
@@ -230,6 +233,8 @@ export const CurtainImage: React.FC<CurtainImageProps> = ({
   delay = 0,
   cursorLabel,
   priority = false,
+  width,
+  height,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -247,55 +252,54 @@ export const CurtainImage: React.FC<CurtainImageProps> = ({
   });
 
   const y = useTransform(smoothProgress, [0, 1], [-effectiveParallax, effectiveParallax]);
+  const instantVisible = Boolean(reduced || priority);
 
   return (
     <motion.div
       ref={containerRef}
       data-cursor={cursorLabel}
-      initial={
-        reduced
-          ? { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1 }
-          : { clipPath: 'inset(14% 0% 0% 0%)', opacity: 0.01 }
-      }
-      {...(immediate
-        ? {
-            animate:
-              ready || reduced
-                ? { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1 }
-                : { clipPath: 'inset(14% 0% 0% 0%)', opacity: 0.01 },
-          }
-        : {
-            whileInView: { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1 },
-            viewport: { once: true, amount: 0.18 },
-          })}
-      transition={{
-        duration: reduced ? 0.01 : 1.05,
-        delay: reduced ? 0 : delay,
-        ease: EASE_EDITORIAL,
+      initial={instantVisible ? 'visible' : 'hidden'}
+      {...(priority
+        ? { animate: 'visible' }
+        : immediate
+          ? { animate: ready || reduced ? 'visible' : 'hidden' }
+          : { whileInView: 'visible', viewport: { once: true, amount: 0.05 } })}
+      variants={{
+        hidden: { clipPath: 'inset(8% 0% 0% 0%)', opacity: 0.01 },
+        visible: {
+          clipPath: 'inset(0% 0% 0% 0%)',
+          opacity: 1,
+          transition: {
+            duration: instantVisible ? 0.01 : 0.86,
+            delay: instantVisible ? 0 : delay,
+            ease: EASE_EDITORIAL,
+          },
+        },
       }}
       className={`group/img relative overflow-hidden bg-[#E7E0D5] ${aspectClass} ${className}`}
     >
       <motion.div
         style={{ y }}
-        className={reduced ? 'h-full w-full' : 'h-[114%] w-full -mt-[7%]'}
+        className={effectiveParallax === 0 ? 'h-full w-full' : 'h-[110%] w-full -mt-[5%]'}
       >
         <motion.img
           src={src}
           alt={alt}
-          loading={priority ? 'eager' : 'lazy'}
+          width={width}
+          height={height}
+          loading="eager"
           decoding={priority ? 'sync' : 'async'}
           fetchPriority={priority ? 'high' : 'auto'}
-          initial={reduced ? { scale: 1 } : { scale: 1.12 }}
-          {...(immediate
-            ? { animate: ready || reduced ? { scale: 1 } : { scale: 1.12 } }
-            : {
-                whileInView: { scale: 1 },
-                viewport: { once: true, amount: 0.18 },
-              })}
-          transition={{
-            duration: reduced ? 0.01 : 1.3,
-            delay: reduced ? 0 : delay,
-            ease: EASE_EDITORIAL,
+          variants={{
+            hidden: reduced ? { scale: 1 } : { scale: 1.06 },
+            visible: {
+              scale: 1,
+              transition: {
+                duration: reduced ? 0.01 : 1.05,
+                delay: reduced ? 0 : delay,
+                ease: EASE_EDITORIAL,
+              },
+            },
           }}
           className={`h-full w-full object-cover transition-transform duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/img:scale-[1.035] ${imgClassName}`}
         />
@@ -368,9 +372,8 @@ const RibbonTrack: React.FC<{ items: string[]; dark: boolean }> = ({ items, dark
     {items.map((item, i) => (
       <React.Fragment key={`${item}-${i}`}>
         <span
-          className={`font-editorial whitespace-nowrap text-[24px] font-light tracking-[-0.01em] md:text-[32px] ${
-            dark ? 'text-[#F6F3EE]/80' : 'text-[#1D2220]/75'
-          }`}
+          className={`font-editorial whitespace-nowrap text-[24px] font-light tracking-[-0.01em] md:text-[32px] ${dark ? 'text-[#F6F3EE]/80' : 'text-[#1D2220]/75'
+            }`}
         >
           {i % 2 === 1 ? (
             <em className={`italic ${dark ? 'text-[#C9A484]' : 'text-[#8C5E3E]'}`}>{item}</em>
@@ -454,11 +457,10 @@ export const VelocityRibbon: React.FC<{
       onPointerLeave={(e) => {
         if (e.pointerType === 'mouse') hoveredRef.current = false;
       }}
-      className={`overflow-hidden border-y py-3.5 select-none ${
-        dark
-          ? 'border-[#F6F3EE]/12 bg-[#16211D]'
-          : 'border-[#1D2220]/10 bg-[#FAF8F4]/75'
-      }`}
+      className={`overflow-hidden border-y py-3.5 select-none ${dark
+        ? 'border-[#F6F3EE]/12 bg-[#16211D]'
+        : 'border-[#1D2220]/10 bg-[#FAF8F4]/75'
+        }`}
     >
       <motion.div
         style={reduced ? undefined : { x, skewX }}

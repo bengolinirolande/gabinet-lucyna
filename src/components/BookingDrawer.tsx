@@ -34,7 +34,7 @@ const SESSION_TYPES = [
   'Konsultacja psychologiczna / psychoterapeutyczna (50 min · 200–210 zł)',
   'Psychoterapia indywidualna — psychodynamiczna (50–60 min · 200–210 zł)',
   'Psychotraumatologia / Seksuologia / Terapia par (50 min · 200–210 zł)',
-  'Interwencja kryzysowa / Badania / Ocena stanu / Relaksacja (od 210 zł)',
+  'Interwencja kryzysowa, badania, ocena stanu psychicznego (od 210 zł)',
   'Wizyta domowa na terenie Gdyni (430 zł)',
 ];
 
@@ -52,7 +52,7 @@ const TIME_SLOTS = ['Poranek (08:30–12:00)', 'Popołudnie (12:00–16:00)', 'W
 const LOCATION_OPEN_WEEKDAYS: Record<LocationOption, { days: number[]; label: string }> = {
   'Gdynia Witomino': {
     days: [1, 2, 3, 4, 5],
-    label: 'ul. Chwarznieńska 136–138 (wejście jak do rehabilitacji, w lewo, 3. gabinet) · PL / RU',
+    label: 'ul. Chwarznieńska 136–138 (wejście wspólne z rehabilitacją, w lewo, 3. gabinet) · PL / RU',
   },
   'Gdynia Śródmieście': {
     days: [1, 2, 3, 4, 5],
@@ -170,10 +170,10 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
       setLocation(preset.location as LocationOption);
     }
     if (preset.topic) {
-      setNote(`Obszar, o którym chciałbym/chciałabym porozmawiać: ${preset.topic}.`);
+      setNote(`Obszar, o którym chcę porozmawiać: ${preset.topic}.`);
     } else {
       setNote((prev) =>
-        prev.startsWith('Obszar, o którym chciałbym/chciałabym porozmawiać:') ? '' : prev
+        prev.startsWith('Obszar, o którym chcę porozmawiać:') ? '' : prev
       );
     }
 
@@ -236,11 +236,11 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
     const trimmedEmail = clientEmail.trim();
 
     if (!trimmedName) {
-      setError('Proszę podać swoje imię.');
+      setError('Podaj proszę swoje imię.');
       return;
     }
     if (!trimmedPhone && !trimmedEmail) {
-      setError('Proszę podać numer telefonu lub adres e-mail do kontaktu zwrotnego.');
+      setError('Podaj numer telefonu lub adres e-mail, abym mogła odpowiedzieć.');
       return;
     }
     if (trimmedPhone && trimmedPhone.replace(/\D/g, '').length < 7) {
@@ -248,11 +248,11 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
       return;
     }
     if (trimmedEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
-      setError('Proszę sprawdzić poprawność adresu e-mail.');
+      setError('Sprawdź proszę poprawność adresu e-mail.');
       return;
     }
     if (!consent) {
-      setError('Proszę potwierdzić zgodę na kontakt zwrotny (RODO).');
+      setError('Potwierdź proszę zgodę na kontakt zwrotny (RODO).');
       return;
     }
 
@@ -436,11 +436,10 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                               type="button"
                               aria-pressed={active}
                               onClick={() => handleLocationChange(loc)}
-                              className={`border px-2.5 py-2.5 text-center text-[12px] leading-tight transition-all duration-300 ${
-                                active
-                                  ? 'border-[#2B423B] bg-[#2B423B]/10 font-medium text-[#2B423B]'
-                                  : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#4E5551] hover:border-[#2B423B]/40'
-                              }`}
+                              className={`border px-2.5 py-2.5 text-center text-[12px] leading-tight transition-all duration-300 ${active
+                                ? 'border-[#2B423B] bg-[#2B423B]/10 font-medium text-[#2B423B]'
+                                : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#4E5551] hover:border-[#2B423B]/40'
+                                }`}
                             >
                               {loc}
                             </button>
@@ -599,8 +598,8 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                     />
                     <div>
                       <label htmlFor="booking-consent" className="cursor-pointer">
-                        Wyrażam zgodę na kontakt zwrotny w celu ustalenia terminu konsultacji.
-                        Zapoznałem/am się z{' '}
+                        Wyrażam zgodę na kontakt zwrotny w celu ustalenia terminu konsultacji oraz
+                        potwierdzam zapoznanie się z{' '}
                       </label>
                       <button
                         type="button"
@@ -633,11 +632,11 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                       {sending ? (
                         <>
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          <span>Wysyłanie rezerwacji do gabinetu…</span>
+                          <span>Wysyłanie zgłoszenia…</span>
                         </>
                       ) : (
                         <>
-                          <SlotRollText label="Wyślij rezerwację na e-mail gabinetu" />
+                          <SlotRollText label="Wyślij zapytanie o termin" />
                           <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                         </>
                       )}
@@ -646,7 +645,7 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                     <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#5D6560]">
                       <span className="inline-flex items-center gap-1.5">
                         <Lock className="h-3.5 w-3.5 stroke-[1.5]" />
-                        <span>Trafia bezpośrednio do {recipientEmail}</span>
+                        <span>Wiadomość trafia na {recipientEmail}</span>
                       </span>
                       <a
                         href={PRACTICE.phoneHref}
@@ -720,18 +719,18 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
 
                   {deliveryMode === 'email-sent' ? (
                     <p className="mt-4 text-[15px] font-light leading-[1.82] text-[#4E5551]">
-                      Twoja rezerwacja została wysłana bezpośrednio na skrzynkę gabinetu (
+                      Twoje zapytanie o termin zostało wysłane na skrzynkę gabinetu (
                       <span className="font-normal text-[#1D2220]">{recipientEmail}</span>).
                       Odpowiadam osobiście w ciągu 24 godzin w dni robocze z propozycją dokładnej
                       godziny.
                     </p>
                   ) : (
                     <p className="mt-4 text-[15px] font-light leading-[1.82] text-[#4E5551]">
-                      Nie udało się potwierdzić automatycznej wysyłki (skrzynka{' '}
-                      <span className="font-normal text-[#1D2220]">{recipientEmail}</span> może
-                      wymagać jednorazowej aktywacji w FormSubmit lub połączenie jest offline).
-                      Wyślij przygotowane zgłoszenie jednym kliknięciem ze swojej poczty lub
-                      skopiuj jego treść:
+                      Nie udało się teraz potwierdzić automatycznej wysyłki — prawdopodobnie z
+                      powodu chwilowej przerwy połączenia. Możesz wysłać przygotowane zapytanie
+                      jednym kliknięciem ze swojej poczty na adres{' '}
+                      <span className="font-normal text-[#1D2220]">{recipientEmail}</span> lub
+                      skopiować jego treść:
                     </p>
                   )}
 

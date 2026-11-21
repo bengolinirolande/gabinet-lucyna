@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useInView, useReducedMotion } from 'framer-motion';
+import React, { useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ExternalLink, MapPin, Navigation, ShieldCheck, Star } from 'lucide-react';
 import { PRACTICE } from '../data/practice';
 import {
@@ -11,44 +11,13 @@ import {
 } from './motion/MotionPrimitives';
 
 /**
- * Animated count-up score (0,0 -> 5,0) triggered once in view; instant under reduced motion.
+ * Crisp immediate score display (always 5,0 from Frame 0 — never flashes 0,0 before scroll).
  */
-const AnimatedRating: React.FC<{ target: number }> = ({ target }) => {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.5 });
-  const reduced = useReducedMotion();
-  const [val, setVal] = useState(reduced ? target : 0);
-
-  useEffect(() => {
-    if (reduced) {
-      setVal(target);
-      return;
-    }
-    if (!inView) return;
-    const duration = 1050;
-    const start = performance.now();
-    let raf = 0;
-
-    const tick = (now: number) => {
-      const progress = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setVal(target * eased);
-      if (progress < 1) raf = requestAnimationFrame(tick);
-    };
-
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, target, reduced]);
-
-  return (
-    <span
-      ref={ref}
-      className="font-editorial text-6xl font-light leading-none tracking-tight text-[#1D2220] md:text-7xl"
-    >
-      {val.toFixed(1).replace('.', ',')}
-    </span>
-  );
-};
+const RatingScore: React.FC<{ target: number }> = ({ target }) => (
+  <span className="font-editorial text-6xl font-light leading-none tracking-tight text-[#1D2220] md:text-7xl">
+    {target.toFixed(1).replace('.', ',')}
+  </span>
+);
 
 /**
  * Official Verified Profiles Showcase (ZnanyLekarz 5,0 · TwójPsycholog Verified Diplomas · Google Maps)
@@ -72,17 +41,17 @@ export const GoogleProfileSection: React.FC = () => {
       : 'Śródmieście · Medyczna Gdynia · 7 min od SKM';
 
   return (
-    <section id="wizytowka-google" className="relative bg-[#EFEAE1]/65 py-16 md:py-22">
-      <div className="mx-auto max-w-[1360px] px-6 md:px-10 lg:px-14">
-        <div className="grid grid-cols-1 items-end gap-8 pb-10 lg:grid-cols-12">
+    <section id="wizytowka-google" className="relative bg-[#EFEAE1]/65 py-14 md:py-18">
+      <div className="mx-auto max-w-[1360px] px-5 sm:px-6 md:px-10 lg:px-14">
+        <div className="grid grid-cols-1 items-end gap-4 pb-6 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <Reveal>
               <p className="eyebrow mb-4">Zweryfikowane profile · ZnanyLekarz · TwójPsycholog</p>
             </Reveal>
             <h2 className="font-editorial text-[clamp(2.25rem,3.9vw,3.55rem)] font-light leading-[1.06] tracking-[-0.02em] text-[#1D2220]">
               <MaskedLines
-                lines={['Zweryfikowane dyplomy', 'i 5,0 zaufania pacjentów.']}
-                italicSubstring="zaufania pacjentów."
+                lines={['Zweryfikowane dyplomy', 'i pełne zaufanie pacjentów.']}
+                italicSubstring="zaufanie pacjentów."
               />
             </h2>
           </div>
@@ -105,23 +74,13 @@ export const GoogleProfileSection: React.FC = () => {
               <div className="border border-[#1D2220]/12 bg-[#FAF8F4] p-7 shadow-[0_24px_55px_-35px_rgba(26,39,35,0.22)] md:p-9">
                 <div className="flex flex-wrap items-start justify-between gap-6 border-b border-[#1D2220]/10 pb-7">
                   <div className="flex items-center gap-5">
-                    <AnimatedRating target={PRACTICE.googleProfile.rating} />
+                    <RatingScore target={PRACTICE.googleProfile.rating} />
                     <div>
                       <div className="flex items-center gap-1" aria-label="Ocena 5 na 5 gwiazdek">
                         {Array.from({ length: 5 }).map((_, i) => (
-                          <motion.span
-                            key={i}
-                            initial={reduced ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.6 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{
-                              delay: reduced ? 0 : 0.14 + i * 0.08,
-                              duration: 0.45,
-                              ease: EASE_EDITORIAL,
-                            }}
-                          >
+                          <span key={i}>
                             <Star className="h-4.5 w-4.5 fill-[#C4924A] text-[#C4924A]" />
-                          </motion.span>
+                          </span>
                         ))}
                       </div>
                       <p className="mt-2 text-[13.5px] font-medium text-[#1D2220]">
@@ -134,7 +93,7 @@ export const GoogleProfileSection: React.FC = () => {
                   </div>
 
                   {/* Verified Diplomas Emblem */}
-                  <div className="flex items-center gap-2 rounded-full border border-[#2B423B]/20 bg-[#F6F3EE] px-4 py-2">
+                  <div className="flex items-center gap-2 rounded-full border border-[#2B423B]/20 bg-[#F6F3EE] px-3.5 py-1.5">
                     <ShieldCheck className="h-4 w-4 text-[#2B423B]" />
                     <span className="text-[11.5px] font-medium text-[#1D2220]">
                       Dyplomy zweryfikowane
@@ -232,7 +191,7 @@ export const GoogleProfileSection: React.FC = () => {
                   viewBox="0 0 460 320"
                   className="h-full w-full"
                   role="group"
-                  aria-label="Interaktywna mapa gabinetów mgr Lucyny Grochowskiej w Gdyni Witominie i Gdyni Śródmieściu"
+                  aria-label="Interaktywna mapa gabinetów mgr Lucyny Grochowskiej na Witominie i w Śródmieściu Gdyni"
                 >
                   <title>Mapa gabinetów — Gdynia Witomino i Gdynia Śródmieście</title>
 
@@ -342,9 +301,9 @@ export const GoogleProfileSection: React.FC = () => {
                     ZATOKA GDAŃSKA
                   </text>
                   <text
-                    x="194"
+                    x="136"
                     y="272"
-                    fill="rgba(246,243,238,0.38)"
+                    fill="rgba(246,243,238,0.42)"
                     fontSize="9"
                     letterSpacing="2"
                   >
@@ -415,7 +374,7 @@ export const GoogleProfileSection: React.FC = () => {
                     className="cursor-pointer"
                     role="button"
                     tabIndex={0}
-                    aria-label="Wybierz gabinet Gdynia Witomino — ul. Chwarznieńska 136-138"
+                    aria-label="Wybierz gabinet Gdynia Witomino — ul. Chwarznieńska 136–138"
                     aria-pressed={selectedPin === 'witomino'}
                   >
                     <circle cx="144" cy="176" r="24" fill="transparent" />
@@ -511,7 +470,7 @@ export const GoogleProfileSection: React.FC = () => {
                       className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#F6F3EE]/22 bg-[#F6F3EE]/8 px-5 py-3 text-[12.5px] font-medium text-[#F6F3EE] transition-colors hover:border-[#C9A484] hover:bg-[#C9A484] hover:text-[#1A2723]"
                     >
                       <Navigation className="h-3.5 w-3.5" />
-                      <SlotRollText label={`Wyznacz trasę (${activeLocation.city}) w Google Maps`} />
+                      <SlotRollText label="Wyznacz trasę w Google Maps" />
                     </a>
                   </motion.div>
                 </AnimatePresence>

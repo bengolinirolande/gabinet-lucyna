@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Check, Copy, Mail, Phone } from 'lucide-react';
 import { PRACTICE } from '../data/practice';
-import { NAV_ORDER, ROUTES, type PageId } from '../types/navigation';
+import { handleRouteLinkClick, NAV_ORDER, ROUTES, type PageId } from '../types/navigation';
 import { useLenis } from './motion/LenisProvider';
 import {
   HairlineDivider,
@@ -59,7 +59,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
         className="pointer-events-none absolute -left-32 top-0 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(201,164,132,0.08)_0%,rgba(26,39,35,0)_72%)]"
       />
 
-      <div className="mx-auto max-w-[1360px] px-6 md:px-10 lg:px-14">
+      <div className="mx-auto max-w-[1360px] px-5 sm:px-6 md:px-10 lg:px-14">
         {/* Closing Serene Invitation */}
         <div className="grid grid-cols-1 items-end gap-8 pb-10 lg:grid-cols-12 md:pb-12">
           <div className="lg:col-span-8">
@@ -88,7 +88,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
               <KineticArrow className="h-4 w-4" />
             </MagneticButton>
             <p className="text-[12px] font-light text-[#F6F3EE]/55">
-              Odpowiadam zwykle w ciągu 24h w dni robocze.
+              Odpowiadam zwykle w ciągu 24 godzin w dni robocze.
             </p>
           </div>
         </div>
@@ -98,7 +98,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
         {/* Structured Footer Columns */}
         <div className="grid grid-cols-1 gap-10 py-12 md:grid-cols-2 lg:grid-cols-12">
           {/* Contact Direct with One-Click Copy Spell */}
-          <div className="space-y-4 lg:col-span-4">
+          <address className="space-y-4 not-italic lg:col-span-4">
             <p className="text-[10.5px] uppercase tracking-[0.22em] text-[#C9A484]">
               Kontakt bezpośredni
             </p>
@@ -191,8 +191,8 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
             </div>
 
             <p className="pt-1 text-[12px] font-light leading-relaxed text-[#F6F3EE]/55">
-              TeleRejestracja Przychodni Medyczna Gdynia ({PRACTICE.clinicEmail}). Możesz też umówić
-              wizytę przez formularz lub oficjalne profile:
+              Rejestracja telefoniczna Przychodni Medyczna Gdynia ({PRACTICE.clinicEmail}). Wizytę
+              możesz też umówić przez formularz lub oficjalne profile:
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-1 text-[12px] text-[#C9A484]">
@@ -221,10 +221,10 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                 Facebook
               </a>
             </div>
-          </div>
+          </address>
 
           {/* Gabinety — derived from PRACTICE.locations single source of truth */}
-          <div className="space-y-4 lg:col-span-3">
+          <address className="space-y-4 not-italic lg:col-span-3">
             <p className="text-[10.5px] uppercase tracking-[0.22em] text-[#C9A484]">
               Lokalizacje
             </p>
@@ -232,35 +232,43 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
               {PRACTICE.locations.map((loc) => (
                 <div key={loc.id}>
                   <p className="font-normal text-[#F6F3EE]">
-                    {loc.city} {loc.id !== 'online' ? `· ${loc.district.split('·')[0].trim()}` : '· Wideo'}
+                    {loc.city}{' '}
+                    {loc.id !== 'online'
+                      ? `· ${loc.district.split('·')[0].trim()}`
+                      : '· Wideo i telefon'}
                   </p>
                   <p className="text-[12.5px] text-[#F6F3EE]/65">
-                    {loc.id === 'online' ? loc.district : loc.address}
+                    {loc.id === 'online'
+                      ? 'Spotkania wideo i telefoniczne · PL / RU'
+                      : loc.address}
                   </p>
                 </div>
               ))}
             </div>
-          </div>
+            <p lang="ru" className="pt-1 text-[11.5px] font-light text-[#F6F3EE]/55">
+              Консультации также на русском языке — в Гдыне и онлайн.
+            </p>
+          </address>
 
           {/* Quick Page Navigation */}
-          <div className="space-y-4 lg:col-span-2">
+          <nav aria-label="Nawigacja w stopce" className="space-y-4 lg:col-span-2">
             <p className="text-[10.5px] uppercase tracking-[0.22em] text-[#C9A484]">
               Nawigacja
             </p>
             <ul className="space-y-2.5 text-[13.5px] font-light text-[#F6F3EE]/75">
               {NAV_ORDER.map((pageId) => (
                 <li key={pageId}>
-                  <button
-                    type="button"
-                    onClick={() => onNavigate(pageId)}
+                  <a
+                    href={ROUTES[pageId].hash}
+                    onClick={(e) => handleRouteLinkClick(e, () => onNavigate(pageId))}
                     className="editorial-link transition-colors hover:text-[#F6F3EE]"
                   >
                     {ROUTES[pageId].navLabel}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Clinical Crisis Resources (Essential Ethical Standard) */}
           <div className="space-y-4 lg:col-span-3">
@@ -292,7 +300,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
         {/* Quiet Editorial Legal Row */}
         <div className="flex flex-col items-start justify-between gap-4 pt-8 text-[12px] font-light text-[#F6F3EE]/50 sm:flex-row sm:items-center">
           <p>
-            © {new Date().getFullYear()} {PRACTICE.fullName} · Gabinet Psychologiczny · Gdynia &amp; Online
+            © {new Date().getFullYear()} {PRACTICE.fullName} · Gabinet Psychologiczny · Gdynia i online
           </p>
           <div className="flex items-center gap-6">
             <button
