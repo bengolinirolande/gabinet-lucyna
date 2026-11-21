@@ -69,20 +69,18 @@ export const Navbar: React.FC<NavbarProps> = ({
     <>
       <header
         data-dark-surface={mobileOpen ? 'true' : undefined}
-        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-          mobileOpen
-            ? 'bg-transparent py-5 shadow-none'
-            : scrolled
-              ? 'bg-[#F6F3EE]/90 py-3.5 backdrop-blur-md shadow-[0_1px_0_rgba(29,34,32,0.08)]'
-              : 'bg-transparent py-5'
-        }`}
+        className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${mobileOpen
+          ? 'bg-transparent py-5 shadow-none'
+          : scrolled
+            ? 'bg-[#F6F3EE]/90 py-3.5 backdrop-blur-md shadow-[0_1px_0_rgba(29,34,32,0.08)]'
+            : 'bg-transparent py-5'
+          }`}
       >
         {!mobileOpen && (
           <motion.div
             style={{ scaleX: progressScaleX, transformOrigin: 'left center' }}
-            className={`pointer-events-none absolute inset-x-0 bottom-0 h-[1.5px] bg-[#2B423B]/65 transition-opacity duration-300 ${
-              scrolled ? 'opacity-100' : 'opacity-0'
-            }`}
+            className={`pointer-events-none absolute inset-x-0 bottom-0 h-[1.5px] bg-[#2B423B]/65 transition-opacity duration-300 ${scrolled ? 'opacity-100' : 'opacity-0'
+              }`}
           />
         )}
 
@@ -94,18 +92,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="group flex items-baseline gap-3 text-left"
           >
             <span
-              className={`font-editorial text-2xl font-medium tracking-tight transition-colors duration-300 md:text-[26px] ${
-                mobileOpen ? 'text-[#F6F3EE]' : 'text-[#1D2220]'
-              }`}
+              className={`font-editorial text-2xl font-medium tracking-tight transition-colors duration-300 md:text-[26px] ${mobileOpen ? 'text-[#F6F3EE]' : 'text-[#1D2220]'
+                }`}
             >
               {PRACTICE.shortName}
             </span>
             <span
-              className={`hidden text-[10px] uppercase tracking-[0.22em] transition-colors duration-300 xl:inline ${
-                mobileOpen
-                  ? 'text-[#C9A484]'
-                  : 'text-[#5D6560] group-hover:text-[#2B423B]'
-              }`}
+              className={`hidden text-[10px] uppercase tracking-[0.22em] transition-colors duration-300 xl:inline ${mobileOpen
+                ? 'text-[#C9A484]'
+                : 'text-[#5D6560] group-hover:text-[#2B423B]'
+                }`}
             >
               Psycholog · Gdynia &amp; Online
             </span>
@@ -125,11 +121,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                   type="button"
                   aria-current={active ? 'page' : undefined}
                   onClick={() => handleNavClick(pageId)}
-                  className={`group relative rounded-full px-4 py-1.5 text-[12.5px] tracking-[0.02em] transition-colors duration-300 ${
-                    active
-                      ? 'font-medium text-[#F6F3EE]'
-                      : 'font-normal text-[#1D2220]/78 hover:text-[#1D2220]'
-                  }`}
+                  className={`group relative rounded-full px-4 py-1.5 text-[12.5px] tracking-[0.02em] transition-colors duration-300 ${active
+                    ? 'font-medium text-[#F6F3EE]'
+                    : 'font-normal text-[#1D2220]/78 hover:text-[#1D2220]'
+                    }`}
                 >
                   {active && (
                     <motion.span
@@ -154,9 +149,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onOpenBooking();
               }}
               cursorLabel="Umów"
-              className={`group items-center gap-2.5 rounded-full bg-[#2B423B] px-5 py-2.5 text-[12.5px] font-medium tracking-[0.03em] text-[#F6F3EE] transition-colors duration-300 hover:bg-[#1A2723] ${
-                mobileOpen ? 'hidden' : 'hidden sm:inline-flex'
-              }`}
+              className={`group items-center gap-2.5 rounded-full bg-[#2B423B] px-5 py-2.5 text-[12.5px] font-medium tracking-[0.03em] text-[#F6F3EE] transition-colors duration-300 hover:bg-[#1A2723] ${mobileOpen ? 'hidden' : 'hidden sm:inline-flex'
+                }`}
             >
               <SlotRollText label="Umów konsultację" italicHover />
               <KineticArrow className="h-3.5 w-3.5" />
@@ -167,11 +161,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => setMobileOpen((prev) => !prev)}
               aria-label={mobileOpen ? 'Zamknij menu' : 'Otwórz menu'}
               aria-expanded={mobileOpen}
-              className={`inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors lg:hidden ${
-                mobileOpen
-                  ? 'border-[#F6F3EE]/30 bg-transparent text-[#F6F3EE] hover:border-[#C9A484]'
-                  : 'border-[#1D2220]/15 bg-[#FAF8F4]/70 text-[#1D2220] backdrop-blur-sm hover:border-[#2B423B]'
-              }`}
+              className={`inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors lg:hidden ${mobileOpen
+                ? 'border-[#F6F3EE]/30 bg-transparent text-[#F6F3EE] hover:border-[#C9A484]'
+                : 'border-[#1D2220]/15 bg-[#FAF8F4]/70 text-[#1D2220] backdrop-blur-sm hover:border-[#2B423B]'
+                }`}
             >
               {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
@@ -212,9 +205,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                         ease: EASE_EDITORIAL,
                       }}
                       onClick={() => handleNavClick(pageId)}
-                      className={`font-editorial flex w-full items-baseline justify-between text-left text-4xl font-light tracking-tight transition-colors ${
-                        active ? 'italic text-[#C9A484]' : 'text-[#F6F3EE] hover:text-[#C9A484]'
-                      }`}
+                      className={`font-editorial flex w-full items-baseline justify-between text-left text-4xl font-light tracking-tight transition-colors ${active ? 'italic text-[#C9A484]' : 'text-[#F6F3EE] hover:text-[#C9A484]'
+                        }`}
                     >
                       <span>{meta.navLabel}</span>
                       <span className="font-sans text-[11px] tracking-[0.2em] text-[#F6F3EE]/40">

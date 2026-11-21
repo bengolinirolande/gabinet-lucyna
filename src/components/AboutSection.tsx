@@ -43,9 +43,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
   return (
     <section
       id="o-mnie"
-      className={`relative bg-[#EFEAE1]/55 ${
-        compactHeader ? 'pt-10 pb-16 md:pt-12 md:pb-20' : 'py-16 md:py-24'
-      }`}
+      className={`relative bg-[#EFEAE1]/55 ${compactHeader ? 'pt-10 pb-16 md:pt-12 md:pb-20' : 'py-16 md:py-24'
+        }`}
     >
       <div className="mx-auto max-w-[1360px] px-6 md:px-10 lg:px-14">
         {!compactHeader && <HairlineDivider className="mb-14 md:mb-18" />}
@@ -144,9 +143,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
               {PRACTICE.about.paragraphs.map((paragraph, idx) => (
                 <Reveal key={idx} delay={idx * 0.08}>
                   <p
-                    className={`font-light leading-[1.86] text-[#3F4642] ${
-                      idx === 0 ? 'text-[17px] text-[#1D2220] md:text-[18.5px]' : 'text-[15.5px]'
-                    }`}
+                    className={`font-light leading-[1.86] text-[#3F4642] ${idx === 0 ? 'text-[17px] text-[#1D2220] md:text-[18.5px]' : 'text-[15.5px]'
+                      }`}
                   >
                     {paragraph}
                   </p>
@@ -177,9 +175,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({
                       aria-controls={`cred-panel-${tab.id}`}
                       onKeyDown={(e) => handleTabKeyDown(e, idx)}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`relative rounded-full px-5 py-2.5 text-[12.5px] font-medium tracking-[0.02em] transition-colors duration-300 ${
-                        active ? 'text-[#F6F3EE]' : 'text-[#4E5551] hover:text-[#1D2220]'
-                      }`}
+                      className={`relative rounded-full px-5 py-2.5 text-[12.5px] font-medium tracking-[0.02em] transition-colors duration-300 ${active ? 'text-[#F6F3EE]' : 'text-[#4E5551] hover:text-[#1D2220]'
+                        }`}
                     >
                       {active && (
                         <motion.span

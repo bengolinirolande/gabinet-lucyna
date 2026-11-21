@@ -41,7 +41,7 @@ const SpotlightPricingCard: React.FC<{
         data-cursor="Wybierz"
         onMouseMove={handleMove}
         onClick={onSelect}
-        className={`group relative block w-full overflow-hidden border p-7 text-left transition-all duration-500 hover:-translate-y-0.5 md:p-9 ${item.highlighted
+        className={`group relative block w-full overflow-hidden border p-6 text-left transition-all duration-500 hover:-translate-y-0.5 md:p-7 ${item.highlighted
           ? 'border-[#2B423B]/45 bg-[#FAF8F4] shadow-[0_24px_55px_-34px_rgba(26,39,35,0.28)] hover:border-[#2B423B]'
           : 'border-[#1D2220]/11 bg-[#FAF8F4]/78 hover:border-[#2B423B]/40 hover:bg-[#FAF8F4]'
           }`}
@@ -148,7 +148,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onOpenBooking })
           </div>
 
           {/* Right Editorial Investment Cards */}
-          <div className="flex flex-col justify-center space-y-5 lg:col-span-7">
+          <div className="flex flex-col justify-center space-y-4 lg:col-span-7">
             {PRACTICE.pricing.items.map((item, idx) => (
               <SpotlightPricingCard
                 key={item.id}

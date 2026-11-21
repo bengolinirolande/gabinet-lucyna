@@ -89,9 +89,8 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenBooking }) => {
                 <div
                   key={item.question}
                   onMouseEnter={() => setHoveredIdx(idx)}
-                  className={`relative transition-colors duration-500 ${
-                    isOpen ? 'bg-[#FAF8F4]/90' : ''
-                  }`}
+                  className={`relative transition-colors duration-500 ${isOpen ? 'bg-[#FAF8F4]/90' : ''
+                    }`}
                 >
                   {isHovered && !isOpen && (
                     <motion.div
@@ -121,11 +120,10 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenBooking }) => {
                       <motion.span
                         animate={{ rotate: isOpen ? 45 : 0 }}
                         transition={{ duration: 0.4, ease: EASE_EDITORIAL }}
-                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors duration-300 ${
-                          isOpen
-                            ? 'border-[#2B423B] bg-[#2B423B] text-[#F6F3EE]'
-                            : 'border-[#1D2220]/15 text-[#1D2220] group-hover:border-[#2B423B] group-hover:text-[#2B423B]'
-                        }`}
+                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-colors duration-300 ${isOpen
+                          ? 'border-[#2B423B] bg-[#2B423B] text-[#F6F3EE]'
+                          : 'border-[#1D2220]/15 text-[#1D2220] group-hover:border-[#2B423B] group-hover:text-[#2B423B]'
+                          }`}
                       >
                         <Plus className="h-4 w-4 stroke-[1.4]" />
                       </motion.span>

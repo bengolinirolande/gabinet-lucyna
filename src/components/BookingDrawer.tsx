@@ -31,11 +31,14 @@ interface BookingDrawerProps {
 }
 
 const SESSION_TYPES = [
-  'Konsultacja psychologiczna / wstępna (50 min · 200–210 zł)',
+  'Konsultacja psychologiczna / psychoterapeutyczna (50 min · 200–210 zł)',
   'Psychoterapia indywidualna — psychodynamiczna (50–60 min · 200–210 zł)',
-  'Konsultacja psychotraumatologiczna / seksuologiczna (50 min · 200–210 zł)',
-  'Terapia dla par · Badania · Wizyta domowa (od 200 zł / 430 zł)',
+  'Psychotraumatologia / Seksuologia / Terapia par (50 min · 200–210 zł)',
+  'Interwencja kryzysowa / Badania / Ocena stanu / Relaksacja (od 210 zł)',
+  'Wizyta domowa na terenie Gdyni (430 zł)',
 ];
+
+const HOME_VISIT_OPTION = SESSION_TYPES[4];
 
 const LOCATIONS = [
   'Gdynia Witomino',
@@ -49,11 +52,11 @@ const TIME_SLOTS = ['Poranek (08:30–12:00)', 'Popołudnie (12:00–16:00)', 'W
 const LOCATION_OPEN_WEEKDAYS: Record<LocationOption, { days: number[]; label: string }> = {
   'Gdynia Witomino': {
     days: [1, 2, 3, 4, 5],
-    label: 'ul. Chwarznieńska 136–138 · Wizyty umawiane indywidualnie (PL / RU)',
+    label: 'ul. Chwarznieńska 136–138 (wejście jak do rehabilitacji, w lewo, 3. gabinet) · PL / RU',
   },
   'Gdynia Śródmieście': {
     days: [1, 2, 3, 4, 5],
-    label: 'Przychodnia Medyczna Gdynia, ul. gen. Bema 16/2 · Centrum Gdyni',
+    label: 'Przychodnia Medyczna Gdynia (ul. gen. Bema 16/2 · tel. 58 500 46 87 / 88)',
   },
   'Online (wideo / telefon)': {
     days: [1, 2, 3, 4, 5],
@@ -85,10 +88,17 @@ function getUpcomingDaysForWeekdays(allowedDays: number[]): string[] {
 function resolveSessionPreset(raw?: string): string {
   if (!raw) return SESSION_TYPES[0];
   const lower = raw.toLowerCase();
-  if (lower.includes('par') || lower.includes('domow') || lower.includes('badani')) {
+  if (lower.includes('domow')) return SESSION_TYPES[4];
+  if (
+    lower.includes('badani') ||
+    lower.includes('kryzys') ||
+    lower.includes('ocena') ||
+    lower.includes('relaks') ||
+    lower.includes('psychoeduk')
+  ) {
     return SESSION_TYPES[3];
   }
-  if (lower.includes('seksuolog') || lower.includes('traum')) {
+  if (lower.includes('seksuolog') || lower.includes('traum') || lower.includes('par')) {
     return SESSION_TYPES[2];
   }
   if (lower.includes('psychoterapia') || lower.includes('indywidualn')) {
@@ -191,7 +201,8 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
   };
 
   const recipientEmail = PRACTICE.bookingRecipientEmail;
-  const effectiveLocationLabel = location;
+  const isHomeVisit = sessionType === HOME_VISIT_OPTION;
+  const effectiveLocationLabel = isHomeVisit ? 'Wizyta domowa (Gdynia)' : location;
   const trimmedNameDisplay = name.trim();
 
   const summaryPlainText = [
@@ -397,11 +408,10 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                             type="button"
                             aria-pressed={active}
                             onClick={() => handleSessionTypeChange(option)}
-                            className={`flex items-center justify-between border px-4 py-2.5 text-left text-[13px] transition-all duration-300 ${
-                              active
-                                ? 'border-[#2B423B] bg-[#2B423B] text-[#F6F3EE]'
-                                : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#1D2220] hover:border-[#2B423B]/45'
-                            }`}
+                            className={`flex items-center justify-between border px-4 py-2.5 text-left text-[13px] transition-all duration-300 ${active
+                              ? 'border-[#2B423B] bg-[#2B423B] text-[#F6F3EE]'
+                              : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#1D2220] hover:border-[#2B423B]/45'
+                              }`}
                           >
                             <span>{option}</span>
                             {active && <Check className="h-4 w-4 shrink-0" />}
@@ -411,41 +421,45 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                     </div>
                   </fieldset>
 
-                  {/* 2. Lokalizacja */}
-                  <fieldset className="space-y-2">
-                    <legend className="block text-[10.5px] uppercase tracking-[0.18em] text-[#5D6560]">
-                      2. Lokalizacja
-                    </legend>
-                    <div className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-3">
-                      {LOCATIONS.map((loc) => {
-                        const active = location === loc;
-                        return (
-                          <button
-                            key={loc}
-                            type="button"
-                            aria-pressed={active}
-                            onClick={() => handleLocationChange(loc)}
-                            className={`border px-2.5 py-2.5 text-center text-[12px] leading-tight transition-all duration-300 ${
-                              active
-                                ? 'border-[#2B423B] bg-[#2B423B]/10 font-medium text-[#2B423B]'
-                                : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#4E5551] hover:border-[#2B423B]/40'
-                            }`}
-                          >
-                            {loc}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </fieldset>
+                  {/* 2. Lokalizacja (ukrywana dla wizyty domowej) */}
+                  {!isHomeVisit && (
+                    <fieldset className="space-y-2">
+                      <legend className="block text-[10.5px] uppercase tracking-[0.18em] text-[#5D6560]">
+                        2. Lokalizacja
+                      </legend>
+                      <div className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-3">
+                        {LOCATIONS.map((loc) => {
+                          const active = location === loc;
+                          return (
+                            <button
+                              key={loc}
+                              type="button"
+                              aria-pressed={active}
+                              onClick={() => handleLocationChange(loc)}
+                              className={`border px-2.5 py-2.5 text-center text-[12px] leading-tight transition-all duration-300 ${
+                                active
+                                  ? 'border-[#2B423B] bg-[#2B423B]/10 font-medium text-[#2B423B]'
+                                  : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#4E5551] hover:border-[#2B423B]/40'
+                              }`}
+                            >
+                              {loc}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </fieldset>
+                  )}
 
                   {/* 3. Preferowany dzień i pora */}
                   <fieldset className="space-y-2.5">
                     <legend className="flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.18em] text-[#5D6560]">
                       <Calendar className="h-3.5 w-3.5 text-[#8C5E3E]" />
-                      <span>3. Preferowany dzień i pora</span>
+                      <span>{isHomeVisit ? '2.' : '3.'} Preferowany dzień i pora</span>
                     </legend>
                     <p className="text-[11.5px] font-light text-[#5D6560]">
-                      {`${location}: ${LOCATION_OPEN_WEEKDAYS[location].label}`}
+                      {isHomeVisit
+                        ? 'Wizyta domowa na terenie Gdyni — podaj dzielnicę w wiadomości poniżej.'
+                        : `${location}: ${LOCATION_OPEN_WEEKDAYS[location].label}`}
                     </p>
                     <div className="flex flex-wrap gap-1.5">
                       {dateOptions.map((day) => {
@@ -456,11 +470,10 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                             type="button"
                             aria-pressed={active}
                             onClick={() => setPreferredDay(day)}
-                            className={`rounded-full border px-3 py-1.5 text-[11.5px] transition-all duration-250 ${
-                              active
-                                ? 'border-[#2B423B] bg-[#2B423B] text-[#F6F3EE]'
-                                : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#4E5551] hover:border-[#2B423B]/45'
-                            }`}
+                            className={`rounded-full border px-3 py-1.5 text-[11.5px] transition-all duration-250 ${active
+                              ? 'border-[#2B423B] bg-[#2B423B] text-[#F6F3EE]'
+                              : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#4E5551] hover:border-[#2B423B]/45'
+                              }`}
                           >
                             {day}
                           </button>
@@ -477,11 +490,10 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                             type="button"
                             aria-pressed={active}
                             onClick={() => setPreferredTime(slot)}
-                            className={`border px-2.5 py-2 text-center text-[11.5px] transition-all duration-300 ${
-                              active
-                                ? 'border-[#2B423B] bg-[#2B423B]/10 font-medium text-[#2B423B]'
-                                : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#4E5551] hover:border-[#2B423B]/40'
-                            }`}
+                            className={`border px-2.5 py-2 text-center text-[11.5px] transition-all duration-300 ${active
+                              ? 'border-[#2B423B] bg-[#2B423B]/10 font-medium text-[#2B423B]'
+                              : 'border-[#1D2220]/12 bg-[#FAF8F4] text-[#4E5551] hover:border-[#2B423B]/40'
+                              }`}
                           >
                             {slot}
                           </button>
@@ -677,11 +689,10 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                   className="my-auto flex flex-col items-start py-8"
                 >
                   <div
-                    className={`flex h-16 w-16 items-center justify-center rounded-full ${
-                      deliveryMode === 'email-sent'
-                        ? 'bg-[#2B423B] text-[#F6F3EE]'
-                        : 'bg-[#8C5E3E] text-[#F6F3EE]'
-                    }`}
+                    className={`flex h-16 w-16 items-center justify-center rounded-full ${deliveryMode === 'email-sent'
+                      ? 'bg-[#2B423B] text-[#F6F3EE]'
+                      : 'bg-[#8C5E3E] text-[#F6F3EE]'
+                      }`}
                   >
                     {deliveryMode === 'email-sent' ? (
                       <svg viewBox="0 0 28 28" fill="none" className="h-7 w-7">

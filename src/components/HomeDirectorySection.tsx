@@ -190,7 +190,7 @@ export const HomeDirectorySection: React.FC<HomeDirectorySectionProps> = ({
                 Gdynia (2 adresy) · Online
               </span>
               <span>
-                Wizyty od <strong className="font-medium text-[#1D2220]">{consultationPrice}</strong>
+                Wizyty · <strong className="font-medium text-[#1D2220]">{consultationPrice}</strong>
               </span>
               <span>
                 Języki: <strong className="font-medium text-[#2B423B]">PL / RU</strong>

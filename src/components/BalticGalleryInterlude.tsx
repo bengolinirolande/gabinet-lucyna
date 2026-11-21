@@ -124,11 +124,10 @@ export const BalticGalleryInterlude: React.FC<BalticGalleryInterludeProps> = ({ 
                         type="button"
                         aria-pressed={active}
                         onClick={() => setActiveMood(m)}
-                        className={`relative rounded-full px-4 py-2 text-[12.5px] transition-colors duration-300 ${
-                          active
-                            ? 'text-[#1A2723] font-medium'
-                            : 'border border-[#F6F3EE]/25 bg-[#1A2723]/35 text-[#F6F3EE]/85 backdrop-blur-md hover:border-[#C9A484]'
-                        }`}
+                        className={`relative rounded-full px-4 py-2 text-[12.5px] transition-colors duration-300 ${active
+                          ? 'text-[#1A2723] font-medium'
+                          : 'border border-[#F6F3EE]/25 bg-[#1A2723]/35 text-[#F6F3EE]/85 backdrop-blur-md hover:border-[#C9A484]'
+                          }`}
                       >
                         {active && (
                           <motion.span

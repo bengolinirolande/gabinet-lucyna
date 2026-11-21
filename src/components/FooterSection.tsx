@@ -103,13 +103,20 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
               Kontakt bezpośredni
             </p>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <a
                 href={PRACTICE.phoneHref}
                 className="editorial-link inline-flex items-center gap-2.5 text-[16px] font-light text-[#F6F3EE]"
               >
                 <Phone className="h-4 w-4 stroke-[1.4] text-[#C9A484]" />
                 <span>{PRACTICE.phoneDisplay}</span>
+              </a>
+              <span className="text-[#F6F3EE]/30">/</span>
+              <a
+                href={PRACTICE.phoneSecondaryHref}
+                className="editorial-link text-[15px] font-light text-[#F6F3EE]/85"
+              >
+                58 500 46 88
               </a>
               <button
                 type="button"
@@ -183,9 +190,9 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
               </button>
             </div>
 
-            <p className="pt-2 text-[12.5px] font-light leading-relaxed text-[#F6F3EE]/55">
-              Jeśli nie odbieram telefonu, najprawdopodobniej prowadzę sesję. Skorzystaj z formularza
-              lub oficjalnych kalendarzy online:
+            <p className="pt-1 text-[12px] font-light leading-relaxed text-[#F6F3EE]/55">
+              TeleRejestracja Przychodni Medyczna Gdynia ({PRACTICE.clinicEmail}). Możesz też umówić
+              wizytę przez formularz lub oficjalne profile:
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-1 text-[12px] text-[#C9A484]">
