@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
 import { ArrowUpRight, Menu, Moon, Sun, X } from 'lucide-react';
 import { usePreferences } from '../context/PreferencesContext';
-import { handleRouteLinkClick, NAV_ORDER, type Locale, type PageId } from '../types/navigation';
+import { getRouteHref, handleRouteLinkClick, NAV_ORDER, type Locale, type PageId } from '../types/navigation';
 import { useLenis } from './motion/LenisProvider';
 import {
   EASE_EDITORIAL,
@@ -89,7 +89,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="mx-auto flex max-w-[1360px] items-center justify-between gap-2 px-4 sm:px-6 md:px-10 lg:px-14">
           {/* Brand Mark */}
           <a
-            href={routes.home.hash}
+            href={getRouteHref('home')}
             onClick={(e) => handleRouteLinkClick(e, () => handleNavClick('home'))}
             className="group flex min-w-0 items-baseline gap-3 text-left"
           >
@@ -122,7 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               return (
                 <a
                   key={pageId}
-                  href={meta.hash}
+                  href={getRouteHref(pageId)}
                   aria-current={active ? 'page' : undefined}
                   onClick={(e) => handleRouteLinkClick(e, () => handleNavClick(pageId))}
                   className={`group relative whitespace-nowrap rounded-full px-3.5 py-1.5 text-[12.5px] tracking-[0.02em] transition-colors duration-300 xl:px-4 ${
@@ -254,7 +254,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     className="overflow-hidden border-b border-[#F6F3EE]/12 pb-3.5"
                   >
                     <motion.a
-                      href={meta.hash}
+                      href={getRouteHref(pageId)}
                       aria-current={active ? 'page' : undefined}
                       initial={{ y: '100%', opacity: 0 }}
                       animate={{ y: '0%', opacity: 1 }}

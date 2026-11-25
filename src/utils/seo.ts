@@ -1,6 +1,6 @@
 import { PRACTICE } from '../data/practice';
 import { PRACTICE_RU } from '../data/practice.ru';
-import { getRoutes, SITE_ORIGIN, type Locale, type PageId } from '../types/navigation';
+import { getRoutes, isHashRouting, SITE_ORIGIN, type Locale, type PageId } from '../types/navigation';
 
 const ROUTE_LD_SCRIPT_ID = 'route-structured-data';
 
@@ -26,7 +26,7 @@ function upsertCanonical(href: string): void {
 
 /**
  * Synchronizes `<html lang>`, `<title>`, meta descriptions, Open Graph / Twitter tags,
- * canonical link, and localized route-specific JSON-LD (`BreadcrumbList`, `FAQPage`).
+ * per-route canonical URL, and localized route-specific JSON-LD (`BreadcrumbList`, `FAQPage`).
  */
 export function syncRouteSeo(page: PageId, lang: Locale = 'pl'): void {
   const routes = getRoutes(lang);
@@ -42,8 +42,11 @@ export function syncRouteSeo(page: PageId, lang: Locale = 'pl'): void {
   upsertMeta('name', 'twitter:title', meta.seoTitle);
   upsertMeta('name', 'twitter:description', meta.seoDescription);
 
-  // While using hash routing (`#/`), canonical stays cleanly on root URL (fragments are ignored by Google).
-  const canonicalUrl = `${SITE_ORIGIN}/`;
+  const canonicalUrl = isHashRouting()
+    ? `${SITE_ORIGIN}/`
+    : page === 'home'
+      ? `${SITE_ORIGIN}/`
+      : `${SITE_ORIGIN}${meta.cleanPath}`;
   upsertCanonical(canonicalUrl);
   upsertMeta('property', 'og:url', canonicalUrl);
 
@@ -67,6 +70,7 @@ export function syncRouteSeo(page: PageId, lang: Locale = 'pl'): void {
           '@type': 'ListItem',
           position: 2,
           name: meta.navLabel,
+          ...(isHashRouting() ? {} : { item: canonicalUrl }),
         },
       ],
     },

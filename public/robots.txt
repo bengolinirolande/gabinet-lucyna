@@ -1,5 +1,5 @@
-# Zaktualizuj adres Sitemap po podpięciu własnej domeny .pl
 User-agent: *
 Allow: /
+Disallow: /api/
 
-Sitemap: https://bengolinirolande.github.io/gabinet-lucyna/sitemap.xml
+Sitemap: https://grochowskapsycholog.pl/sitemap.xml

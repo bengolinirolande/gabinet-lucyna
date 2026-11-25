@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, ArrowUpRight, Star } from 'lucide-react';
 import { usePreferences } from '../context/PreferencesContext';
-import { handleRouteLinkClick, type PageId } from '../types/navigation';
+import { getRouteHref, handleRouteLinkClick, type PageId } from '../types/navigation';
 import { useLenis } from './motion/LenisProvider';
 import { AmbientLightCanvas } from './motion/AmbientLightCanvas';
 import {
@@ -41,7 +41,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onNavigate,
   onOpenBooking,
 }) => {
-  const { practice, ui, routes } = usePreferences();
+  const { practice, ui } = usePreferences();
   const { scrollTo } = useLenis();
   const reduced = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
@@ -143,7 +143,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </MagneticButton>
 
               <a
-                href={routes['o-mnie'].hash}
+                href={getRouteHref('o-mnie')}
                 onClick={(e) => handleRouteLinkClick(e, () => onNavigate('o-mnie'))}
                 className="group editorial-link-persistent py-1 text-[13.5px] font-medium text-[var(--text-ink)] transition-colors hover:text-[var(--accent-emphasis)]"
               >
@@ -171,7 +171,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               ))}
 
               <a
-                href={routes.gabinety.hash}
+                href={getRouteHref('gabinety')}
                 onClick={(e) =>
                   handleRouteLinkClick(e, () => onNavigate('gabinety', '#wizytowka-google'))
                 }
@@ -192,7 +192,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="relative lg:col-span-5">
             <div className="relative mx-auto max-w-[385px] lg:ml-auto lg:mr-0 xl:max-w-[405px]">
               <a
-                href={routes['o-mnie'].hash}
+                href={getRouteHref('o-mnie')}
                 onClick={(e) => handleRouteLinkClick(e, () => onNavigate('o-mnie'))}
                 aria-label={ui.hero.portraitAria}
                 className="block w-full text-left"

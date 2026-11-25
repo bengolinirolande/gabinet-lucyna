@@ -120,18 +120,18 @@ export const PRACTICE = {
   },
 
   images: {
-    portrait: './images/portrait-lucyna.jpg',
-    officePortrait: './images/lucyna-office.jpg',
-    gdansk: './images/gabinet-gdansk.jpg',
-    gdynia: './images/gabinet-gdynia.jpg',
-    stillLife: './images/still-life-calm.jpg',
-    detail: './images/lucyna-detail.jpg',
-    balticShore: './images/baltic-shore-calm.jpg',
-    gdanskExterior: './images/gdansk-kamienica-entrance.jpg',
-    sanctuaryTea: './images/editorial-sanctuary-tea.jpg',
-    lightArchitecture: './images/editorial-light-architecture.jpg',
-    balticPinePath: './images/baltic-pine-path.jpg',
-    sanctuaryCorner: './images/sanctuary-corner.jpg',
+    portrait: '/images/portrait-lucyna.jpg',
+    officePortrait: '/images/lucyna-office.jpg',
+    gdansk: '/images/gabinet-gdansk.jpg',
+    gdynia: '/images/gabinet-gdynia.jpg',
+    stillLife: '/images/still-life-calm.jpg',
+    detail: '/images/lucyna-detail.jpg',
+    balticShore: '/images/baltic-shore-calm.jpg',
+    gdanskExterior: '/images/gdansk-kamienica-entrance.jpg',
+    sanctuaryTea: '/images/editorial-sanctuary-tea.jpg',
+    lightArchitecture: '/images/editorial-light-architecture.jpg',
+    balticPinePath: '/images/baltic-pine-path.jpg',
+    sanctuaryCorner: '/images/sanctuary-corner.jpg',
   },
 
   hero: {
@@ -229,7 +229,7 @@ export const PRACTICE = {
         'Zaburzenia emocjonalne i objawy psychosomatyczne',
       ],
       approach: 'Psychoterapia psychodynamiczna · Psychologia kliniczna · Fototerapia · Relaksacja',
-      image: './images/baltic-shore-calm.jpg',
+      image: '/images/baltic-shore-calm.jpg',
     },
     {
       id: 'psychotraumatologia',
@@ -246,7 +246,7 @@ export const PRACTICE = {
         'Wsparcie w stanach pooperacyjnych',
       ],
       approach: 'Psychotraumatologia · Psychoterapia traumy · Interwencja kryzysowa',
-      image: './images/editorial-sanctuary-tea.jpg',
+      image: '/images/editorial-sanctuary-tea.jpg',
     },
     {
       id: 'relacje-pary-mlodziez',
@@ -263,7 +263,7 @@ export const PRACTICE = {
         'Dzieci i młodzież od 10. roku życia (depresja, relacje)',
       ],
       approach: 'Terapia indywidualna i dla par · Wsparcie dzieci i młodzieży (10+)',
-      image: './images/gabinet-gdynia.jpg',
+      image: '/images/gabinet-gdynia.jpg',
     },
     {
       id: 'seksuologia',
@@ -280,7 +280,7 @@ export const PRACTICE = {
         'Bliskość i akceptacja cielesności',
       ],
       approach: 'Seksuologia kliniczna (w trakcie certyfikacji) · Edukacja i terapia',
-      image: './images/still-life-calm.jpg',
+      image: '/images/still-life-calm.jpg',
       imagePosition: 'object-[50%_62%]',
     },
     {
@@ -298,7 +298,7 @@ export const PRACTICE = {
         'Wsparcie w schizofrenii i po epizodach psychotycznych',
       ],
       approach: 'Psychoterapia długoterminowa · Nurt psychodynamiczny · Diagnoza',
-      image: './images/editorial-light-architecture.jpg',
+      image: '/images/editorial-light-architecture.jpg',
       imagePosition: 'object-[50%_55%]',
     },
     {
@@ -315,7 +315,7 @@ export const PRACTICE = {
         'Uzależnienia, DDA i wsparcie bliskich',
       ],
       approach: 'Interwencja kryzysowa · Terapia uzależnień · Psychoedukacja',
-      image: './images/gdansk-kamienica-entrance.jpg',
+      image: '/images/gdansk-kamienica-entrance.jpg',
       imagePosition: 'object-center',
     },
   ] as SpecialtyItem[],
@@ -438,7 +438,7 @@ export const PRACTICE = {
         number: '01',
         title: 'Wybór formy i rezerwacja terminu',
         duration: 'Gdynia (2 adresy) · Online · Wizyta domowa',
-        image: './images/editorial-sanctuary-tea.jpg',
+        image: '/images/editorial-sanctuary-tea.jpg',
         imageAlt: 'Spokojna filiżanka herbaty na stole przed pierwszą konsultacją',
         description:
           'Wypełniasz krótki formularz na stronie albo wybierasz termin w kalendarzu TwójPsycholog.pl lub ZnanyLekarz.pl. Możesz umówić się na Witominie, w Medycznej Gdyni, online lub na wizytę domową.',
@@ -447,7 +447,7 @@ export const PRACTICE = {
         number: '02',
         title: 'Konsultacje wstępne (1–3 spotkania)',
         duration: '50 minut · Język polski lub rosyjski',
-        image: './images/lucyna-office.jpg',
+        image: '/images/lucyna-office.jpg',
         imageAlt: 'mgr Lucyna Grochowska w swoim gabinecie psychologicznym w Gdyni',
         description:
           'Podczas pierwszych konsultacji wspólnie staramy się zrozumieć, na czym polega Twoje cierpienie i jaka forma pomocy (psychoterapia, wsparcie kryzysowe, badania lub psychoedukacja) będzie najlepsza.',
@@ -456,7 +456,7 @@ export const PRACTICE = {
         number: '03',
         title: 'Regularny proces terapeutyczny',
         duration: '50–60 minut · W Twoim realnym tempie',
-        image: './images/editorial-light-architecture.jpg',
+        image: '/images/editorial-light-architecture.jpg',
         imageAlt: 'Miękkie poranne światło na gładkim łuku tynku — metafora ulgi i spokoju',
         description:
           'Wspólnie ustalamy ramy współpracy i rozpoczynamy proces w nurcie psychodynamicznym lub psychoterapię traumy — aby z czasem mogło dojść do głębokiej zmiany emocjonalnej i trwałej ulgi.',
@@ -478,8 +478,8 @@ export const PRACTICE = {
       hours: 'Dorośli, pary oraz dzieci i młodzież od 10. roku życia · Terminy także na TwójPsycholog.pl',
       ambiance:
         'Kameralny, autorski gabinet prywatny wyróżniony w plebiscycie Orły Medycyny. Spokojna i przyjazna przestrzeń, w której od pierwszych minut możesz poczuć się bezpiecznie.',
-      image: './images/gabinet-gdynia.jpg',
-      secondaryImage: './images/lucyna-office.jpg',
+      image: '/images/gabinet-gdynia.jpg',
+      secondaryImage: '/images/lucyna-office.jpg',
       secondaryCaption: 'mgr Lucyna Grochowska · Gabinet przy ul. Chwarznieńskiej 136–138',
       coordinates: '54.4998° N, 18.4976° E',
       mapUrl:
@@ -498,8 +498,8 @@ export const PRACTICE = {
       hours: 'Konsultacje stacjonarne dla dorosłych · Rezerwacja telefoniczna, przez formularz lub ZnanyLekarz',
       ambiance:
         'Placówka medyczna w samym centrum Gdyni — bardzo wygodny dojazd kolejką SKM z całego Trójmiasta (Gdynia, Sopot, Gdańsk) i okolic.',
-      image: './images/gabinet-gdansk.jpg',
-      secondaryImage: './images/baltic-shore-calm.jpg',
+      image: '/images/gabinet-gdansk.jpg',
+      secondaryImage: '/images/baltic-shore-calm.jpg',
       secondaryCaption: 'Gdynia Śródmieście · ul. 3 Maja 30/21, blisko SKM i Bulwaru',
       coordinates: '54.5192° N, 18.5364° E',
       mapUrl:
@@ -519,8 +519,8 @@ export const PRACTICE = {
         'Usiądź spokojnie ok. 10 minut przed sesją (sprawdź połączenie, kamerę i mikrofon) · Dorośli i pary',
       ambiance:
         'Pełna dyskrecja, uważność i ciągłość terapii także podczas wyjazdów czy pobytu za granicą. Elastyczne łączenie sesji online ze spotkaniami w Gdyni.',
-      image: './images/editorial-sanctuary-tea.jpg',
-      secondaryImage: './images/lucyna-detail.jpg',
+      image: '/images/editorial-sanctuary-tea.jpg',
+      secondaryImage: '/images/lucyna-detail.jpg',
       secondaryCaption: 'Spokojna przestrzeń rozmowy online · PL / RU',
       coordinates: 'End-to-End · RODO',
     },

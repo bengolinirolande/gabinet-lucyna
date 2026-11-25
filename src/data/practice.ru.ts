@@ -137,7 +137,7 @@ export const PRACTICE_RU: PracticeData = {
         'Эмоциональные и психосоматические симптомы',
       ],
       approach: 'Психодинамическая психотерапия · Клиническая психология · Фототерапия · Релаксация',
-      image: './images/baltic-shore-calm.jpg',
+      image: '/images/baltic-shore-calm.jpg',
     },
     {
       id: 'psychotraumatologia',
@@ -154,7 +154,7 @@ export const PRACTICE_RU: PracticeData = {
         'Поддержка в послеоперационный период',
       ],
       approach: 'Психотравматология · Психотерапия травмы · Кризисная интервенция',
-      image: './images/editorial-sanctuary-tea.jpg',
+      image: '/images/editorial-sanctuary-tea.jpg',
     },
     {
       id: 'relacje-pary-mlodziez',
@@ -171,7 +171,7 @@ export const PRACTICE_RU: PracticeData = {
         'Дети и подростки от 10 лет (депрессия, отношения)',
       ],
       approach: 'Индивидуальная и парная терапия · Поддержка детей и подростков (10+)',
-      image: './images/gabinet-gdynia.jpg',
+      image: '/images/gabinet-gdynia.jpg',
     },
     {
       id: 'seksuologia',
@@ -188,7 +188,7 @@ export const PRACTICE_RU: PracticeData = {
         'Близость и принятие собственной телесности',
       ],
       approach: 'Клиническая сексология (в процессе сертификации) · Просвещение и терапия',
-      image: './images/still-life-calm.jpg',
+      image: '/images/still-life-calm.jpg',
       imagePosition: 'object-[50%_62%]',
     },
     {
@@ -206,7 +206,7 @@ export const PRACTICE_RU: PracticeData = {
         'Поддержка при шизофрении и после психотических эпизодов',
       ],
       approach: 'Длительная психотерапия · Психодинамический подход · Диагностика',
-      image: './images/editorial-light-architecture.jpg',
+      image: '/images/editorial-light-architecture.jpg',
       imagePosition: 'object-[50%_55%]',
     },
     {
@@ -223,7 +223,7 @@ export const PRACTICE_RU: PracticeData = {
         'Зависимости, ВДА (DDA) и поддержка близких',
       ],
       approach: 'Кризисная интервенция · Терапия зависимостей · Психообразование',
-      image: './images/gdansk-kamienica-entrance.jpg',
+      image: '/images/gdansk-kamienica-entrance.jpg',
       imagePosition: 'object-center',
     },
   ] as SpecialtyItem[],
@@ -346,7 +346,7 @@ export const PRACTICE_RU: PracticeData = {
         number: '01',
         title: 'Выбор формата и запись на встречу',
         duration: 'Гдыня (2 адреса) · Онлайн · Визит на дом',
-        image: './images/editorial-sanctuary-tea.jpg',
+        image: '/images/editorial-sanctuary-tea.jpg',
         imageAlt: 'Керамическая чашка чая на деревянном столике перед первой консультацией',
         description:
           'Вы заполняете короткую форму на сайте или выбираете время в календаре TwójPsycholog.pl либо ZnanyLekarz.pl. Можно записаться в Витомино, в Medyczna Gdynia, онлайн или на визит на дом.',
@@ -355,7 +355,7 @@ export const PRACTICE_RU: PracticeData = {
         number: '02',
         title: 'Первичные консультации (1–3 встречи)',
         duration: '50 минут · Русский или польский язык',
-        image: './images/lucyna-office.jpg',
+        image: '/images/lucyna-office.jpg',
         imageAlt: 'mgr Луцина Гроховская в своём психологическом кабинете в Гдыне',
         description:
           'На первых встречах мы спокойно знакомимся с вашей ситуацией, чтобы понять природу трудностей и подобрать оптимальный формат помощи — психотерапию, кризисную поддержку, диагностику или психообразование.',
@@ -364,7 +364,7 @@ export const PRACTICE_RU: PracticeData = {
         number: '03',
         title: 'Регулярный терапевтический процесс',
         duration: '50–60 минут · В вашем естественном темпе',
-        image: './images/editorial-light-architecture.jpg',
+        image: '/images/editorial-light-architecture.jpg',
         imageAlt: 'Мягкий утренний свет на светлой арке — метафора спокойствия и ясности',
         description:
           'Мы согласуем понятные рамки совместной работы и начинаем процесс в психодинамическом подходе или терапию травмы — чтобы со временем пришли глубокие эмоциональные перемены и устойчивое облегчение.',
@@ -386,8 +386,8 @@ export const PRACTICE_RU: PracticeData = {
       hours: 'Взрослые, пары, а также дети и подростки от 10 лет · Запись также на TwójPsycholog.pl',
       ambiance:
         'Камерный авторский кабинет, отмеченный наградой «Orły Medycyny». Тихое и доброжелательное пространство, в котором с первых минут можно почувствовать себя спокойно и безопасно.',
-      image: './images/gabinet-gdynia.jpg',
-      secondaryImage: './images/lucyna-office.jpg',
+      image: '/images/gabinet-gdynia.jpg',
+      secondaryImage: '/images/lucyna-office.jpg',
       secondaryCaption: 'mgr Луцина Гроховская · Кабинет на ul. Chwarznieńska 136–138',
       coordinates: '54.4998° N, 18.4976° E',
       mapUrl:
@@ -406,8 +406,8 @@ export const PRACTICE_RU: PracticeData = {
       hours: 'Очные консультации для взрослых · Запись по телефону, через форму или ZnanyLekarz',
       ambiance:
         'Медицинский центр в самом сердце Гдыни — максимально удобный доезд на городской электричке SKM со всего Труймяста (Гдыня, Сопот, Гданьск) и пригородов.',
-      image: './images/gabinet-gdansk.jpg',
-      secondaryImage: './images/baltic-shore-calm.jpg',
+      image: '/images/gabinet-gdansk.jpg',
+      secondaryImage: '/images/baltic-shore-calm.jpg',
       secondaryCaption: 'Центр Гдыни · ul. 3 Maja 30/21, рядом с SKM и бульваром',
       coordinates: '54.5192° N, 18.5364° E',
       mapUrl:
@@ -427,8 +427,8 @@ export const PRACTICE_RU: PracticeData = {
         'Устройтесь спокойно за 10 минут до начала (проверьте интернет, камеру и микрофон) · Взрослые и пары',
       ambiance:
         'Полная конфиденциальность, внимательность и непрерывность терапии даже в поездках или при переезде. Онлайн-встречи можно гибко сочетать с очными сессиями в Гдыне.',
-      image: './images/editorial-sanctuary-tea.jpg',
-      secondaryImage: './images/lucyna-detail.jpg',
+      image: '/images/editorial-sanctuary-tea.jpg',
+      secondaryImage: '/images/lucyna-detail.jpg',
       secondaryCaption: 'Спокойное пространство для онлайн-встреч · RU / PL',
       coordinates: 'End-to-End · GDPR',
     },

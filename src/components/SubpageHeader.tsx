@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { usePreferences } from '../context/PreferencesContext';
-import { handleRouteLinkClick, type PageId } from '../types/navigation';
+import { getRouteHref, handleRouteLinkClick, type PageId } from '../types/navigation';
 import {
   EASE_EDITORIAL,
   KineticArrow,
@@ -29,14 +29,14 @@ export const SubpageHeader: React.FC<SubpageHeaderProps> = ({
   ready = true,
   onBackHome,
 }) => {
-  const { ui, routes } = usePreferences();
+  const { ui } = usePreferences();
 
   return (
     <section className="relative border-b border-[var(--border-hairline)] bg-[var(--bg-canvas)] pt-22 pb-7 md:pt-26 md:pb-10">
       <div className="mx-auto max-w-[1360px] px-5 sm:px-6 md:px-10 lg:px-14">
         <div className="mb-5 flex items-center justify-between gap-4 border-b border-[var(--border-hairline)] pb-3">
           <a
-            href={routes.home.hash}
+            href={getRouteHref('home')}
             onClick={(e) => handleRouteLinkClick(e, onBackHome)}
             className="editorial-link text-[12px] font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--accent-emphasis)]"
           >
@@ -114,7 +114,7 @@ export const NextChapterBridge: React.FC<NextChapterBridgeProps> = ({
     >
       <div className="mx-auto max-w-[1360px] px-5 sm:px-6 md:px-10 lg:px-14">
         <a
-          href={meta.hash}
+          href={getRouteHref(nextPage)}
           data-cursor={ui.cursors.next}
           onMouseMove={handleMouseMove}
           onClick={(e) => handleRouteLinkClick(e, () => onNavigate(nextPage))}

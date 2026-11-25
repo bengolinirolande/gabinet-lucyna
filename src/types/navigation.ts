@@ -5,7 +5,7 @@ export type Locale = 'pl' | 'ru';
 export type Theme = 'light' | 'dark';
 
 export const SITE_ORIGIN = (
-  import.meta.env.VITE_SITE_URL || 'https://bengolinirolande.github.io/gabinet-lucyna'
+  import.meta.env.VITE_SITE_URL || 'https://grochowskapsycholog.pl'
 ).replace(/\/$/, '');
 
 export interface RouteMeta {
@@ -44,7 +44,7 @@ export const ROUTES_BY_LANG: Record<Locale, Record<PageId, RouteMeta>> = {
       chapter: '01',
       seoTitle: 'Psychoterapia, trauma, seksuologia Gdynia | L. Grochowska',
       seoDescription:
-        'Psychoterapia psychodynamiczna, leczenie lęku i depresji, psychotraumatologia, seksuologia i terapia par w Gdyni oraz online (PL / RU). Sprawdź zakres pomocy.',
+        'Psychoterapia psychodynamiczna, leczenie lęku i depresji, psychotraumatologia, seksuologia, fototerapia i terapia par w Gdyni oraz online (PL / RU).',
     },
     'o-mnie': {
       id: 'o-mnie',
@@ -94,7 +94,7 @@ export const ROUTES_BY_LANG: Record<Locale, Record<PageId, RouteMeta>> = {
       chapter: '01',
       seoTitle: 'Психотерапия, травма и сексология в Гдыне | Л. Гроховская',
       seoDescription:
-        'Психодинамическая психотерапия, помощь при тревоге и депрессии, психотравматология, сексология и терапия пар в Гдыне и онлайн (RU / PL).',
+        'Психодинамическая психотерапия, помощь при тревоге и депрессии, психотравматология, сексология, фототерапия и терапия пар в Гдыне и онлайн (RU / PL).',
     },
     'o-mnie': {
       id: 'o-mnie',
@@ -131,12 +131,41 @@ export function getRoutes(lang: Locale): Record<PageId, RouteMeta> {
 
 export const NAV_ORDER: PageId[] = ['home', 'terapia', 'o-mnie', 'gabinety'];
 
+/**
+ * Use clean History API URLs (`/terapia`, `/o-mnie`, `/gabinety`) everywhere on root domains
+ * (grochowskapsycholog.pl, OVH preview, localhost) and auto-fallback to `#/` only on GitHub Pages subpaths.
+ */
+export function isHashRouting(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.location.hostname.endsWith('github.io');
+}
+
+export function getRouteHref(page: PageId): string {
+  return isHashRouting() ? ROUTES[page].hash : ROUTES[page].cleanPath;
+}
+
 export function parseHashToPage(hash: string): PageId {
-  const clean = hash.replace(/^#\/?/, '').split('?')[0].trim().toLowerCase();
+  const clean = hash.replace(/^#\/?/, '').split('?')[0].replace(/\/+$/, '').trim().toLowerCase();
   if (clean === 'terapia') return 'terapia';
   if (clean === 'o-mnie') return 'o-mnie';
   if (clean === 'gabinety' || clean === 'cennik' || clean === 'kontakt') return 'gabinety';
   return 'home';
+}
+
+export function parsePathToPage(pathname: string): PageId {
+  const clean = pathname.replace(/^\/+|\/+$/g, '').trim().toLowerCase();
+  if (clean === 'terapia') return 'terapia';
+  if (clean === 'o-mnie') return 'o-mnie';
+  if (clean === 'gabinety' || clean === 'cennik' || clean === 'kontakt') return 'gabinety';
+  return 'home';
+}
+
+export function parseLocationToPage(): PageId {
+  if (typeof window === 'undefined') return 'home';
+  if (window.location.hash && window.location.hash.startsWith('#/')) {
+    return parseHashToPage(window.location.hash);
+  }
+  return parsePathToPage(window.location.pathname);
 }
 
 /**

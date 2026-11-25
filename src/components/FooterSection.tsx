@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Check, Copy, Mail, Phone } from 'lucide-react';
 import { usePreferences } from '../context/PreferencesContext';
-import { handleRouteLinkClick, NAV_ORDER, type PageId } from '../types/navigation';
+import { getRouteHref, handleRouteLinkClick, NAV_ORDER, type PageId } from '../types/navigation';
 import { useLenis } from './motion/LenisProvider';
 import {
   HairlineDivider,
@@ -244,7 +244,7 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
               {NAV_ORDER.map((pageId) => (
                 <li key={pageId}>
                   <a
-                    href={routes[pageId].hash}
+                    href={getRouteHref(pageId)}
                     onClick={(e) => handleRouteLinkClick(e, () => onNavigate(pageId))}
                     className="editorial-link transition-colors hover:text-[#F6F3EE]"
                   >

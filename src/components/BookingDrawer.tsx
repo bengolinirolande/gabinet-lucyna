@@ -282,24 +282,60 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
     }, 10000);
 
     try {
-      const response = await fetch(
-        `https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`,
-        {
+      // 1. Primary path: custom boutique HTML mailer on OVH (/api/send-booking.php)
+      let isConfirmed = false;
+      try {
+        const phpRes = await fetch('/api/send-booking.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json',
           },
-          body: JSON.stringify(payload),
+          body: JSON.stringify({
+            lang,
+            name: trimmedName,
+            phone: trimmedPhone,
+            email: trimmedEmail,
+            sessionType,
+            location: effectiveLocationLabel,
+            preferredDay,
+            preferredTime,
+            note: note.trim(),
+            _honey: '',
+          }),
           signal: controller.signal,
+        });
+        const phpData = await phpRes.json().catch(() => null);
+        if (phpRes.ok && phpData?.ok === true) {
+          isConfirmed = true;
         }
-      );
+      } catch {
+        // Fallback to FormSubmit if PHP endpoint is unavailable (e.g. local dev / static preview)
+      }
 
       if (controller.signal.aborted) return;
 
-      const data = await response.json().catch(() => null);
-      const isConfirmed =
-        response.ok && (data?.success === true || data?.success === 'true');
+      // 2. Resilient fallback: FormSubmit relay if primary PHP mailer was unreachable
+      if (!isConfirmed) {
+        const response = await fetch(
+          `https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify(payload),
+            signal: controller.signal,
+          }
+        );
+
+        if (controller.signal.aborted) return;
+
+        const data = await response.json().catch(() => null);
+        isConfirmed =
+          response.ok && (data?.success === true || data?.success === 'true');
+      }
 
       setDeliveryMode(isConfirmed ? 'email-sent' : 'fallback');
       setSubmitted(true);

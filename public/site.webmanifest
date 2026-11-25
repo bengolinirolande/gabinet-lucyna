@@ -1,15 +1,16 @@
 {
-  "name": "mgr Lucyna Grochowska — Gabinet Psychologiczny Gdynia i online",
-  "short_name": "L. Grochowska",
-  "description": "Psycholog, psychotraumatolog, psychoterapeutka psychodynamiczna i seksuolog kliniczny — Gdynia i online (PL / RU).",
-  "start_url": "./",
+  "name": "mgr Lucyna Grochowska — Gabinet Psychologiczny",
+  "short_name": "Lucyna Grochowska",
+  "description": "Psycholog, psychotraumatolog i psychoterapeutka w Gdyni oraz online (PL / RU).",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#F6F3EE",
   "theme_color": "#2B423B",
   "lang": "pl",
   "icons": [
     {
-      "src": "./favicon.svg",
+      "src": "/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }

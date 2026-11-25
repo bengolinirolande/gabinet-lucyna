@@ -27,7 +27,7 @@ import { BookingDrawer, type BookingPreset } from './components/BookingDrawer';
 import { BreathingModal } from './components/BreathingModal';
 import { PrivacyModal } from './components/PrivacyModal';
 import { EASE_EDITORIAL, VelocityRibbon } from './components/motion/MotionPrimitives';
-import { parseHashToPage, ROUTES, type PageId } from './types/navigation';
+import { getRouteHref, isHashRouting, parseLocationToPage, type PageId } from './types/navigation';
 import { syncRouteSeo } from './utils/seo';
 
 const AppShell: React.FC = () => {
@@ -35,9 +35,7 @@ const AppShell: React.FC = () => {
   const { scrollTo, resetScrollTop, resize, lockScroll, unlockScroll } = useLenis();
   const mainRef = useRef<HTMLElement>(null);
   const [heroReady, setHeroReady] = useState<boolean>(() => !shouldPlayPreloader());
-  const [currentPage, setCurrentPage] = useState<PageId>(() =>
-    typeof window !== 'undefined' ? parseHashToPage(window.location.hash) : 'home'
-  );
+  const [currentPage, setCurrentPage] = useState<PageId>(() => parseLocationToPage());
   const [curtainOpen, setCurtainOpen] = useState(false);
   const [curtainTarget, setCurtainTarget] = useState<PageId>(currentPage);
 
@@ -101,7 +99,16 @@ const AppShell: React.FC = () => {
       clearTransitionTimers();
 
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const targetHash = ROUTES[target].hash;
+      const targetUrl = getRouteHref(target);
+      const pushRouteUrl = () => {
+        if (isHashRouting()) {
+          if (window.location.hash !== targetUrl) {
+            window.history.pushState(null, '', targetUrl);
+          }
+        } else if (window.location.pathname !== targetUrl || window.location.hash) {
+          window.history.pushState(null, '', targetUrl);
+        }
+      };
 
       const positionScrollForNewPage = () => {
         if (scrollSelector) {
@@ -118,9 +125,7 @@ const AppShell: React.FC = () => {
 
       if (reduced) {
         setCurrentPage(target);
-        if (window.location.hash !== targetHash) {
-          window.history.pushState(null, '', targetHash);
-        }
+        pushRouteUrl();
         positionScrollForNewPage();
         mainRef.current?.focus({ preventScroll: true });
         return;
@@ -135,9 +140,7 @@ const AppShell: React.FC = () => {
 
       const swapTimer = window.setTimeout(() => {
         setCurrentPage(target);
-        if (window.location.hash !== targetHash) {
-          window.history.pushState(null, '', targetHash);
-        }
+        pushRouteUrl();
         positionScrollForNewPage();
       }, swapDelay);
 
@@ -162,8 +165,7 @@ const AppShell: React.FC = () => {
       clearTransitionTimers();
       curtainOpenRef.current = false;
       setCurtainOpen(false);
-      const next = parseHashToPage(hash);
-      setCurrentPage(next);
+      setCurrentPage(parseLocationToPage());
       resetScrollTop();
     };
     window.addEventListener('hashchange', syncFromLocation);

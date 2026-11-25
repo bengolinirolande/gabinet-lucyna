@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ExternalLink, MapPin, ShieldCheck, Star, Wind } from 'lucide-react';
 import { usePreferences } from '../context/PreferencesContext';
-import { handleRouteLinkClick, type PageId } from '../types/navigation';
+import { getRouteHref, handleRouteLinkClick, type PageId } from '../types/navigation';
 import {
   EASE_EDITORIAL,
   KineticArrow,
@@ -20,7 +20,7 @@ export const HomeDirectorySection: React.FC<HomeDirectorySectionProps> = ({
   onNavigate,
   onOpenBreathing,
 }) => {
-  const { practice, ui, routes } = usePreferences();
+  const { practice, ui } = usePreferences();
 
   return (
     <section id="przewodnik" className="relative bg-[var(--bg-surface-soft)] py-10 md:py-14">
@@ -66,7 +66,7 @@ export const HomeDirectorySection: React.FC<HomeDirectorySectionProps> = ({
           {ui.directory.cards.map((card, idx) => (
             <motion.a
               key={card.page}
-              href={routes[card.page].hash}
+              href={getRouteHref(card.page)}
               data-cursor={ui.cursors.open}
               onClick={(e) => handleRouteLinkClick(e, () => onNavigate(card.page))}
               initial={{ opacity: 0, y: 18 }}
@@ -154,7 +154,7 @@ export const HomeDirectorySection: React.FC<HomeDirectorySectionProps> = ({
 
             <div className="flex flex-wrap items-center gap-2 lg:col-span-3 lg:justify-end">
               <a
-                href={routes.gabinety.hash}
+                href={getRouteHref('gabinety')}
                 onClick={(e) => handleRouteLinkClick(e, () => onNavigate('gabinety'))}
                 className="group inline-flex items-center gap-1.5 rounded-full bg-[var(--btn-primary-bg)] px-4 py-2 text-[12px] font-medium text-[var(--btn-primary-text)] transition-colors hover:bg-[var(--btn-primary-hover)]"
               >
