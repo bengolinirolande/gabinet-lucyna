@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Psycholog Gdynia i online — mgr Lucyna Grochowska</title>
+  <meta name="description"
+    content="mgr Lucyna Grochowska — psycholog, psychotraumatolog i psychoterapeutka w Gdyni (Witomino, Śródmieście) oraz online (PL / RU). 8 lat praktyki. Umów konsultację." />
+  <meta name="theme-color" content="#F6F3EE" />
+  <meta name="robots" content="index, follow" />
+  <!-- Zmień domenę w canonical / og:url / og:image oraz JSON-LD po przeniesieniu na własną domenę .pl -->
+  <link rel="canonical" href="https://bengolinirolande.github.io/gabinet-lucyna/" />
+  <link rel="manifest" href="./site.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <link rel="preload" as="image" href="./images/portrait-lucyna.jpg" fetchpriority="high" />
+
+  <!-- Open Graph & Social Sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="mgr Lucyna Grochowska — Gabinet Psychologiczny" />
+  <meta property="og:locale" content="pl_PL" />
+  <meta property="og:locale:alternate" content="ru_RU" />
+  <meta property="og:url" content="https://bengolinirolande.github.io/gabinet-lucyna/" />
+  <meta property="og:title" content="Psycholog Gdynia i online — mgr Lucyna Grochowska" />
+  <meta
+    property="og:description"
+    content="Psychoterapia psychodynamiczna, psychotraumatologia, seksuologia, fototerapia i pomoc psychologiczna w Gdyni oraz online (PL / RU). 8 lat doświadczenia · stała superwizja."
+  />
+  <meta
+    property="og:image"
+    content="https://bengolinirolande.github.io/gabinet-lucyna/images/portrait-lucyna.jpg"
+  />
+  <meta
+    property="og:image:alt"
+    content="mgr Lucyna Grochowska — psycholog, psychotraumatolog i psychoterapeutka w Gdyni"
+  />
+  <meta property="og:image:width" content="749" />
+  <meta property="og:image:height" content="800" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Psycholog Gdynia i online — mgr Lucyna Grochowska" />
+  <meta
+    name="twitter:description"
+    content="Psychoterapia psychodynamiczna, psychotraumatologia, seksuologia i fototerapia w Gdyni oraz online (PL / RU)."
+  />
+  <meta
+    name="twitter:image"
+    content="https://bengolinirolande.github.io/gabinet-lucyna/images/portrait-lucyna.jpg"
+  />
+
+  <!-- Trimmed Google Fonts (Cormorant Garamond + Plus Jakarta Sans for Latin + Manrope for crisp Cyrillic) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+
+  <!-- Zero-FOUC initial Theme & Locale synchronization before React hydrates -->
+  <script>
+    (function () {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var qTheme = params.get('theme');
+        var storedTheme = window.localStorage.getItem('lucyna_theme');
+        var theme = qTheme === 'dark' || qTheme === 'light'
+          ? qTheme
+          : storedTheme === 'dark' || storedTheme === 'light'
+            ? storedTheme
+            : 'light';
+        document.documentElement.dataset.theme = theme;
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          var tc = document.querySelector('meta[name="theme-color"]');
+          if (tc) tc.setAttribute('content', '#101715');
+        }
+        var qLang = params.get('lang');
+        var storedLang = window.localStorage.getItem('lucyna_lang');
+        var lang = qLang === 'ru' || qLang === 'pl'
+          ? qLang
+          : storedLang === 'ru' || storedLang === 'pl'
+            ? storedLang
+            : 'pl';
+        document.documentElement.lang = lang;
+      } catch (e) { }
+    })();
+  </script>
+
+  <!-- Policy-Compliant Schema.org @graph (MedicalBusiness + MedicalClinic + Person, zero self-serving AggregateRating) -->
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://bengolinirolande.github.io/gabinet-lucyna/#website",
+            "url": "https://bengolinirolande.github.io/gabinet-lucyna/",
+            "name": "mgr Lucyna Grochowska — Gabinet Psychologiczny i Psychoterapeutyczny",
+            "description": "Psychoterapia psychodynamiczna, psychotraumatologia, seksuologia i pomoc psychologiczna w Gdyni oraz online (PL / RU).",
+            "inLanguage": "pl-PL",
+            "publisher": {
+              "@id": "https://bengolinirolande.github.io/gabinet-lucyna/#gabinet-witomino"
+            },
+            "about": {
+              "@id": "https://bengolinirolande.github.io/gabinet-lucyna/#lucyna-grochowska"
+            }
+          },
+          {
+            "@type": "MedicalBusiness",
+            "@id": "https://bengolinirolande.github.io/gabinet-lucyna/#gabinet-witomino",
+            "name": "mgr Lucyna Grochowska — Gabinet Psychologiczno-Psychoterapeutyczny",
+            "alternateName": "Psycholog Gdynia — Lucyna Grochowska",
+            "description": "Prywatny gabinet psychologiczny i psychoterapeutyczny w Gdyni na Witominie oraz konsultacje online (język polski i rosyjski). Psychoterapia psychodynamiczna, psychotraumatologia, seksuologia kliniczna, terapia par oraz wsparcie młodzieży od 10. roku życia.",
+            "url": "https://bengolinirolande.github.io/gabinet-lucyna/",
+            "telephone": "+48 664 411 496",
+            "email": "euro169@wp.pl",
+            "image": "https://bengolinirolande.github.io/gabinet-lucyna/images/portrait-lucyna.jpg",
+            "priceRange": "200-430 PLN",
+            "currenciesAccepted": "PLN",
+            "paymentAccepted": "Gotówka, BLIK, Przelew bankowy, Revolut",
+            "knowsLanguage": ["pl", "ru"],
+            "founder": {
+              "@id": "https://bengolinirolande.github.io/gabinet-lucyna/#lucyna-grochowska"
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "ul. Chwarznieńska 136-138",
+              "addressLocality": "Gdynia",
+              "addressRegion": "pomorskie",
+              "postalCode": "81-602",
+              "addressCountry": "PL"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 54.4998,
+              "longitude": 18.4976
+            },
+            "hasMap": "https://www.google.com/maps/search/?api=1&query=Chwarznie%C5%84ska+136-138,+81-602+Gdynia",
+            "areaServed": [
+              { "@type": "City", "name": "Gdynia" },
+              { "@type": "City", "name": "Sopot" },
+              { "@type": "City", "name": "Gdańsk" },
+              { "@type": "Country", "name": "Polska" }
+            ],
+            "sameAs": [
+              "https://www.znanylekarz.pl/profil/lucyna-grochowska",
+              "https://twojpsycholog.pl/profil-psychologa/lucyna-grochowska-11618",
+              "https://www.facebook.com/share/1E9WPyV2w2/?mibextid=wwXIfr"
+            ],
+            "hasOfferCatalog": {
+              "@type": "OfferCatalog",
+              "name": "Usługi psychologiczne i psychoterapeutyczne",
+              "itemListElement": [
+                {
+                  "@type": "Offer",
+                  "price": "200",
+                  "priceCurrency": "PLN",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Konsultacja psychologiczna, psychoterapeutyczna, psychotraumatologiczna i seksuologiczna (50 min)"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "price": "200",
+                  "priceCurrency": "PLN",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Psychoterapia indywidualna w nurcie psychodynamicznym (60 min — Gdynia Witomino)"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "price": "210",
+                  "priceCurrency": "PLN",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Interwencja kryzysowa, ocena stanu psychicznego, psychoedukacja, relaksacja i badania psychologiczne"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "price": "430",
+                  "priceCurrency": "PLN",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Wizyta domowa psychologa na terenie Gdyni"
+                  }
+                },
+                {
+                  "@type": "Offer",
+                  "itemOffered": {
+                    "@type": "Service",
+                    "name": "Fototerapia (cena do uzgodnienia indywidualnie)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "@type": "MedicalClinic",
+            "@id": "https://bengolinirolande.github.io/gabinet-lucyna/#medyczna-gdynia",
+            "name": "Przychodnia Medyczna Gdynia",
+            "url": "https://www.medycznagdynia.pl/",
+            "telephone": "+48 664 411 496",
+            "email": "euro169@wp.pl",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "ul. 3 Maja 30/21",
+              "addressLocality": "Gdynia",
+              "addressRegion": "pomorskie",
+              "postalCode": "81-364",
+              "addressCountry": "PL"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 54.5192,
+              "longitude": 18.5364
+            },
+            "hasMap": "https://www.google.com/maps/search/?api=1&query=3+Maja+30/21,+81-364+Gdynia"
+          },
+          {
+            "@type": "Person",
+            "@id": "https://bengolinirolande.github.io/gabinet-lucyna/#lucyna-grochowska",
+            "honorificPrefix": "mgr",
+            "name": "Lucyna Grochowska",
+            "jobTitle": "Psycholog, Psychotraumatolog, Psychoterapeutka psychodynamiczna (w trakcie certyfikacji), Seksuolog kliniczny (w trakcie certyfikacji)",
+            "description": "Psycholog z 8-letnią praktyką kliniczną zdobytą w publicznych placówkach zdrowia psychicznego (m.in. Poradnia Zdrowia Psychicznego MSWiA w Gdańsku) oraz w praktyce prywatnej. Pracuje pod stałą superwizją w języku polskim i rosyjskim.",
+            "image": "https://bengolinirolande.github.io/gabinet-lucyna/images/portrait-lucyna.jpg",
+            "url": "https://bengolinirolande.github.io/gabinet-lucyna/",
+            "knowsLanguage": ["pl", "ru"],
+            "award": "Orły Medycyny",
+            "worksFor": [
+              {
+                "@id": "https://bengolinirolande.github.io/gabinet-lucyna/#gabinet-witomino"
+              },
+              {
+                "@id": "https://bengolinirolande.github.io/gabinet-lucyna/#medyczna-gdynia"
+              }
+            ],
+            "alumniOf": [
+              {
+                "@type": "CollegeOrUniversity",
+                "name": "Uniwersytet Kazimierza Wielkiego w Bydgoszczy"
+              },
+              {
+                "@type": "EducationalOrganization",
+                "name": "Instytut Psychoterapii i Psychotraumatologii „Triada” w Gdańsku"
+              },
+              {
+                "@type": "CollegeOrUniversity",
+                "name": "Uniwersytet im. Adama Mickiewicza w Poznaniu"
+              },
+              {
+                "@type": "EducationalOrganization",
+                "name": "Szkoła Psychoterapii Uzależnień „Vis Salutis” w Łodzi"
+              }
+            ],
+            "knowsAbout": [
+              "Psychologia kliniczna",
+              "Psychoterapia psychodynamiczna",
+              "Psychotraumatologia",
+              "Seksuologia kliniczna",
+              "Terapia uzależnień",
+              "Interwencja kryzysowa",
+              "Terapia par",
+              "Zaburzenia lękowe i depresja",
+              "Fototerapia"
+            ],
+            "sameAs": [
+              "https://www.znanylekarz.pl/profil/lucyna-grochowska",
+              "https://twojpsycholog.pl/profil-psychologa/lucyna-grochowska-11618",
+              "https://www.facebook.com/share/1E9WPyV2w2/?mibextid=wwXIfr"
+            ]
+          }
+        ]
+      }
+    </script>
+  <script type="module" crossorigin src="./assets/index-CfTnbPJe.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/motion-CPDFS3FU.js">
+  <link rel="modulepreload" crossorigin href="./assets/react-VQvzkfa9.js">
+  <link rel="modulepreload" crossorigin href="./assets/icons-D65i6f2R.js">
+  <link rel="stylesheet" crossorigin href="./assets/index-D1nytLzL.css">
+</head>
+
+<body class="bg-[var(--bg-canvas)] text-[var(--text-ink)] antialiased">
+  <div id="root"></div>
+  <noscript>
+    <main style="max-width: 780px; margin: 40px auto; padding: 24px; font-family: Georgia, serif; color: #1D2220;">
+      <h1>mgr Lucyna Grochowska — Psycholog, Psychotraumatolog i Psychoterapeutka w Gdyni i online</h1>
+      <p>
+        Psycholog z 8-letnim doświadczeniem klinicznym, psychotraumatolog, psychoterapeutka pracująca w nurcie
+        psychodynamicznym oraz seksuolog kliniczny w trakcie certyfikacji. Sesje po polsku i po rosyjsku (PL / RU).
+      </p>
+      <h2>Gabinety w Gdyni i konsultacje online</h2>
+      <ul>
+        <li>Gabinet prywatny: ul. Chwarznieńska 136–138, 81-602 Gdynia (Witomino) — od 200 zł</li>
+        <li>Przychodnia Medyczna Gdynia: ul. 3 Maja 30/21, 81-364 Gdynia — tel. +48 664 411 496 · euro169@wp.pl</li>
+        <li>Konsultacje online (wideo / telefon, PL / RU), fototerapia (cena do uzgodnienia indywidualnie) oraz wizyty domowe na terenie Gdyni (430 zł)</li>
+      </ul>
+      <p>
+        Oficjalne profile:
+        <a href="https://www.znanylekarz.pl/profil/lucyna-grochowska">ZnanyLekarz.pl</a> ·
+        <a href="https://twojpsycholog.pl/profil-psychologa/lucyna-grochowska-11618">TwójPsycholog.pl</a>
+      </p>
+    </main>
+  </noscript>
+</body>
+
+</html>
