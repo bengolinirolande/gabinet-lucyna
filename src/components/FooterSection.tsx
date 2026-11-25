@@ -106,13 +106,6 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
                 <Phone className="h-4 w-4 stroke-[1.4] text-[#C9A484]" />
                 <span>{practice.phoneDisplay}</span>
               </a>
-              <span className="text-[#F6F3EE]/30">/</span>
-              <a
-                href={practice.phoneSecondaryHref}
-                className="editorial-link text-[15px] font-light text-[#F6F3EE]/85"
-              >
-                58 500 46 88
-              </a>
               <button
                 type="button"
                 onClick={() => copyToClipboard(practice.phoneDisplay, 'phone')}
@@ -187,8 +180,6 @@ export const FooterSection: React.FC<FooterSectionProps> = ({
 
             <p className="pt-1 text-[12px] font-light leading-relaxed text-[#F6F3EE]/55">
               {f.clinicNoteBefore}
-              {practice.clinicEmail}
-              {f.clinicNoteAfter}
             </p>
 
             <div className="flex flex-wrap items-center gap-4 pt-1 text-[12px] text-[#C9A484]">

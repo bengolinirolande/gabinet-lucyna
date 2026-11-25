@@ -57,6 +57,7 @@ function getUpcomingDaysForLocale(lang: Locale, nearestLabel: string): string[] 
 function resolveSessionIndex(raw?: string): number {
   if (!raw) return 0;
   const lower = raw.toLowerCase();
+  if (lower === 'phototherapy' || lower.includes('fototerap') || lower.includes('фототерап')) return 5;
   if (lower === 'home-visit' || lower.includes('domow') || lower.includes('дом')) return 4;
   if (
     lower === 'diagnostics-support' ||

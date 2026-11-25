@@ -68,7 +68,7 @@ export const ROUTES_BY_LANG: Record<Locale, Record<PageId, RouteMeta>> = {
       chapter: '03',
       seoTitle: 'Gabinety Gdynia i cennik (od 200 zł) — mgr L. Grochowska',
       seoDescription:
-        'Gabinety w Gdyni: ul. Chwarznieńska 136–138 (Witomino) i ul. gen. Bema 16/2 (Medyczna Gdynia) oraz online PL / RU. Cennik od 200 zł, dojazd, mapa i FAQ.',
+        'Gabinety w Gdyni: ul. Chwarznieńska 136–138 (Witomino) i ul. 3 Maja 30/21 (Medyczna Gdynia) oraz online PL / RU. Cennik od 200 zł, fototerapia, mapa i FAQ.',
     },
   },
   ru: {
@@ -118,7 +118,7 @@ export const ROUTES_BY_LANG: Record<Locale, Record<PageId, RouteMeta>> = {
       chapter: '03',
       seoTitle: 'Кабинеты в Гдыне и цены (от 200 zł) — mgr Л. Гроховская',
       seoDescription:
-        'Кабинеты в Гдыне: ul. Chwarznieńska 136–138 (Витомино) и ul. gen. Bema 16/2 (Medyczna Gdynia), а также онлайн RU / PL. Цены от 200 zł, карта и ответы на вопросы.',
+        'Кабинеты в Гдыне: ul. Chwarznieńska 136–138 (Витомино) и ul. 3 Maja 30/21 (Medyczna Gdynia), а также онлайн RU / PL. Цены от 200 zł, фототерапия, карта и FAQ.',
     },
   },
 };

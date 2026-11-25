@@ -64,7 +64,7 @@ export const PRACTICE = {
   // ani prywatnej komórki (portale maskują te dane). Wpisz tu swój e-mail,
   // aby wszystkie zapytania z formularza trafiały prosto na skrzynkę.
   // =========================================================================
-  bookingRecipientEmail: 'kontakt@lucynagrochowska.pl',
+  bookingRecipientEmail: 'euro169@wp.pl',
 
   brandMonogram: 'L.',
   fullName: 'mgr Lucyna Grochowska',
@@ -72,13 +72,13 @@ export const PRACTICE = {
   role: 'Psycholog · Psychotraumatolog · Psychoterapeutka',
   regionLabel: 'Gdynia · Trójmiasto · Online (PL / RU)',
   tagline:
-    'Psychoterapia psychodynamiczna, psychotraumatologia, seksuologia i pomoc psychologiczna dla dorosłych, par oraz młodzieży (od 10. roku życia) w Gdyni i online.',
-  phoneDisplay: '+48 58 500 46 87',
-  phoneSecondaryDisplay: '+48 58 500 46 88',
-  phoneHref: 'tel:+48585004687',
-  phoneSecondaryHref: 'tel:+48585004688',
-  email: 'kontakt@lucynagrochowska.pl',
-  clinicEmail: 'wizyta@medycznagdynia.pl',
+    'Psychoterapia psychodynamiczna, psychotraumatologia, seksuologia, fototerapia i pomoc psychologiczna dla dorosłych, par oraz młodzieży (od 10. roku życia) w Gdyni i online.',
+  phoneDisplay: '+48 664 411 496',
+  phoneSecondaryDisplay: '',
+  phoneHref: 'tel:+48664411496',
+  phoneSecondaryHref: '',
+  email: 'euro169@wp.pl',
+  clinicEmail: 'euro169@wp.pl',
   availabilityStatus: 'Przyjmuję w Gdyni, online oraz na wizytach domowych',
 
   // Oficjalne profile zewnętrzne mgr Lucyny Grochowskiej
@@ -99,7 +99,7 @@ export const PRACTICE = {
     mapsWitominoUrl:
       'https://www.google.com/maps/search/?api=1&query=Chwarznie%C5%84ska+136-138,+81-602+Gdynia',
     mapsSrodmiescieUrl:
-      'https://www.google.com/maps/search/?api=1&query=Genera%C5%82a+J%C3%B3zefa+Bema+16/2,+81-381+Gdynia',
+      'https://www.google.com/maps/search/?api=1&query=3+Maja+30/21,+81-364+Gdynia',
     featuredReviews: [
       {
         author: 'Anita',
@@ -224,11 +224,11 @@ export const PRACTICE = {
         'Stany lękowe i nerwica',
         'Napady paniki i lęk uogólniony',
         'Fobia społeczna',
-        'Depresja i zaburzenia dwubiegunowe (ChAD)',
-        'Bezsenność i objawy psychosomatyczne',
-        'Zaburzenia emocjonalne i objawy konwersyjne',
+        'Depresja, depresja sezonowa i ChAD',
+        'Bezsenność, rytm dobowy i fototerapia',
+        'Zaburzenia emocjonalne i objawy psychosomatyczne',
       ],
-      approach: 'Psychoterapia psychodynamiczna · Psychologia kliniczna · Relaksacja',
+      approach: 'Psychoterapia psychodynamiczna · Psychologia kliniczna · Fototerapia · Relaksacja',
       image: './images/baltic-shore-calm.jpg',
     },
     {
@@ -373,13 +373,13 @@ export const PRACTICE = {
             institution:
               'ul. Chwarznieńska 136–138, Gdynia Witomino · Sesje stacjonarne, online i domowe',
             detail:
-              'Konsultacje psychologiczne, psychoterapeutyczne, psychotraumatologiczne i seksuologiczne, psychoterapia długoterminowa, terapia par, badania psychologiczne i relaksacja.',
+              'Konsultacje psychologiczne, psychoterapeutyczne, psychotraumatologiczne i seksuologiczne, psychoterapia długoterminowa, terapia par, badania psychologiczne, fototerapia i relaksacja.',
           },
           {
             period: 'Przychodnia specjalistyczna · Gdynia Śródmieście',
             title: 'Psycholog, psychotraumatolog, psychoterapeutka',
             institution:
-              'Przychodnia Medyczna Gdynia (ul. gen. Józefa Bema 16/2 · Oddział A: ul. 3 Maja 30/21)',
+              'Przychodnia Medyczna Gdynia (ul. 3 Maja 30/21)',
             detail:
               'Konsultacje diagnostyczne i terapeutyczne, ocena stanu psychicznego, interwencja kryzysowa i psychoterapia indywidualna.',
           },
@@ -490,20 +490,20 @@ export const PRACTICE = {
       city: 'Gdynia Śródmieście',
       district: 'Przychodnia Medyczna Gdynia',
       badge: 'Medyczna Gdynia',
-      address: 'ul. gen. Józefa Bema 16/2, 81-381 Gdynia (Oddział A: ul. 3 Maja 30/21)',
+      address: 'ul. 3 Maja 30/21, 81-364 Gdynia',
       transit:
-        'Ścisłe centrum Gdyni — ok. 7 minut spacerem od stacji SKM Gdynia Wzgórze św. Maksymiliana i Gdynia Główna.',
+        'Ścisłe centrum Gdyni — ok. 5 minut spacerem od stacji SKM Gdynia Główna.',
       parking:
-        'Rejestracja przychodni: 58 500 46 87 / 58 500 46 88 · wizyta@medycznagdynia.pl (wizyty prywatne).',
-      hours: 'Konsultacje stacjonarne dla dorosłych · Rezerwacja przez ZnanyLekarz lub Medyczną Gdynię',
+        'Kontakt i rejestracja: +48 664 411 496 · euro169@wp.pl (wizyty prywatne).',
+      hours: 'Konsultacje stacjonarne dla dorosłych · Rezerwacja telefoniczna, przez formularz lub ZnanyLekarz',
       ambiance:
         'Placówka medyczna w samym centrum Gdyni — bardzo wygodny dojazd kolejką SKM z całego Trójmiasta (Gdynia, Sopot, Gdańsk) i okolic.',
       image: './images/gabinet-gdansk.jpg',
       secondaryImage: './images/baltic-shore-calm.jpg',
-      secondaryCaption: 'Gdynia Śródmieście · blisko Bulwaru Nadmorskiego i SKM',
-      coordinates: '54.5131° N, 18.5414° E',
+      secondaryCaption: 'Gdynia Śródmieście · ul. 3 Maja 30/21, blisko SKM i Bulwaru',
+      coordinates: '54.5192° N, 18.5364° E',
       mapUrl:
-        'https://www.google.com/maps/search/?api=1&query=Genera%C5%82a+J%C3%B3zefa+Bema+16/2,+81-381+Gdynia',
+        'https://www.google.com/maps/search/?api=1&query=3+Maja+30/21,+81-364+Gdynia',
     },
     {
       id: 'online',
@@ -561,6 +561,13 @@ export const PRACTICE = {
         price: '430 zł',
         note: 'Indywidualna konsultacja psychologiczna lub wsparcie w miejscu zamieszkania dla osób mających trudność z dotarciem do gabinetu (np. stany pooperacyjne, seniorzy).',
       },
+      {
+        id: 'phototherapy',
+        name: 'Fototerapia',
+        duration: 'Sesje indywidualne · Gdynia',
+        price: 'do uzgodnienia',
+        note: 'Wsparcie światłoterapią m.in. przy obniżonym nastroju, depresji sezonowej oraz zaburzeniach snu i rytmu dobowego. Cena do uzgodnienia indywidualnie.',
+      },
     ] as PricingItem[],
     policies: [
       'Akceptowane formy płatności: gotówka w gabinecie, BLIK, przelew na konto oraz Revolut (wizyty wyłącznie prywatne, bez NFZ i pakietów ubezpieczeniowych).',
@@ -598,7 +605,7 @@ export const PRACTICE = {
     {
       question: 'Jakie formy płatności akceptujesz i czy przyjmujesz na NFZ lub w ramach pakietów?',
       answer:
-        'Przyjmuję wyłącznie w ramach wizyt prywatnych (bez NFZ oraz prywatnych pakietów medycznych). Akceptuję gotówkę w gabinecie, BLIK, przelew na konto oraz Revolut. Konsultacja i psychoterapia kosztują 200 zł (ul. Chwarznieńska) lub 210 zł (Medyczna Gdynia / ZnanyLekarz), badania psychologiczne od 210 zł, a wizyta domowa 430 zł.',
+        'Przyjmuję wyłącznie w ramach wizyt prywatnych (bez NFZ oraz prywatnych pakietów medycznych). Akceptuję gotówkę w gabinecie, BLIK, przelew na konto oraz Revolut. Konsultacja i psychoterapia kosztują 200 zł (ul. Chwarznieńska) lub 210 zł (Medyczna Gdynia / ZnanyLekarz), badania psychologiczne od 210 zł, wizyta domowa 430 zł, a cena fototerapii ustalana jest indywidualnie.',
     },
   ] as FaqItem[],
 
